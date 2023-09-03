@@ -1,0 +1,407 @@
+{
+  "playerCharacter": {
+    "name": "geotsek",
+    "maxHp": 615.0,
+    "currentHp": 577.0,
+    "defence": 324.0,
+    "attack": 307.0,
+    "magicAttack": 329.0,
+    "magicDefence": 306.0,
+    "speed": 150.0,
+    "level": 12,
+    "exp": 43760,
+    "expRequired": 49883,
+    "maxInnerPower": 356,
+    "currentInnerPower": 270,
+    "skillPoints": 0,
+    "gear": {
+      "weapon": {
+        "_id": "1ff8852c-4fe0-441a-afbf-fe528cae83da",
+        "itemName": "Sword",
+        "itemType": "WEAPON",
+        "quantity": 0,
+        "levelRequired": 1,
+        "defenceModifier": 24,
+        "attackModifier": 26,
+        "magicDefenceModifier": 12,
+        "magicAttackModifier": 6,
+        "hpModifier": 19,
+        "goldValue": 6
+      },
+      "offHand": {
+        "_id": "f3526196-4fac-4258-a781-284fd93ea223",
+        "itemName": "Shield",
+        "itemType": "OFFHAND",
+        "quantity": 0,
+        "levelRequired": 5,
+        "defenceModifier": 22,
+        "attackModifier": 26,
+        "magicDefenceModifier": 16,
+        "magicAttackModifier": 16,
+        "hpModifier": 15,
+        "goldValue": 24
+      },
+      "helmet": {
+        "_id": "f19a60b0-6d74-492d-933a-7f45d24efa3b",
+        "itemName": "Helmet",
+        "itemType": "HELMET",
+        "quantity": 0,
+        "levelRequired": 5,
+        "defenceModifier": 29,
+        "attackModifier": 13,
+        "magicDefenceModifier": 7,
+        "magicAttackModifier": 29,
+        "hpModifier": 24,
+        "goldValue": 35
+      },
+      "chest": {
+        "_id": "64eb59f5-4ad7-4db1-aa74-6eff8d02b247",
+        "itemName": "Chest",
+        "itemType": "CHEST",
+        "quantity": 0,
+        "levelRequired": 9,
+        "defenceModifier": 21,
+        "attackModifier": 25,
+        "magicDefenceModifier": 15,
+        "magicAttackModifier": 33,
+        "hpModifier": 24,
+        "goldValue": 64
+      },
+      "gloves": {
+        "_id": "4df7a9ce-afd7-4430-809d-cb338419a92a",
+        "itemName": "Fine Gloves",
+        "itemType": "GLOVES",
+        "quantity": 0,
+        "levelRequired": 4,
+        "defenceModifier": 17,
+        "attackModifier": 27,
+        "magicDefenceModifier": 27,
+        "magicAttackModifier": 21,
+        "hpModifier": 28,
+        "goldValue": 48
+      },
+      "pants": {
+        "_id": "146ee397-bf64-49cd-ae99-da0716d27b75",
+        "quantity": 0,
+        "levelRequired": 0,
+        "defenceModifier": 0,
+        "attackModifier": 0,
+        "magicDefenceModifier": 0,
+        "magicAttackModifier": 0,
+        "hpModifier": 0,
+        "goldValue": 0,
+        "_class": "com.wot.wotbackend.itemModel.GearModels.Pants"
+      },
+      "shoulders": {
+        "_id": "66948329-9d03-4d69-b895-00581288bf43",
+        "itemName": "Fine Shoulders",
+        "itemType": "SHOULDERS",
+        "quantity": 0,
+        "levelRequired": 2,
+        "defenceModifier": 26,
+        "attackModifier": 7,
+        "magicDefenceModifier": 24,
+        "magicAttackModifier": 23,
+        "hpModifier": 19,
+        "goldValue": 10
+      },
+      "boots": {
+        "_id": "7e9ed05c-1540-4118-8491-c123511a305d",
+        "quantity": 0,
+        "levelRequired": 0,
+        "defenceModifier": 0,
+        "attackModifier": 0,
+        "magicDefenceModifier": 0,
+        "magicAttackModifier": 0,
+        "hpModifier": 0,
+        "goldValue": 0,
+        "_class": "com.wot.wotbackend.itemModel.GearModels.Boots"
+      },
+      "amulet": {
+        "_id": "c5369fb5-6289-40dc-929d-81b0e2ed0180",
+        "itemName": "Amulet",
+        "itemType": "AMULET",
+        "quantity": 0,
+        "levelRequired": 9,
+        "defenceModifier": 24,
+        "attackModifier": 10,
+        "magicDefenceModifier": 15,
+        "magicAttackModifier": 34,
+        "hpModifier": 16,
+        "goldValue": 48
+      },
+      "ring1": {
+        "_id": "b97a25db-f6a8-49a7-b8c2-8a11c579210d",
+        "itemName": "Ring",
+        "itemType": "RING",
+        "quantity": 0,
+        "levelRequired": 4,
+        "defenceModifier": 5,
+        "attackModifier": 22,
+        "magicDefenceModifier": 27,
+        "magicAttackModifier": 11,
+        "hpModifier": 28,
+        "goldValue": 24
+      },
+      "ring2": {
+        "_id": "fa4cbb71-db9d-4b3b-b941-43e798d0734f",
+        "itemName": "Ring",
+        "itemType": "RING",
+        "quantity": 0,
+        "levelRequired": 6,
+        "defenceModifier": 6,
+        "attackModifier": 26,
+        "magicDefenceModifier": 19,
+        "magicAttackModifier": 31,
+        "hpModifier": 17,
+        "goldValue": 36
+      }
+    },
+    "resourceName": "Inner Power",
+    "characterSkills": [
+      {
+        "characterSkillName": "Attack",
+        "characterSkillType": "ATTACK",
+        "skillDescription": "Basic melee attack. Does 100.0% magic damage to the target. Consumes 0% of inner power.",
+        "characterSkillModifier": 1.0,
+        "skillLevel": 1,
+        "skillMaxLevel": 1,
+        "innerPowerConsume": 0,
+        "skillRank": "D",
+        "buffedTurnsRemaining": 0,
+        "crystalCost": 0,
+        "_class": "com.wot.wotbackend.characterModel.characterSkill.MeleeAttack"
+      },
+      {
+        "characterSkillName": "Magic Attack",
+        "characterSkillType": "MAGICATTACK",
+        "skillDescription": "Basic magic attack. Does 100.0% magic damage to the target. Consumes 0% of inner power.",
+        "characterSkillModifier": 1.0,
+        "skillLevel": 1,
+        "skillMaxLevel": 1,
+        "innerPowerConsume": 0,
+        "skillRank": "D",
+        "buffedTurnsRemaining": 0,
+        "crystalCost": 0,
+        "_class": "com.wot.wotbackend.characterModel.characterSkill.MagicAttack"
+      },
+      {
+        "characterSkillName": "Wild Swing",
+        "characterSkillType": "ATTACKSKILL",
+        "skillDescription": "Swing you weapon wildly, causing 150.0% melee damage to the target. Consumes 10% of inner power.",
+        "characterSkillModifier": 1.5,
+        "skillLevel": 1,
+        "skillMaxLevel": 5,
+        "innerPowerConsume": 10,
+        "skillRank": "C",
+        "buffedTurnsRemaining": 0,
+        "crystalCost": 0,
+        "_class": "com.wot.wotbackend.characterModel.characterSkill.WildSwing"
+      },
+      {
+        "characterSkillName": "Arcane Bolt",
+        "characterSkillType": "MAGICATTACKSKILL",
+        "skillDescription": "Throw an arcane bolt causing 150.0% magic damage to the target. Consumes 10% of inner power.",
+        "characterSkillModifier": 1.5,
+        "skillLevel": 1,
+        "skillMaxLevel": 5,
+        "innerPowerConsume": 10,
+        "skillRank": "C",
+        "buffedTurnsRemaining": 0,
+        "crystalCost": 0,
+        "_class": "com.wot.wotbackend.characterModel.characterSkill.ArcaneBolt"
+      },
+      {
+        "characterSkillName": "Burst of Power",
+        "characterSkillType": "BATTLEBUFF",
+        "skillDescription": "Increases attack and magic attack for 3 rounds by 200.0% . Consumes 20% of inner power.",
+        "characterSkillModifier": 2.0,
+        "skillLevel": 1,
+        "skillMaxLevel": 5,
+        "innerPowerConsume": 20,
+        "skillRank": "B",
+        "buffedTurnsRemaining": 3,
+        "crystalCost": 1,
+        "_class": "com.wot.wotbackend.characterModel.characterSkill.BurstOfPower"
+      },
+      {
+        "characterSkillName": "Healing Touch",
+        "characterSkillType": "BATTLEBUFF",
+        "skillDescription": "Heal for 15.000001% of your magic damage. Consumes 15% of inner power.",
+        "characterSkillModifier": 0.15000000596046448,
+        "skillLevel": 1,
+        "skillMaxLevel": 5,
+        "innerPowerConsume": 15,
+        "skillRank": "C",
+        "buffedTurnsRemaining": 0,
+        "crystalCost": 1,
+        "_class": "com.wot.wotbackend.characterModel.characterSkill.HealingTouch"
+      }
+    ],
+    "skill1": {
+      "characterSkillName": "Magic Attack",
+      "characterSkillType": "MAGICATTACK",
+      "skillDescription": "Basic magic attack. Does 100.0% magic damage to the target. Consumes 0% of inner power.",
+      "characterSkillModifier": 1.0,
+      "skillLevel": 1,
+      "skillMaxLevel": 1,
+      "innerPowerConsume": 0,
+      "skillRank": "D",
+      "buffedTurnsRemaining": 0,
+      "crystalCost": 0
+    },
+    "skill2": {
+      "characterSkillName": "Arcane Bolt",
+      "characterSkillType": "MAGICATTACKSKILL",
+      "skillDescription": "Throw an arcane bolt causing 150.0% magic damage to the target. Consumes 10% of inner power.",
+      "characterSkillModifier": 1.5,
+      "skillLevel": 1,
+      "skillMaxLevel": 5,
+      "innerPowerConsume": 10,
+      "skillRank": "C",
+      "buffedTurnsRemaining": 0,
+      "crystalCost": 0
+    },
+    "skill3": {
+      "characterSkillName": "Burst of Power",
+      "characterSkillType": "BATTLEBUFF",
+      "skillDescription": "Increases attack and magic attack for 3 rounds by 200.0% . Consumes 20% of inner power.",
+      "characterSkillModifier": 2.0,
+      "skillLevel": 1,
+      "skillMaxLevel": 5,
+      "innerPowerConsume": 20,
+      "skillRank": "B",
+      "buffedTurnsRemaining": 3,
+      "crystalCost": 1
+    },
+    "skill4": {
+      "characterSkillName": "Healing Touch",
+      "characterSkillType": "BATTLEBUFF",
+      "skillDescription": "Heal for 15.000001% of your magic damage. Consumes 15% of inner power.",
+      "characterSkillModifier": 0.15000000596046448,
+      "skillLevel": 1,
+      "skillMaxLevel": 5,
+      "innerPowerConsume": 15,
+      "skillRank": "C",
+      "buffedTurnsRemaining": 0,
+      "crystalCost": 1
+    },
+    "characterRace": {
+      "raceName": "Human",
+      "statModifier": 0.0,
+      "hp": 85.0,
+      "attack": 25.0,
+      "defence": 30.0,
+      "magicAttack": 25.0,
+      "magicDefence": 30.0,
+      "speed": 30.0,
+      "innerPower": 50.0,
+      "_class": "com.wot.wotbackend.characterModel.characterRace.HumanRace"
+    },
+    "gold": 19616,
+    "questList": [
+      {
+        "_id": "982de340-adf3-4a96-8079-c95f36683a76",
+        "name": "Wondering hero",
+        "description": "The world has changed! Portals have spawned all around. Take a walk and see for yourself.",
+        "objectiveList": [
+          {
+            "description": "Walk 1Km. ",
+            "objectiveTypeEnum": "TRAVELOBJECTIVE",
+            "isCompleted": false,
+            "maxTasks": 1000,
+            "tasksDone": 820,
+            "_class": "com.wot.wotbackend.questModel.OBjectives.TravelObjective"
+          }
+        ],
+        "questLevel": 1,
+        "exp": 3000,
+        "gold": 1500,
+        "itemRewards": [
+          {
+            "_id": "63869768-591b-41f7-b5f6-02750a380026",
+            "itemName": "Potion",
+            "itemAbility": {
+              "abilityDescription": "Heals player for 10% of max hp.",
+              "abilityModifier": 10.0,
+              "_class": "com.wot.wotbackend.itemModel.Abilities.HealHp"
+            },
+            "itemType": "CONSUMABLE",
+            "quantity": 1,
+            "levelRequired": 0,
+            "defenceModifier": 0,
+            "attackModifier": 0,
+            "magicDefenceModifier": 0,
+            "magicAttackModifier": 0,
+            "hpModifier": 0,
+            "goldValue": 200,
+            "_class": "com.wot.wotbackend.itemModel.ConsumableModel.Potion"
+          }
+        ],
+        "isQuestCompleted": false,
+        "questTypeEnum": "MAINQUEST"
+      }
+    ],
+    "inventory": [
+      {
+        "_id": "e96fb92c-a187-4b27-a779-736639cff230",
+        "itemName": "Ip Potion",
+        "itemAbility": {
+          "abilityDescription": "Restore 10% of max ip.",
+          "abilityModifier": 10.0
+        },
+        "itemType": "CONSUMABLE",
+        "quantity": 3,
+        "levelRequired": 0,
+        "defenceModifier": 0,
+        "attackModifier": 0,
+        "magicDefenceModifier": 0,
+        "magicAttackModifier": 0,
+        "hpModifier": 0,
+        "goldValue": 200
+      },
+      {
+        "_id": "992786eb-f0c4-41dd-ab1d-9e523245427e",
+        "itemName": "Potion",
+        "itemAbility": {
+          "abilityDescription": "Heals player for 10% of max hp.",
+          "abilityModifier": 10.0
+        },
+        "itemType": "CONSUMABLE",
+        "quantity": 3,
+        "levelRequired": 0,
+        "defenceModifier": 0,
+        "attackModifier": 0,
+        "magicDefenceModifier": 0,
+        "magicAttackModifier": 0,
+        "hpModifier": 0,
+        "goldValue": 200
+      },
+      {
+        "_id": "6bab1623-229e-4fd8-8147-5975a0e115ab",
+        "itemName": "Sword",
+        "itemType": "WEAPON",
+        "quantity": "0",
+        "levelRequired": "2",
+        "defenceModifier": "9",
+        "attackModifier": "22",
+        "magicDefenceModifier": "23",
+        "magicAttackModifier": "19",
+        "hpModifier": "5",
+        "goldValue": "5"
+      }
+    ]
+  },
+  "career": {
+    "distanceTraveled": 1700,
+    "creaturesKilled": 38,
+    "bossesKilled": 0,
+    "currentValorTowerFloor": 2,
+    "topValorTowerFloor": 9,
+    "totalGoldAcquired": 0,
+    "totalGoldSpent": 0,
+    "totalDeaths": 0,
+    "totalLootedItems": 0,
+    "valorTowerAvailableResets": 2
+  }
+}

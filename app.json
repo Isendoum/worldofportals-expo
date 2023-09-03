@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "ios": {
+      "icon": "./assets/icon.png"
+    },
+    "android": {
+      "icon": "./assets/icon.png",
+      "package": "com.geotsek2003.simpleApp"
+    },
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "worldofportals",
+    "slug": "worldofportals",
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
+    ],
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./assets/splash2.png",
+      "resizeMode": "cover"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/65afef22-9a79-4b18-9e25-35969592e099"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "65afef22-9a79-4b18-9e25-35969592e099"
+      }
+    },
+    "owner": "geotsek2003"
+  }
+}

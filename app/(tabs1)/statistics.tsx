@@ -1,0 +1,142 @@
+import { usePlayerCharacter } from "@/context/PlayerContext";
+
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+
+export default function Statistics() {
+  const [playerCharacter] = usePlayerCharacter();
+
+  return (
+    <ScrollView
+      contentContainerStyle={{
+        flex: 1,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        marginTop: 25,
+      }}>
+      <View>
+        <View style={styles.nameView}>
+          <Text style={styles.nameText}>{playerCharacter?.name}</Text>
+
+          <Text style={styles.nameText}>Lvl: {playerCharacter?.level}</Text>
+        </View>
+        <View>
+          <Text style={styles.inBetweenText}>Character Info</Text>
+        </View>
+
+        <View style={styles.columnView}>
+          <Text style={styles.text}>
+            Race: {playerCharacter?.characterRace.raceName}
+          </Text>
+
+          <Text style={styles.text}>
+            Exp: {playerCharacter?.exp}/{playerCharacter?.expRequired}
+          </Text>
+
+          <Text style={styles.text}>
+            Hp: {playerCharacter?.currentHp}/{playerCharacter?.getMaxHp()}
+          </Text>
+          <Text style={styles.text}>
+            {playerCharacter?.resourceName + ": "}
+            {playerCharacter?.currentInnerPower}/
+            {playerCharacter?.maxInnerPower}
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.inBetweenText}>Stats</Text>
+        </View>
+        <View style={styles.columnView}>
+          <Text style={styles.text}>
+            Attack: {playerCharacter?.getAttack()}
+          </Text>
+          <Text style={styles.text}>
+            Defence: {playerCharacter?.getDefence()}
+          </Text>
+          <Text style={styles.text}>
+            M.Attack: {playerCharacter?.getMagicAttack()}
+          </Text>
+          <Text style={styles.text}>
+            M.Defence: {playerCharacter?.getMagicDefence()}
+          </Text>
+        </View>
+
+        <View>
+          <Text style={styles.inBetweenText}>Career</Text>
+        </View>
+
+        <View style={styles.careerColumnView}>
+          <Text style={styles.text}>
+            Distance traveled(km):{" "}
+            {(playerCharacter?.career.distanceTraveled || 0 / 1000).toPrecision(
+              2
+            )}
+          </Text>
+          <Text style={styles.text}>
+            Creatures killed: {playerCharacter?.career.creaturesKilled}
+          </Text>
+          <Text style={styles.text}>
+            Valor Tower top floor reached:{" "}
+            {playerCharacter?.career.topValorTowerFloor}
+          </Text>
+          <Text style={styles.text}>
+            Total deaths: {playerCharacter?.career.totalDeaths}
+          </Text>
+        </View>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  nameView: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+
+    borderStyle: "solid",
+
+    marginBottom: 8,
+    marginStart: "10%",
+    marginEnd: "10%",
+  },
+  nameText: {
+    fontFamily: "BruntsfieldCFBlackRegular",
+    fontSize: 26,
+    color: "#F0F8FF",
+  },
+  inBetweenText: {
+    fontFamily: "BruntsfieldCFBlackRegular",
+    fontSize: 24,
+    marginStart: "10%",
+    marginEnd: "10%",
+    color: "#F0F8FF",
+  },
+
+  columnView: {
+    flexDirection: "column",
+    justifyContent: "space-around",
+    marginBottom: 10,
+    borderColor: "#F0F8FF",
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderRadius: 7,
+    marginStart: "10%",
+    marginEnd: "10%",
+    flex: 0,
+  },
+  careerColumnView: {
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    marginBottom: 10,
+    borderColor: "#F0F8FF",
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderRadius: 7,
+    marginStart: "10%",
+    marginEnd: "10%",
+  },
+  text: {
+    flexDirection: "column",
+    fontFamily: "BruntsfieldCFBlackRegular",
+    fontSize: 18,
+    color: "#F0F8FF",
+  },
+});
