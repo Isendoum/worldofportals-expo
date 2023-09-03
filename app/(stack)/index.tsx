@@ -34,7 +34,7 @@ const IntroPage = () => {
   const clearStorage = async () => {
     try {
       // await AsyncStorage.clear();
-      setPlayerCharacter(null);
+      setPlayerCharacter(null!);
       alert("Storage successfully cleared!");
     } catch (e) {
       alert("Failed to clear the async storage.");

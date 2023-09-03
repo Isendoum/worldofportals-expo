@@ -8,12 +8,14 @@
     },
     "android": {
       "icon": "./assets/icon.png",
-      "package": "com.geotsek2003.simpleApp"
+      "package": "com.geotsek2003.simpleApp",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ]
     },
     "scheme": "acme",
-    "web": {
-      "bundler": "metro"
-    },
     "name": "worldofportals",
     "slug": "worldofportals",
     "plugins": [
@@ -35,14 +37,14 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/65afef22-9a79-4b18-9e25-35969592e099"
+      "url": "https://u.expo.dev/dc70309e-08a6-4726-96a2-89b3dd90705b"
     },
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "65afef22-9a79-4b18-9e25-35969592e099"
+        "projectId": "dc70309e-08a6-4726-96a2-89b3dd90705b"
       }
     },
     "owner": "geotsek2003"
