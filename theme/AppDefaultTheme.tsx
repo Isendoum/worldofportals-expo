@@ -14,6 +14,8 @@ const AppDefaultTheme: AppTheme = {
     buttonText: "rgb(255, 255, 255)", // this is for button text color
     modalBackground: "rgba(242, 242, 242, 0.95)",
     appCardBackground: "rgb(220, 220, 220)",
+    disabledButtonBackground: "rgb(100, 100, 100)",
+    disabledButtonText: "rgba(200, 200, 200, 0.95)",
   },
 };
 

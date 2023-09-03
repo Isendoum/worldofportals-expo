@@ -10,7 +10,7 @@ const Tbs = () => {
         <Stack.Screen
           name="index"
           options={{
-            title: "Home",
+            title: "Main menu",
             headerShown: false,
             // tabBarIcon: () => (
             //   <Ionicons name="airplane" size={24} color="black" />
@@ -41,6 +41,16 @@ const Tbs = () => {
           name="battle"
           options={{
             title: "Battle",
+            headerShown: false,
+            // tabBarIcon: () => (
+            //   <Ionicons name="aperture" size={24} color="black" />
+            // ),
+          }}
+        />
+        <Stack.Screen
+          name="create"
+          options={{
+            title: "Create Character",
             headerShown: false,
             // tabBarIcon: () => (
             //   <Ionicons name="aperture" size={24} color="black" />

@@ -12,6 +12,7 @@ import {
   ItemType,
   PlayerCharacter,
 } from "@/game/classes/classes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ShowModalContent = () => {
   const [text, setText] = useState<string>("");
@@ -30,7 +31,15 @@ const ShowModalContent = () => {
 const IntroPage = () => {
   const router = useRouter();
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
-
+  const clearStorage = async () => {
+    try {
+      // await AsyncStorage.clear();
+      setPlayerCharacter(null);
+      alert("Storage successfully cleared!");
+    } catch (e) {
+      alert("Failed to clear the async storage.");
+    }
+  };
   return (
     <ScrollView
       contentContainerStyle={{
@@ -45,10 +54,12 @@ const IntroPage = () => {
           flexDirection: "column",
         }}>
         <AppButton
+          disabled={!playerCharacter}
           title="Explore"
           onPress={() => router.push("/(stack)/map")}
         />
         <AppButton
+          disabled={!playerCharacter}
           title="Character"
           onPress={() => router.push("/(tabs1)/statistics")}
         />
@@ -60,7 +71,16 @@ const IntroPage = () => {
           alignItems: "center",
           flexDirection: "column",
         }}>
-        <AppText>{playerCharacter?.getAttack()}</AppText>
+        <AppButton
+          disabled={!!playerCharacter}
+          title="Create character"
+          onPress={() => router.push("/(stack)/create")}
+        />
+        <AppButton
+          disabled={!playerCharacter}
+          title="Delete Character"
+          onPress={async () => await clearStorage()}
+        />
       </AppCard>
     </ScrollView>
   );

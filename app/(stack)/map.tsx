@@ -23,7 +23,7 @@ const Screen1 = () => {
         accuracy: Location.Accuracy.Balanced,
         timeInterval: 5,
       });
-      console.log(location);
+      console.log("Loc:", location);
       setLocation(location);
     })();
   }, []);

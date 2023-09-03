@@ -40,16 +40,16 @@ const Gear = () => {
               flexDirection: "column",
             }}>
             <Text style={styles.text}>Helmet</Text>
-            <GearView item={playerCharacter?.gear.helmet} />
+            <GearView item={playerCharacter?.gear?.helmet} />
 
             <Text style={styles.text}>Chest</Text>
-            <GearView item={playerCharacter?.gear.chest} />
+            <GearView item={playerCharacter?.gear?.chest} />
 
             <Text style={styles.text}>Gloves</Text>
-            <GearView item={playerCharacter?.gear.gloves} />
+            <GearView item={playerCharacter?.gear?.gloves} />
 
             <Text style={styles.text}>Pants</Text>
-            <GearView item={playerCharacter?.gear.pants} />
+            <GearView item={playerCharacter?.gear?.pants} />
           </View>
 
           <View
@@ -74,30 +74,30 @@ const Gear = () => {
                   flexDirection: "column",
                 }}>
                 <Text style={styles.text}>Weapon</Text>
-                <GearView item={playerCharacter?.gear.weapon} />
+                <GearView item={playerCharacter?.gear?.weapon} />
               </View>
               <View style={{ flex: 1, flexDirection: "column" }}>
                 <Text style={styles.text}>Off-Hand</Text>
-                <GearView item={playerCharacter?.gear.offHand} />
+                <GearView item={playerCharacter?.gear?.offHand} />
               </View>
             </View>
           </View>
 
           <View style={{ flex: 1, flexDirection: "column" }}>
             <Text style={styles.text}>Shoulders</Text>
-            <GearView item={playerCharacter?.gear.shoulders} />
+            <GearView item={playerCharacter?.gear?.shoulders} />
 
             <Text style={styles.text}>Boots</Text>
-            <GearView item={playerCharacter?.gear.boots} />
+            <GearView item={playerCharacter?.gear?.boots} />
 
             <Text style={styles.text}>Amulet</Text>
-            <GearView item={playerCharacter?.gear.amulet} />
+            <GearView item={playerCharacter?.gear?.amulet} />
 
             <Text style={styles.text}>Ring 1</Text>
-            <GearView item={playerCharacter?.gear.ring1} />
+            <GearView item={playerCharacter?.gear?.ring1} />
 
             <Text style={styles.text}>Ring 2</Text>
-            <GearView item={playerCharacter?.gear.ring2} />
+            <GearView item={playerCharacter?.gear?.ring2} />
           </View>
         </View>
       </View>

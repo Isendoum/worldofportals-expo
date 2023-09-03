@@ -1,6 +1,7 @@
 import ProgressBar from "@/components/other/ProgressBar";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { Creature, Battle, CharacterSkill } from "@/game/classes/classes";
+import { useModal } from "@/hooks/useModal";
 import { findSkillImage } from "@/utils/imageUtils";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -14,36 +15,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-// const startingBattleState = {
-//   turn: 1,
-//   player: {
-//     playerCharacter: {
-//       name: "geotsek",
-//       level: 20,
-//       characterRace: { raceName: "Elf" },
-//       exp: 3000,
-//       expRequired: 10000,
-//       currentHp: 100,
-//       maxHp: 100,
-//       resourceName: "Mana",
-//       currentInnerPower: 30,
-//       maxInnerPower: 30,
-//       attack: 10,
-//       defence: 10,
-//       magicAttack: 10,
-//       magicDefence: 10,
-//     },
-//   },
-//   battleMessage: "Battle is starting",
-// };
+import { EndBattleModalContent } from "../../components/EndBattleModalContent";
 
 const BattleScreen = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
-
+  const { openModal } = useModal();
   const [arePlayerButtonDisabled, setArePlayerButtonDisabled] = useState(false);
   const [endBattleOverlay, setEndBattleOverlay] = useState(false);
-  const [battleState, setBattleState] = useState(new Battle(playerCharacter));
+  const [battleState, setBattleState] = useState(
+    new Battle(
+      playerCharacter!,
+      Creature.generateMonster(playerCharacter?.level!)
+    )
+  );
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [isSkillDisabled, setIsSkillDisabled] = useState(false);
   const [battleEnded, setBattleEnded] = useState(false);
@@ -57,6 +41,58 @@ const BattleScreen = () => {
   const animatedCreatureYValue = useRef(new Animated.Value(0)).current;
   const creatureTimeout = useRef(null);
 
+  const attackRequest = (skill: CharacterSkill | undefined) => {
+    const battle = battleState.clone();
+    battle.playerAttack(skill);
+    setBattleState(battle);
+    // Animation
+    Animated.sequence([
+      Animated.timing(animatedPlayerXValue, {
+        toValue: 200, // Dash towards the monster by 50 units
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animatedPlayerXValue, {
+        toValue: 0, // Return to the original position
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const monsterAttack = () => {
+    const battle = battleState.clone();
+    battle.monsterAttack();
+    setBattleState(battle);
+    Animated.sequence([
+      Animated.delay(1000),
+      Animated.timing(animatedCreatureXValue, {
+        toValue: -200, // Monster dashes towards the player
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animatedCreatureXValue, {
+        toValue: 0, // Monster returns to its original position
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  // check currently playing property
+  useEffect(() => {
+    console.log(battleState.battleState);
+    if (battleState.battleState === "monster") {
+      monsterAttack();
+    }
+    if (battleState.battleState === "end") {
+      setTimeout(
+        () => openModal(<EndBattleModalContent battleState={battleState} />),
+        1000
+      );
+    }
+  }, [battleState.battleState]);
+
   const skillButton = (skill: CharacterSkill | undefined) => {
     if (skill !== null) {
       return (
@@ -67,7 +103,7 @@ const BattleScreen = () => {
           <TouchableOpacity
             // ref={(skillBtn) => (this.skillBtn = skillBtn)}
             style={{ alignItems: "center" }}
-            //  onPressIn={() => this.attackRequest(skill)}
+            onPressIn={() => attackRequest(skill)}
 
             //disabled={this.isAttackDisabled(skill.innerPowerConsume)}
           >
@@ -94,13 +130,13 @@ const BattleScreen = () => {
       );
   };
 
-  const hasEnoughInnerPower = (innerPower: number) => {
-    if (innerPower === null) {
-      return false;
-    } else if (innerPower <= battleState.playerCharacter.currentInnerPower) {
-      return true;
-    } else return false;
-  };
+  // const hasEnoughInnerPower = (innerPower: number) => {
+  //   if (innerPower === null) {
+  //     return false;
+  //   } else if (innerPower <= battleState.playerCharacter.currentInnerPower) {
+  //     return true;
+  //   } else return false;
+  // };
 
   //   useEffect(() => {
   //     hasEnoughInnerPower();
@@ -180,12 +216,12 @@ const BattleScreen = () => {
                   resizeMode: "contain",
                   alignSelf: "flex-end",
                   transform: [
-                    {
-                      rotate: animatedRotateValue.interpolate({
-                        inputRange: [-5, 5],
-                        outputRange: ["-0.1rad", "0.1rad"],
-                      }),
-                    },
+                    // {
+                    //   rotate: animatedRotateValue.interpolate({
+                    //     inputRange: [-5, 5],
+                    //     outputRange: ["-0.1rad", "0.1rad"],
+                    //   }),
+                    // },
                     {
                       translateX: animatedCreatureXValue,
                     },
@@ -207,19 +243,19 @@ const BattleScreen = () => {
               {battleState.playerCharacter?.name}
             </Text>
             <ProgressBar
-              current={battleState.playerCharacter?.currentHp}
-              max={battleState.playerCharacter?.maxHp}
+              current={battleState.playerCharacter?.getCurrentHp()!}
+              max={battleState.playerCharacter?.getMaxHp()!}
             />
             {/* <ProgressBar style={{ marginTop: 2, alignSelf: "center" }} borderColor={"#000000"} color={"#00008B"} height={8} width={100} animated={true}
               progress={battleState.player.playerCharacter.currentInnerPower / this.state.battleState.player.playerCharacter.maxInnerPower} />
             {buffs(battleState)} */}
           </View>
           <View>
-            <Text style={styles.infoText}>
-              Skeleton
-              {/* {battleState?.creature?.name} */}
-            </Text>
-            <ProgressBar current={222} max={222} />
+            <Text style={styles.infoText}>{battleState?.creature?.name}</Text>
+            <ProgressBar
+              current={battleState?.creature?.currentHp!}
+              max={battleState?.creature?.maxHp!}
+            />
             {/* <Progress.Bar style={{ marginTop: 2, alignSelf: "center" }} borderColor={"#000000"} color={"#DC143C"} height={8} width={100} animated={true}
               progress={battleState.creature.hp / creatureMaxHp} /> */}
           </View>

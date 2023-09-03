@@ -6,13 +6,15 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+
 interface AppButtonProps extends PressableProps {
   title?: string;
   onPress?: () => void;
+  disabled?: boolean; // Added disabled prop
 }
 
 const AppButton: React.FC<AppButtonProps> = (props) => {
-  const { title = "" } = props;
+  const { title = "", disabled = false } = props;
   const theme = useTheme() as AppTheme;
   const scale = useSharedValue(1);
 
@@ -27,17 +29,31 @@ const AppButton: React.FC<AppButtonProps> = (props) => {
       style={[
         styles.button,
         animatedStyle,
-        { backgroundColor: theme.colors.buttonBackground },
+        {
+          backgroundColor: disabled
+            ? theme.colors.disabledButtonBackground
+            : theme.colors.buttonBackground,
+        },
       ]}
-      onStartShouldSetResponder={() => true}
+      onStartShouldSetResponder={() => !disabled}
       onResponderGrant={() => {
-        scale.value = withSpring(1.2);
+        if (!disabled) {
+          scale.value = withSpring(1.2);
+        }
       }}
       onResponderRelease={() => {
-        scale.value = withSpring(1);
-        props.onPress && props.onPress();
+        if (!disabled) {
+          scale.value = withSpring(1);
+          props.onPress && props.onPress();
+        }
       }}>
-      <Text style={{ ...styles.text, color: theme.colors.buttonText }}>
+      <Text
+        style={{
+          ...styles.text,
+          color: disabled
+            ? theme.colors.disabledButtonText
+            : theme.colors.buttonText,
+        }}>
         {title}
       </Text>
     </Animated.View>

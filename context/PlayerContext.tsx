@@ -26,7 +26,6 @@ export const PlayerCharacterProvider: React.FC<any> = ({ children }) => {
 
   // Save the PlayerCharacter to AsyncStorage whenever it changes
   React.useEffect(() => {
-    console.log("in save use effect");
     if (playerCharacter) {
       AsyncStorage.setItem("playerCharacter", playerCharacter.serialize());
       console.info("Saved");

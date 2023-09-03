@@ -15,37 +15,15 @@ import { usePlayerCharacter } from "@/context/PlayerContext";
 const Skills = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   // const [skills, setSkills] = useState();
-  const [toolTipVisible, setToolTipVisible] = useState<number | null>(null);
-  const skills = [
-    {
-      id: 1,
-      characterSkillName: "Attack",
-      skillDescription: "Normal attack.",
-    },
-    {
-      id: 2,
-      characterSkillName: "Wild Swing",
-      skillDescription: "Throws a magic orb.",
-    },
-    {
-      id: 3,
-      characterSkillName: "Arcane Bolt",
-      skillDescription: "Throws a magic orb.",
-    },
-    {
-      id: 4,
-      characterSkillName: "Magic Attack",
-      skillDescription: "Throws a magic orb.",
-    },
-  ];
+  const [toolTipVisible, setToolTipVisible] = useState<number | string | null>(
+    null
+  );
 
   const assignSkill = (skill: any, slot: number) => {
     if (playerCharacter) {
       // Create a new instance of PlayerCharacter with the updated skill
       const updatedPlayerCharacter = playerCharacter.clone();
       updatedPlayerCharacter.assignSkillToSlot(skill, slot);
-
-      console.log(updatedPlayerCharacter.skill1);
 
       // Set the new instance as the state
       setPlayerCharacter(updatedPlayerCharacter);
@@ -77,7 +55,7 @@ const Skills = () => {
           }}>
           <FlatList
             keyExtractor={(item) => item.id.toString()}
-            data={skills}
+            data={playerCharacter?.characterSkills}
             renderItem={({ item }) => {
               return (
                 <View style={styles.listItem}>

@@ -5,6 +5,8 @@ declare type AppThemeColors = Theme["colors"] & {
   buttonText: string;
   modalBackground: string;
   appCardBackground: string;
+  disabledButtonBackground: string;
+  disabledButtonText: string;
 };
 
 declare type AppTheme = Theme & {

@@ -14,6 +14,8 @@ const AppDarkTheme: AppTheme = {
     buttonText: "rgb(250, 240, 230)",
     modalBackground: "rgba(92, 84, 112, 0.95)",
     appCardBackground: "rgb(140, 140, 148)",
+    disabledButtonBackground: "rgb(100, 100, 100)",
+    disabledButtonText: "rgba(92, 84, 112, 0.95)",
   },
 };
 

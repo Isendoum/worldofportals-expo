@@ -1,9 +1,12 @@
 import { usePlayerCharacter } from "@/context/PlayerContext";
+import { getNextLevelExperience } from "@/game/utils/expUtils";
 
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 export default function Statistics() {
   const [playerCharacter] = usePlayerCharacter();
+  // React.useEffect(() => {}, [playerCharacter]);
 
   return (
     <ScrollView
@@ -25,11 +28,12 @@ export default function Statistics() {
 
         <View style={styles.columnView}>
           <Text style={styles.text}>
-            Race: {playerCharacter?.characterRace.raceName}
+            Race: {playerCharacter?.characterRace?.raceName}
           </Text>
 
           <Text style={styles.text}>
-            Exp: {playerCharacter?.exp}/{playerCharacter?.expRequired}
+            Exp: {playerCharacter?.exp}/
+            {getNextLevelExperience(playerCharacter?.level!)}
           </Text>
 
           <Text style={styles.text}>
@@ -40,6 +44,7 @@ export default function Statistics() {
             {playerCharacter?.currentInnerPower}/
             {playerCharacter?.maxInnerPower}
           </Text>
+          <Text style={styles.text}>Gold: {playerCharacter?.gold}</Text>
         </View>
         <View>
           <Text style={styles.inBetweenText}>Stats</Text>
@@ -66,19 +71,19 @@ export default function Statistics() {
         <View style={styles.careerColumnView}>
           <Text style={styles.text}>
             Distance traveled(km):{" "}
-            {(playerCharacter?.career.distanceTraveled || 0 / 1000).toPrecision(
-              2
-            )}
+            {(
+              playerCharacter?.career?.distanceTraveled || 0 / 1000
+            ).toPrecision(2)}
           </Text>
           <Text style={styles.text}>
-            Creatures killed: {playerCharacter?.career.creaturesKilled}
+            Creatures killed: {playerCharacter?.career?.creaturesKilled}
           </Text>
           <Text style={styles.text}>
             Valor Tower top floor reached:{" "}
-            {playerCharacter?.career.topValorTowerFloor}
+            {playerCharacter?.career?.topValorTowerFloor}
           </Text>
           <Text style={styles.text}>
-            Total deaths: {playerCharacter?.career.totalDeaths}
+            Total deaths: {playerCharacter?.career?.totalDeaths}
           </Text>
         </View>
       </View>

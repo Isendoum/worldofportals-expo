@@ -1,68 +1,86 @@
+import {
+  getMonsterExperienceAward,
+  getNextLevelExperience,
+} from "../utils/expUtils";
+
 export class PlayerCharacter {
   constructor(
-    name?: string,
-    characterRace?: CharacterRace,
-    level?: number,
-    exp?: number,
-    gear?: Gear,
-    characterSkills?: CharacterSkill[],
-    inventory?: Item[],
-    skill1?: CharacterSkill,
-    skill2?: CharacterSkill,
-    skill3?: CharacterSkill,
-    skill4?: CharacterSkill
+    public name?: string,
+    public maxHp?: number,
+    public currentHp?: number,
+    public defence?: number,
+    public attack?: number,
+    public magicAttack?: number,
+    public magicDefence?: number,
+    public speed?: number,
+    public level?: number,
+    public exp?: number,
+    public expRequired?: number,
+    public maxInnerPower?: number,
+    public currentInnerPower?: number,
+    public skillPoints?: number,
+    public gear?: Gear,
+    public resourceName?: string,
+    public characterSkills?: CharacterSkill[],
+    public skill1?: CharacterSkill,
+    public skill2?: CharacterSkill,
+    public skill3?: CharacterSkill,
+    public skill4?: CharacterSkill,
+    public characterRace?: CharacterRace,
+    public gold?: number,
+    public questList?: Quest[],
+    public inventory?: Item[],
+    public career?: Career
   ) {
-    this.skill1 = skill1;
-    this.skill2 = skill2;
-    this.skill3 = skill3;
-    this.skill4 = skill4;
-    this.name = name || "";
-    this.exp = exp || 0;
-    this.level = level || 0;
-    this.characterRace = characterRace || new CharacterRace();
-    this.gear = gear || new Gear();
-    this.questList = [];
-    this.gold = 1000;
-    this.inventory = inventory || [];
-    this.skillPoints = 0;
-    this.maxHp = this.getMaxHp();
-    this.currentHp = this.getMaxHp();
-    this.defence = this.getDefence();
-    this.attack = this.getAttack();
-    this.magicAttack = this.getMagicAttack();
-    this.magicDefence = this.getMagicDefence();
-    this.speed = 5;
+    // this.skill1 = skill1;
+    // this.skill2 = skill2;
+    // this.skill3 = skill3;
+    // this.skill4 = skill4;
+    // this.name = name || "";
+    // this.exp = exp || 0;
+    // this.expRequired = expRequired || 0;
+    //  this.level = level || 1;
+    //this.characterRace = characterRace;
+    //  this.gear = gear || new Gear();
+    // this.questList = [];
+    // this.gold = 1000;
+    // this.inventory = inventory || [];
+    // this.skillPoints = 0;
+    // this.maxHp = this.getMaxHp();
+    //  this.currentHp = this.maxHp;
+    // this.defence = this.getDefence();
+    // this.attack = this.getAttack();
+    // this.magicAttack = this.getMagicAttack();
+    // this.magicDefence = this.getMagicDefence();
+    // this.currentInnerPower = currentInnerPower || this.getMaxInnerPower();
+    // this.maxInnerPower = this.getMaxInnerPower();
+    // this.speed = 5;
     this.resourceName = "Inner Power";
-    this.characterSkills = characterSkills || [];
-    this.career = new Career();
+    // this.characterSkills = characterSkills || [];
+    // this.career = new Career();
     // ... initialize other properties ...
   }
-  name: string;
-  maxHp: number;
-  currentHp: number;
-  defence: number;
-  attack: number;
-  magicAttack: number;
-  magicDefence: number;
-  speed: number;
-  level: number;
-  exp: number;
-  expRequired: number;
-  maxInnerPower: number;
-  currentInnerPower: number;
-  skillPoints: number;
-  gear: Gear;
-  resourceName: string;
-  characterSkills: CharacterSkill[];
-  skill1?: CharacterSkill;
-  skill2?: CharacterSkill;
-  skill3?: CharacterSkill;
-  skill4?: CharacterSkill;
-  characterRace: CharacterRace;
-  gold: number;
-  questList: Quest[];
-  inventory: Item[];
-  career: Career;
+
+  static characterInit(
+    name: string,
+    race: CharacterRace,
+    startingSkills: CharacterSkill[]
+  ) {
+    const char = new PlayerCharacter();
+    char.name = name;
+    char.characterRace = race;
+    char.characterSkills = [...startingSkills];
+    char.level = 1;
+    char.exp = 0;
+    char.gold = 50;
+    char.inventory = [];
+    char.expRequired = getNextLevelExperience(char.level);
+    char.currentHp = char.getMaxHp();
+    char.maxInnerPower = char.getMaxInnerPower();
+    char.currentInnerPower = char.getMaxInnerPower();
+    char.career = new Career();
+    return char;
+  }
 
   clone() {
     const cloned = new PlayerCharacter();
@@ -72,10 +90,10 @@ export class PlayerCharacter {
   }
 
   addItemToInventory(item: Item) {
-    this.inventory.push(item);
+    this.inventory?.push(item);
   }
   removeItemFromInventory(item: Item) {
-    const inventoryWithRemovedItem = this.inventory.filter(
+    const inventoryWithRemovedItem = this.inventory?.filter(
       (i) => i._id !== item._id
     );
     this.inventory = inventoryWithRemovedItem;
@@ -84,113 +102,133 @@ export class PlayerCharacter {
   equipGearItemAndRemoveItFromInventory(item: Item) {
     switch (item.itemType) {
       case ItemType.WEAPON:
-        if (this.gear.weapon) {
+        if (this.gear?.weapon) {
           const equipedItem = this.gear.weapon;
           this.gear.weapon = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.weapon = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.weapon = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.OFFHAND:
-        if (this.gear.offHand) {
+        if (this.gear?.offHand) {
           const equipedItem = this.gear.offHand;
           this.gear.offHand = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.offHand = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.offHand = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.CHEST:
-        if (this.gear.chest) {
+        if (this.gear?.chest) {
           const equipedItem = this.gear.chest;
           this.gear.chest = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.chest = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.chest = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.HELMET:
-        if (this.gear.helmet) {
+        if (this.gear?.helmet) {
           const equipedItem = this.gear.helmet;
           this.gear.helmet = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.helmet = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.helmet = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.BOOTS:
-        if (this.gear.boots) {
+        if (this.gear?.boots) {
           const equipedItem = this.gear.boots;
           this.gear.boots = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.boots = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.boots = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.AMULET:
-        if (this.gear.amulet) {
+        if (this.gear?.amulet) {
           const equipedItem = this.gear.amulet;
           this.gear.amulet = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.amulet = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.amulet = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.RING:
-        if (this.gear.ring1) {
+        if (this.gear?.ring1) {
           const equipedItem = this.gear.ring1;
           this.gear.ring1 = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.ring1 = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.ring1 = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.SHOULDERS:
-        if (this.gear.shoulders) {
+        if (this.gear?.shoulders) {
           const equipedItem = this.gear.shoulders;
           this.gear.shoulders = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.shoulders = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.shoulders = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.GLOVES:
-        if (this.gear.gloves) {
+        if (this.gear?.gloves) {
           const equipedItem = this.gear.gloves;
           this.gear.gloves = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.gloves = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.gloves = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.PANTS:
-        if (this.gear.pants) {
+        if (this.gear?.pants) {
           const equipedItem = this.gear.pants;
           this.gear.pants = item;
           this.removeItemFromInventory(item);
-          this.inventory.push(equipedItem);
+          this.inventory?.push(equipedItem);
         } else {
-          this.gear.pants = item;
-          this.removeItemFromInventory(item);
+          if (this.gear) {
+            this.gear.pants = item;
+            this.removeItemFromInventory(item);
+          }
         }
         break;
       case ItemType.CONSUMABLE:
@@ -198,89 +236,96 @@ export class PlayerCharacter {
     }
   }
 
+  getCurrentHp() {
+    return this.currentHp;
+  }
+
   getMaxHp(): number {
     let gearHpSum =
-      (this.gear.weapon?.hpModifier || 0) +
-      (this.gear.offHand?.hpModifier || 0) +
-      (this.gear.helmet?.hpModifier || 0) +
-      (this.gear.chest?.hpModifier || 0) +
-      (this.gear.gloves?.hpModifier || 0) +
-      (this.gear.pants?.hpModifier || 0) +
-      (this.gear.shoulders?.hpModifier || 0) +
-      (this.gear.boots?.hpModifier || 0) +
-      (this.gear.amulet?.hpModifier || 0) +
-      (this.gear.ring1?.hpModifier || 0) +
-      (this.gear.ring2?.hpModifier || 0);
-    console.log(gearHpSum);
+      (this.gear?.weapon?.hpModifier || 0) +
+      (this.gear?.offHand?.hpModifier || 0) +
+      (this.gear?.helmet?.hpModifier || 0) +
+      (this.gear?.chest?.hpModifier || 0) +
+      (this.gear?.gloves?.hpModifier || 0) +
+      (this.gear?.pants?.hpModifier || 0) +
+      (this.gear?.shoulders?.hpModifier || 0) +
+      (this.gear?.boots?.hpModifier || 0) +
+      (this.gear?.amulet?.hpModifier || 0) +
+      (this.gear?.ring1?.hpModifier || 0) +
+      (this.gear?.ring2?.hpModifier || 0);
 
-    return (this.characterRace.hp || 0) + gearHpSum;
+    return (this.characterRace?.hp || 0) + gearHpSum;
   }
   getDefence(): number {
     let gearDefenceSum =
-      (this.gear.weapon?.defenceModifier || 0) +
-      (this.gear.offHand?.defenceModifier || 0) +
-      (this.gear.helmet?.defenceModifier || 0) +
-      (this.gear.chest?.defenceModifier || 0) +
-      (this.gear.gloves?.defenceModifier || 0) +
-      (this.gear.pants?.defenceModifier || 0) +
-      (this.gear.shoulders?.defenceModifier || 0) +
-      (this.gear.boots?.defenceModifier || 0) +
-      (this.gear.amulet?.defenceModifier || 0) +
-      (this.gear.ring1?.defenceModifier || 0) +
-      (this.gear.ring2?.defenceModifier || 0);
+      (this.gear?.weapon?.defenceModifier || 0) +
+      (this.gear?.offHand?.defenceModifier || 0) +
+      (this.gear?.helmet?.defenceModifier || 0) +
+      (this.gear?.chest?.defenceModifier || 0) +
+      (this.gear?.gloves?.defenceModifier || 0) +
+      (this.gear?.pants?.defenceModifier || 0) +
+      (this.gear?.shoulders?.defenceModifier || 0) +
+      (this.gear?.boots?.defenceModifier || 0) +
+      (this.gear?.amulet?.defenceModifier || 0) +
+      (this.gear?.ring1?.defenceModifier || 0) +
+      (this.gear?.ring2?.defenceModifier || 0);
 
-    return this.characterRace.defence || 0 + gearDefenceSum;
+    return this.characterRace?.defence || 0 + gearDefenceSum;
   }
 
   getAttack(): number {
     let gearAttackSum =
-      (this.gear.weapon?.attackModifier || 0) +
-      (this.gear.offHand?.attackModifier || 0) +
-      (this.gear.helmet?.attackModifier || 0) +
-      (this.gear.chest?.attackModifier || 0) +
-      (this.gear.gloves?.attackModifier || 0) +
-      (this.gear.pants?.attackModifier || 0) +
-      (this.gear.shoulders?.attackModifier || 0) +
-      (this.gear.boots?.attackModifier || 0) +
-      (this.gear.amulet?.attackModifier || 0) +
-      (this.gear.ring1?.attackModifier || 0) +
-      (this.gear.ring2?.attackModifier || 0);
+      (this.gear?.weapon?.attackModifier || 0) +
+      (this.gear?.offHand?.attackModifier || 0) +
+      (this.gear?.helmet?.attackModifier || 0) +
+      (this.gear?.chest?.attackModifier || 0) +
+      (this.gear?.gloves?.attackModifier || 0) +
+      (this.gear?.pants?.attackModifier || 0) +
+      (this.gear?.shoulders?.attackModifier || 0) +
+      (this.gear?.boots?.attackModifier || 0) +
+      (this.gear?.amulet?.attackModifier || 0) +
+      (this.gear?.ring1?.attackModifier || 0) +
+      (this.gear?.ring2?.attackModifier || 0);
 
-    return (this.characterRace.attack || 0) + gearAttackSum;
+    return (this.characterRace?.attack || 0) + gearAttackSum;
   }
 
   getMagicDefence(): number {
     let gearMagicDefenceSum =
-      (this.gear.weapon?.magicDefenceModifier || 0) +
-      (this.gear.offHand?.magicDefenceModifier || 0) +
-      (this.gear.helmet?.magicDefenceModifier || 0) +
-      (this.gear.chest?.magicDefenceModifier || 0) +
-      (this.gear.gloves?.magicDefenceModifier || 0) +
-      (this.gear.pants?.magicDefenceModifier || 0) +
-      (this.gear.shoulders?.magicDefenceModifier || 0) +
-      (this.gear.boots?.magicDefenceModifier || 0) +
-      (this.gear.amulet?.magicDefenceModifier || 0) +
-      (this.gear.ring1?.magicDefenceModifier || 0) +
-      (this.gear.ring2?.magicDefenceModifier || 0);
+      (this.gear?.weapon?.magicDefenceModifier || 0) +
+      (this.gear?.offHand?.magicDefenceModifier || 0) +
+      (this.gear?.helmet?.magicDefenceModifier || 0) +
+      (this.gear?.chest?.magicDefenceModifier || 0) +
+      (this.gear?.gloves?.magicDefenceModifier || 0) +
+      (this.gear?.pants?.magicDefenceModifier || 0) +
+      (this.gear?.shoulders?.magicDefenceModifier || 0) +
+      (this.gear?.boots?.magicDefenceModifier || 0) +
+      (this.gear?.amulet?.magicDefenceModifier || 0) +
+      (this.gear?.ring1?.magicDefenceModifier || 0) +
+      (this.gear?.ring2?.magicDefenceModifier || 0);
 
-    return (this.characterRace.magicDefence || 0) + gearMagicDefenceSum;
+    return (this.characterRace?.magicDefence || 0) + gearMagicDefenceSum;
   }
 
   getMagicAttack(): number {
     let gearMagicAttackSum =
-      (this.gear.weapon?.magicAttackModifier || 0) +
-      (this.gear.offHand?.magicAttackModifier || 0) +
-      (this.gear.helmet?.magicAttackModifier || 0) +
-      (this.gear.chest?.magicAttackModifier || 0) +
-      (this.gear.gloves?.magicAttackModifier || 0) +
-      (this.gear.pants?.magicAttackModifier || 0) +
-      (this.gear.shoulders?.magicAttackModifier || 0) +
-      (this.gear.boots?.magicAttackModifier || 0) +
-      (this.gear.amulet?.magicAttackModifier || 0) +
-      (this.gear.ring1?.magicAttackModifier || 0) +
-      (this.gear.ring2?.magicAttackModifier || 0);
+      (this.gear?.weapon?.magicAttackModifier || 0) +
+      (this.gear?.offHand?.magicAttackModifier || 0) +
+      (this.gear?.helmet?.magicAttackModifier || 0) +
+      (this.gear?.chest?.magicAttackModifier || 0) +
+      (this.gear?.gloves?.magicAttackModifier || 0) +
+      (this.gear?.pants?.magicAttackModifier || 0) +
+      (this.gear?.shoulders?.magicAttackModifier || 0) +
+      (this.gear?.boots?.magicAttackModifier || 0) +
+      (this.gear?.amulet?.magicAttackModifier || 0) +
+      (this.gear?.ring1?.magicAttackModifier || 0) +
+      (this.gear?.ring2?.magicAttackModifier || 0);
 
-    return (this.characterRace.magicAttack || 0) + gearMagicAttackSum;
+    return (this.characterRace?.magicAttack || 0) + gearMagicAttackSum;
+  }
+
+  getMaxInnerPower(): number {
+    return this.characterRace?.innerPower || 0;
   }
 
   assignSkillToSlot(skill: CharacterSkill, slot: number) {
@@ -304,22 +349,50 @@ export class PlayerCharacter {
   serialize(): string {
     return JSON.stringify(this);
   }
+  addAndCheckExp(exp: number) {
+    const expWithAward = (this.exp || 0) + exp;
+    if (expWithAward >= this.expRequired!) {
+      this.level = this.level! + 1;
+      const remainingExp = expWithAward - this.expRequired!;
+      this.exp = remainingExp;
+      if (remainingExp > 0) {
+        this.addAndCheckExp(remainingExp);
+      }
+    } else {
+      this.exp = expWithAward;
+    }
+  }
 
   // Create a new class instance from a JSON string
   static deserialize(json: string): PlayerCharacter {
     const obj: PlayerCharacter = JSON.parse(json);
     const player = new PlayerCharacter(
       obj.name,
-      obj.characterRace,
+      obj.maxHp,
+      obj.currentHp,
+      obj.defence,
+      obj.attack,
+      obj.magicAttack,
+      obj.magicDefence,
+      obj.speed,
       obj.level,
       obj.exp,
+      obj.expRequired,
+      obj.maxInnerPower,
+      obj.currentInnerPower,
+      obj.skillPoints,
       obj.gear,
+      obj.resourceName,
       obj.characterSkills,
-      obj.inventory,
       obj.skill1,
       obj.skill2,
       obj.skill3,
-      obj.skill4
+      obj.skill4,
+      obj.characterRace,
+      obj.gold,
+      obj.questList,
+      obj.inventory,
+      obj.career
     );
     // ... assign other properties from obj to player ...
     return player;
@@ -357,7 +430,7 @@ export enum ItemType {
 export class Item {
   constructor(
     public _id: string,
-    public itemName?: string,
+    public itemName: string,
     public itemType: ItemType,
     public quantity: number,
     public levelRequired: number,
@@ -373,6 +446,7 @@ export class Item {
 
 export class CharacterSkill {
   constructor(
+    public id: string | number,
     public characterSkillName: string,
     public characterSkillType: string,
     public skillDescription: string,
@@ -402,18 +476,63 @@ export class CharacterRace {
 
 export class Battle {
   constructor(
-    public playerCharacter: PlayerCharacter,
+    public playerCharacter?: PlayerCharacter,
     public creature?: Creature,
     public turn: number = 1,
-    public battleMessage: string = "Battle starting"
+    public battleMessage: string = "Battle starting",
+    public battleState: string = "player"
   ) {
     this.playerCharacter = playerCharacter;
     this.creature = creature;
+    this.battleState = battleState;
+  }
+
+  playerAttack(skill: CharacterSkill | undefined) {
+    if (skill && this.creature?.currentHp) {
+      const attackDamage =
+        (this.playerCharacter?.getAttack() || 0) * skill.characterSkillModifier;
+      const projectedCreatureHp = this.creature?.currentHp - attackDamage;
+      if (projectedCreatureHp <= 0) {
+        this.creature.currentHp = 0;
+        this.battleState = "end";
+      } else {
+        this.creature.currentHp = projectedCreatureHp;
+        this.battleState = "monster";
+      }
+    }
+  }
+  monsterAttack() {
+    this.battleState = "player";
+  }
+
+  clone() {
+    const cloned = new Battle();
+    // Copy over all properties from this instance to the cloned instance
+    Object.assign(cloned, this);
+    return cloned;
   }
 }
 
 export class Creature {
-  constructor(public name: string) {}
+  constructor(
+    public name?: string,
+    public level?: number,
+    public currentHp?: number,
+    public maxHp?: number,
+    public expRewards?: number,
+    public goldRewards?: number
+  ) {}
+
+  static generateMonster(level: number) {
+    const monster = new Creature();
+    monster.name = "Skeleton";
+    monster.maxHp = 20;
+    monster.currentHp = 20;
+    monster.level = level;
+    monster.expRewards = getMonsterExperienceAward(level);
+    monster.goldRewards = 100;
+    return monster;
+  }
 }
 
 class Quest {
@@ -442,17 +561,18 @@ class Objective {
 }
 
 export class Career {
-  distanceTraveled: number;
-  creaturesKilled: number;
-  bossesKilled: number;
-  currentValorTowerFloor: number;
-  topValorTowerFloor: number;
-  totalGoldAcquired: number;
-  totalGoldSpent: number;
-  totalDeaths: number;
-  totalLootedItems: number;
-  valorTowerAvailableResets: number;
-  constructor() {
+  constructor(
+    public distanceTraveled?: number,
+    public creaturesKilled?: number,
+    public bossesKilled?: number,
+    public currentValorTowerFloor?: number,
+    public topValorTowerFloor?: number,
+    public totalGoldAcquired?: number,
+    public totalGoldSpent?: number,
+    public totalDeaths?: number,
+    public totalLootedItems?: number,
+    public valorTowerAvailableResets?: number
+  ) {
     this.distanceTraveled = 0;
     this.creaturesKilled = 0;
     this.bossesKilled = 0;
