@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { usePlayerCharacter } from "@/context/PlayerContext";
+import { generateRandomItem } from "@/game/utils/itemUtils";
 
 export const EndBattleModalContent = ({
   battleState,
@@ -20,6 +21,10 @@ export const EndBattleModalContent = ({
       upPlayer.addAndCheckExp(battleState.creature?.expRewards!);
       upPlayer.gold =
         (upPlayer?.gold || 0) + (battleState.creature?.goldRewards || 0);
+      upPlayer.inventory = [
+        ...upPlayer.inventory!,
+        generateRandomItem(battleState.creature?.level!),
+      ];
       setPlayerCharacter(upPlayer);
     }
     closeModal();

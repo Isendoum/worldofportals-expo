@@ -1,15 +1,21 @@
 import { useRouter } from "expo-router";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 
 import { createRef, useEffect, useState } from "react";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import mapStyle from "../../assets/mapStyle.json";
+import { usePlayerCharacter } from "@/context/PlayerContext";
+import { getDistance } from "@/game/utils/maoUtils";
 const Screen1 = () => {
   const router = useRouter();
   const [location, setLocation] = useState<any>({});
+  const [message, setMessage] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
+  const [previousLocation, setPreviousLocation] = useState<any>(null);
+  const [distanceTraveled, setDistanceTraveled] = useState<number>(0);
   const ref = createRef<MapView>();
   useEffect(() => {
     (async () => {
@@ -27,13 +33,41 @@ const Screen1 = () => {
       setLocation(location);
     })();
   }, []);
+
+  const showHpMessage = () => {
+    Alert.alert("You are weak. Heal to resume battles.");
+    // setTimeout(() => setMessage(""), 2000);
+  };
+
+  const setCarreer = (d: number) => {
+    if (playerCharacter) {
+      console.log(d);
+      const upPlayer = playerCharacter?.clone();
+      upPlayer.career.distanceTraveled = d;
+      setPlayerCharacter(upPlayer);
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => setCarreer(distanceTraveled), 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [distanceTraveled]);
+
   return (
     <View
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
       }}>
+      <View style={{ position: "absolute", zIndex: 2, top: 0, left: 0 }}>
+        <Text>{message}</Text>
+        <Button onPress={() => router.back()} title="Menu" />
+      </View>
       <MapView
         ref={ref}
         provider="google"
@@ -47,9 +81,19 @@ const Screen1 = () => {
         }}
         minZoomLevel={17}
         maxZoomLevel={17}
-        onUserLocationChange={(a) =>
-          setLocation({ coords: a.nativeEvent.coordinate })
-        }
+        onUserLocationChange={(a) => {
+          if (previousLocation && a.nativeEvent?.coordinate) {
+            const distance = getDistance(
+              previousLocation.coords.latitude,
+              previousLocation.coords.longitude,
+              a.nativeEvent?.coordinate.latitude,
+              a.nativeEvent?.coordinate.longitude
+            );
+            setDistanceTraveled((prevDistance) => prevDistance + distance);
+          }
+          setPreviousLocation({ coords: a.nativeEvent.coordinate });
+          setLocation({ coords: a.nativeEvent.coordinate });
+        }}
         showsUserLocation>
         {location?.coords && (
           <Marker
@@ -58,7 +102,13 @@ const Screen1 = () => {
               longitude: location?.coords?.longitude,
             }}
             style={{ width: 30, height: 50 }}
-            onPress={() => router.push("(stack)/battle")}
+            onPress={() => {
+              if (playerCharacter?.currentHp === 0) {
+                showHpMessage();
+              } else {
+                router.push("(stack)/battle");
+              }
+            }}
             children={
               <View>
                 <Image

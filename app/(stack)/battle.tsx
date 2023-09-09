@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { EndBattleModalContent } from "../../components/EndBattleModalContent";
+import { EndBattleModalContent } from "../../components/other/EndBattleModalContent";
 
 const BattleScreen = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
@@ -62,7 +62,7 @@ const BattleScreen = () => {
 
   const monsterAttack = () => {
     const battle = battleState.clone();
-    battle.monsterAttack();
+
     setBattleState(battle);
     Animated.sequence([
       Animated.delay(1000),
@@ -77,6 +77,7 @@ const BattleScreen = () => {
         useNativeDriver: true,
       }),
     ]).start();
+    setTimeout(() => battle.monsterAttack(), 1000);
   };
 
   // check currently playing property
@@ -101,6 +102,10 @@ const BattleScreen = () => {
             flexDirection: "column",
           }}>
           <TouchableOpacity
+            disabled={
+              battleState.battleState === "monster" ||
+              battleState.battleState === "end"
+            }
             // ref={(skillBtn) => (this.skillBtn = skillBtn)}
             style={{ alignItems: "center" }}
             onPressIn={() => attackRequest(skill)}

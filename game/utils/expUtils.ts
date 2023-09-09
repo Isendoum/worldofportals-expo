@@ -1,6 +1,6 @@
 const a = 500;
 const b = 120;
-const c = 5000;
+const c = 1000;
 
 export function getNextLevelExperience(level: number): number {
   if (level < 1 || level >= 100) {

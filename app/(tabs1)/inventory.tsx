@@ -10,21 +10,25 @@ import {
   Image,
   Pressable,
   Modal,
+  Button,
 } from "react-native";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { Item, ItemAbility, ItemType } from "@/game/classes/classes";
-import { findImage } from "@/utils/imageUtils";
+
 import { findGearItem } from "@/utils/gearUtils";
+import { ITEM_IMAGES } from "@/game/utils/assetMap";
+import { generateRandomItem } from "@/game/utils/itemUtils";
 
 const CharacterInventory = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
 
   const [inventory, setInventory] = useState(playerCharacter?.inventory || []);
-  const [itemInfo, setItemInfo] = useState(null);
+  const [itemInfo, setItemInfo] = useState<Item | null>(null);
   const [action, setAction] = useState<string | null>(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [trigger, setTrigger] = useState(false);
 
-  const removeItemAndUpdatePlayerState = async (item) => {
+  const removeItemAndUpdatePlayerState = async (item: Item) => {
     if (playerCharacter) {
       const updatedPlayerCharacter = playerCharacter.clone();
       updatedPlayerCharacter.removeItemFromInventory(item);
@@ -32,7 +36,7 @@ const CharacterInventory = () => {
     }
   };
 
-  const useItemAndUpdatePlayerState = async (item) => {
+  const useItemAndUpdatePlayerState = async (item: Item) => {
     if (playerCharacter) {
       const updatedPlayerCharacter = playerCharacter.clone();
       updatedPlayerCharacter.equipGearItemAndRemoveItFromInventory(item);
@@ -45,7 +49,7 @@ const CharacterInventory = () => {
     setIsOverlayVisible(false);
   };
 
-  const useAndDiscardOverlay = (item) => {
+  const useAndDiscardOverlay = (item: Item) => {
     if (action === "use") {
       return (
         <Modal onRequestClose={closeOverlay} visible={isOverlayVisible}>
@@ -184,7 +188,7 @@ const CharacterInventory = () => {
     }
   };
 
-  const itemInfoBasedOnItemType = (item) => {
+  const itemInfoBasedOnItemType = (item: Item) => {
     if (
       item.itemType === ItemType.PANTS ||
       item.itemType === ItemType.BOOTS ||
@@ -195,6 +199,7 @@ const CharacterInventory = () => {
       item.itemType === ItemType.WEAPON ||
       item.itemType === ItemType.AMULET ||
       item.itemType === ItemType.RING ||
+      item.itemType === ItemType.EARINGS ||
       item.itemType === ItemType.OFFHAND
     ) {
       return (
@@ -287,32 +292,22 @@ const CharacterInventory = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     if (playerCharacter) {
-  //       // Create a new instance of PlayerCharacter with the updated skill
-  //       const updatedPlayerCharacter = playerCharacter.clone();
-  //       const item = new Item(
-  //         "123129",
-  //         "Helmet",
-  //         ItemType.HELMET,
-  //         1,
-  //         1,
-  //         1,
-  //         2,
-  //         4,
-  //         1,
-  //         1,
-  //         1
-  //       );
-  //       updatedPlayerCharacter.addItemToInventory(item);
+  useEffect(() => {
+    if (playerCharacter) {
+      // Create a new instance of PlayerCharacter with the updated skill
+      const updatedPlayerCharacter = playerCharacter.clone();
+      const item = generateRandomItem(playerCharacter.level!);
+      console.log(item.assetFile);
+      updatedPlayerCharacter.addItemToInventory(item);
 
-  //       // Set the new instance as the state
-  //       setPlayerCharacter(updatedPlayerCharacter);
-  //     }
-  //   }, []);
+      // Set the new instance as the state
+      setPlayerCharacter(updatedPlayerCharacter);
+    }
+  }, [trigger]);
 
   return (
-    <View style={{ flex: 1, marginTop: "10%" }}>
+    <View style={{ flex: 1, marginTop: "2%" }}>
+      <Button onPress={() => setTrigger(!trigger)} title="Gen" />
       <Text style={styles.titleText}>Inventory ({inventory.length}/20)</Text>
 
       <View
@@ -328,7 +323,15 @@ const CharacterInventory = () => {
           renderItem={({ item }) => (
             <Pressable onPress={() => setItemInfo(item)}>
               <View style={styles.listItem}>
-                <Image source={findImage(item.itemName)} />
+                <Image
+                  source={
+                    item?.assetFile
+                      ? ITEM_IMAGES[
+                          `${item.assetFile}` as keyof typeof ITEM_IMAGES
+                        ]
+                      : ""
+                  }
+                />
                 <Text style={styles.itemNameText}>
                   {item.itemName}
                   {item.itemType === ItemType.CONSUMABLE ? (

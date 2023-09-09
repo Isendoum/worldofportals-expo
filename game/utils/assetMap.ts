@@ -1,0 +1,17 @@
+export const ITEM_IMAGES = {
+  generic: require("../../assets/Items/generic.png"),
+  sword0: require("../../assets/Items/sword0.png"),
+  sword1: require("../../assets/Items/sword1.png"),
+  boots: require("../../assets/Items/boots.png"),
+  helmet: require("../../assets/Items/helmet.png"),
+  shield: require("../../assets/Items/shield.png"),
+  shoulders: require("../../assets/Items/shoulders.png"),
+  earrings: require("../../assets/Items/earrings.png"),
+  amulet: require("../../assets/Items/amulet.png"),
+  chest: require("../../assets/Items/chest.png"),
+  gloves: require("../../assets/Items/gloves.png"),
+  pants: require("../../assets/Items/pants.png"),
+  ring: require("../../assets/Items/ring.png"),
+  potion: require("../../assets/Items/potion.png"),
+  ipPotion: require("../../assets/Items/ippotion.png"),
+};

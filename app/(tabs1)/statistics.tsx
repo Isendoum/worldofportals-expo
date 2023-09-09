@@ -72,7 +72,7 @@ export default function Statistics() {
           <Text style={styles.text}>
             Distance traveled(km):{" "}
             {(
-              playerCharacter?.career?.distanceTraveled || 0 / 1000
+              (playerCharacter?.career?.distanceTraveled || 0) / 1000
             ).toPrecision(2)}
           </Text>
           <Text style={styles.text}>

@@ -2,14 +2,18 @@ import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Image, Text } from "react-native";
 import Tooltip from "react-native-walkthrough-tooltip";
-import { findImage } from "@/utils/imageUtils";
 
-const GearView = ({ item }: { item: any }) => {
+import { ITEM_IMAGES } from "@/game/utils/assetMap";
+import { Item } from "@/game/classes/classes";
+
+const GearView = ({ item }: { item: Item | undefined }) => {
   const [toolTipVisible, setToolTipVisible] = useState(false);
   return (
     <View style={styles.itemGearView}>
-      {item?.itemName === null ? (
-        <Text style={styles.text}>Empty</Text>
+      {item === undefined ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text style={styles.text}>Empty</Text>
+        </View>
       ) : (
         <Tooltip
           isVisible={toolTipVisible}
@@ -35,10 +39,20 @@ const GearView = ({ item }: { item: any }) => {
             </View>
           }>
           <Pressable onPress={() => setToolTipVisible(true)}>
-            <Image
-              style={styles.itemImage}
-              source={findImage(item?.itemName)}
-            />
+            {item?.assetFile && (
+              <Image
+                width={64}
+                height={64}
+                style={styles.itemImage}
+                source={
+                  item?.assetFile
+                    ? ITEM_IMAGES[
+                        `${item.assetFile}` as keyof typeof ITEM_IMAGES
+                      ]
+                    : ""
+                }
+              />
+            )}
           </Pressable>
         </Tooltip>
       )}
@@ -48,13 +62,12 @@ const GearView = ({ item }: { item: any }) => {
 
 const styles = StyleSheet.create({
   itemGearView: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
     alignItems: "center",
-    borderColor: "#000000",
-    borderRadius: 5,
-    marginBottom: "5%",
+    // borderRadius: 2,
+    borderWidth: 3,
+    borderColor: "black",
+    width: 64,
+    height: 64,
   },
   itemImage: {
     flex: 1,

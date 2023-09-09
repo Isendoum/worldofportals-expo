@@ -30,34 +30,10 @@ export class PlayerCharacter {
     public gold?: number,
     public questList?: Quest[],
     public inventory?: Item[],
-    public career?: Career
+    public career: Career = new Career()
   ) {
-    // this.skill1 = skill1;
-    // this.skill2 = skill2;
-    // this.skill3 = skill3;
-    // this.skill4 = skill4;
-    // this.name = name || "";
-    // this.exp = exp || 0;
-    // this.expRequired = expRequired || 0;
-    //  this.level = level || 1;
-    //this.characterRace = characterRace;
-    //  this.gear = gear || new Gear();
-    // this.questList = [];
-    // this.gold = 1000;
-    // this.inventory = inventory || [];
-    // this.skillPoints = 0;
-    // this.maxHp = this.getMaxHp();
-    //  this.currentHp = this.maxHp;
-    // this.defence = this.getDefence();
-    // this.attack = this.getAttack();
-    // this.magicAttack = this.getMagicAttack();
-    // this.magicDefence = this.getMagicDefence();
-    // this.currentInnerPower = currentInnerPower || this.getMaxInnerPower();
-    // this.maxInnerPower = this.getMaxInnerPower();
-    // this.speed = 5;
     this.resourceName = "Inner Power";
-    // this.characterSkills = characterSkills || [];
-    // this.career = new Career();
+
     // ... initialize other properties ...
   }
 
@@ -79,6 +55,7 @@ export class PlayerCharacter {
     char.maxInnerPower = char.getMaxInnerPower();
     char.currentInnerPower = char.getMaxInnerPower();
     char.career = new Career();
+    char.gear = new Gear();
     return char;
   }
 
@@ -180,14 +157,27 @@ export class PlayerCharacter {
         }
         break;
       case ItemType.RING:
-        if (this.gear?.ring1) {
-          const equipedItem = this.gear.ring1;
-          this.gear.ring1 = item;
+        if (this.gear?.ring) {
+          const equipedItem = this.gear.ring;
+          this.gear.ring = item;
           this.removeItemFromInventory(item);
           this.inventory?.push(equipedItem);
         } else {
           if (this.gear) {
-            this.gear.ring1 = item;
+            this.gear.ring = item;
+            this.removeItemFromInventory(item);
+          }
+        }
+        break;
+      case ItemType.EARINGS:
+        if (this.gear?.earings) {
+          const equipedItem = this.gear.earings;
+          this.gear.earings = item;
+          this.removeItemFromInventory(item);
+          this.inventory?.push(equipedItem);
+        } else {
+          if (this.gear) {
+            this.gear.earings = item;
             this.removeItemFromInventory(item);
           }
         }
@@ -220,12 +210,14 @@ export class PlayerCharacter {
         break;
       case ItemType.PANTS:
         if (this.gear?.pants) {
+          console.log("PANTS");
           const equipedItem = this.gear.pants;
           this.gear.pants = item;
           this.removeItemFromInventory(item);
           this.inventory?.push(equipedItem);
         } else {
           if (this.gear) {
+            console.log("PANTS else");
             this.gear.pants = item;
             this.removeItemFromInventory(item);
           }
@@ -251,11 +243,12 @@ export class PlayerCharacter {
       (this.gear?.shoulders?.hpModifier || 0) +
       (this.gear?.boots?.hpModifier || 0) +
       (this.gear?.amulet?.hpModifier || 0) +
-      (this.gear?.ring1?.hpModifier || 0) +
-      (this.gear?.ring2?.hpModifier || 0);
+      (this.gear?.ring?.hpModifier || 0) +
+      (this.gear?.earings?.hpModifier || 0);
 
     return (this.characterRace?.hp || 0) + gearHpSum;
   }
+
   getDefence(): number {
     let gearDefenceSum =
       (this.gear?.weapon?.defenceModifier || 0) +
@@ -267,8 +260,8 @@ export class PlayerCharacter {
       (this.gear?.shoulders?.defenceModifier || 0) +
       (this.gear?.boots?.defenceModifier || 0) +
       (this.gear?.amulet?.defenceModifier || 0) +
-      (this.gear?.ring1?.defenceModifier || 0) +
-      (this.gear?.ring2?.defenceModifier || 0);
+      (this.gear?.ring?.defenceModifier || 0) +
+      (this.gear?.earings?.defenceModifier || 0);
 
     return this.characterRace?.defence || 0 + gearDefenceSum;
   }
@@ -284,8 +277,8 @@ export class PlayerCharacter {
       (this.gear?.shoulders?.attackModifier || 0) +
       (this.gear?.boots?.attackModifier || 0) +
       (this.gear?.amulet?.attackModifier || 0) +
-      (this.gear?.ring1?.attackModifier || 0) +
-      (this.gear?.ring2?.attackModifier || 0);
+      (this.gear?.ring?.attackModifier || 0) +
+      (this.gear?.earings?.attackModifier || 0);
 
     return (this.characterRace?.attack || 0) + gearAttackSum;
   }
@@ -301,8 +294,8 @@ export class PlayerCharacter {
       (this.gear?.shoulders?.magicDefenceModifier || 0) +
       (this.gear?.boots?.magicDefenceModifier || 0) +
       (this.gear?.amulet?.magicDefenceModifier || 0) +
-      (this.gear?.ring1?.magicDefenceModifier || 0) +
-      (this.gear?.ring2?.magicDefenceModifier || 0);
+      (this.gear?.ring?.magicDefenceModifier || 0) +
+      (this.gear?.earings?.magicDefenceModifier || 0);
 
     return (this.characterRace?.magicDefence || 0) + gearMagicDefenceSum;
   }
@@ -318,8 +311,8 @@ export class PlayerCharacter {
       (this.gear?.shoulders?.magicAttackModifier || 0) +
       (this.gear?.boots?.magicAttackModifier || 0) +
       (this.gear?.amulet?.magicAttackModifier || 0) +
-      (this.gear?.ring1?.magicAttackModifier || 0) +
-      (this.gear?.ring2?.magicAttackModifier || 0);
+      (this.gear?.ring?.magicAttackModifier || 0) +
+      (this.gear?.earings?.magicAttackModifier || 0);
 
     return (this.characterRace?.magicAttack || 0) + gearMagicAttackSum;
   }
@@ -349,10 +342,12 @@ export class PlayerCharacter {
   serialize(): string {
     return JSON.stringify(this);
   }
+
   addAndCheckExp(exp: number) {
     const expWithAward = (this.exp || 0) + exp;
     if (expWithAward >= this.expRequired!) {
       this.level = this.level! + 1;
+      this.currentHp = this.maxHp;
       const remainingExp = expWithAward - this.expRequired!;
       this.exp = remainingExp;
       if (remainingExp > 0) {
@@ -407,25 +402,26 @@ export class Gear {
     public helmet?: Item,
     public boots?: Item,
     public amulet?: Item,
-    public ring1?: Item,
-    public ring2?: Item,
+    public ring?: Item,
+    public earings?: Item,
     public shoulders?: Item,
     public gloves?: Item,
     public pants?: Item
   ) {}
 }
 export enum ItemType {
-  "WEAPON",
-  "OFFHAND",
-  "CHEST",
-  "HELMET",
-  "BOOTS",
-  "AMULET",
-  "RING",
-  "SHOULDERS",
-  "GLOVES",
-  "PANTS",
-  "CONSUMABLE",
+  WEAPON = "WEAPON",
+  OFFHAND = "OFFHAND",
+  CHEST = "CHEST",
+  HELMET = "HELMET",
+  BOOTS = "BOOTS",
+  AMULET = "AMULET",
+  RING = "RING",
+  EARINGS = "EARINGS",
+  SHOULDERS = "SHOULDERS",
+  GLOVES = "GLOVES",
+  PANTS = "PANTS",
+  CONSUMABLE = "CONSUMABLE",
 }
 export class Item {
   constructor(
@@ -440,7 +436,8 @@ export class Item {
     public magicAttackModifier: number,
     public hpModifier: number,
     public goldValue: number,
-    public itemAbility?: ItemAbility
+    public itemAbility?: ItemAbility,
+    public assetFile?: string
   ) {}
 }
 
@@ -502,7 +499,17 @@ export class Battle {
     }
   }
   monsterAttack() {
-    this.battleState = "player";
+    if (this.playerCharacter?.currentHp) {
+      const projectedPlayerHp =
+        this.playerCharacter?.currentHp - this.creature?.attack!;
+      if (projectedPlayerHp <= 0) {
+        this.playerCharacter.currentHp = 0;
+        this.battleState = "end";
+      } else {
+        this.playerCharacter.currentHp = projectedPlayerHp;
+        this.battleState = "player";
+      }
+    }
   }
 
   clone() {
@@ -519,6 +526,8 @@ export class Creature {
     public level?: number,
     public currentHp?: number,
     public maxHp?: number,
+    public attack?: number,
+    public defence?: number,
     public expRewards?: number,
     public goldRewards?: number
   ) {}
@@ -526,8 +535,10 @@ export class Creature {
   static generateMonster(level: number) {
     const monster = new Creature();
     monster.name = "Skeleton";
-    monster.maxHp = 20;
-    monster.currentHp = 20;
+    monster.maxHp = 20 * level;
+    monster.currentHp = 20 * level;
+    monster.attack = 1 + level;
+    monster.defence = 1 + level;
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;

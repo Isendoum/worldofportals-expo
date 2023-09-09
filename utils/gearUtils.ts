@@ -1,35 +1,38 @@
 import { Gear, ItemType } from "@/game/classes/classes";
 
-export function findGearItem(itemType: ItemType, playerGear: Gear) {
+export function findGearItem(itemType: ItemType, playerGear: Gear | undefined) {
   switch (itemType) {
     case ItemType.WEAPON:
-      return playerGear.weapon;
+      return playerGear?.weapon;
 
     case ItemType.OFFHAND:
-      return playerGear.offHand;
+      return playerGear?.offHand;
 
     case ItemType.HELMET:
-      return playerGear.helmet;
+      return playerGear?.helmet;
 
     case ItemType.CHEST:
-      return playerGear.chest;
+      return playerGear?.chest;
 
     case ItemType.GLOVES:
-      return playerGear.gloves;
+      return playerGear?.gloves;
 
     case ItemType.PANTS:
-      return playerGear.pants;
+      return playerGear?.pants;
 
     case ItemType.SHOULDERS:
-      return playerGear.shoulders;
+      return playerGear?.shoulders;
 
     case ItemType.BOOTS:
-      return playerGear.boots;
+      return playerGear?.boots;
 
     case ItemType.AMULET:
-      return playerGear.amulet;
+      return playerGear?.amulet;
 
     case ItemType.RING:
-      return playerGear.ring1;
+      return playerGear?.ring;
+
+    case ItemType.EARINGS:
+      return playerGear?.earings;
   }
 }
