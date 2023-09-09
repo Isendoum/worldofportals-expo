@@ -8,7 +8,9 @@ import { useFocusEffect } from "expo-router";
 export default function Statistics() {
   const [playerCharacter] = usePlayerCharacter();
   React.useEffect(() => {}, [playerCharacter]);
-
+  useFocusEffect(() => {
+    console.log(playerCharacter?.exp);
+  });
   return (
     <ScrollView
       contentContainerStyle={{

@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 
 import { useEffect, useState, useRef } from "react";
@@ -48,13 +48,13 @@ const Screen1 = () => {
     }
   };
 
-  useEffect(() => {
-    const intervalId = setInterval(() => setCarreer(distanceTraveled), 5000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => setCarreer(distanceTraveled), 5000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [distanceTraveled]);
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, [distanceTraveled]);
 
   return (
     <View

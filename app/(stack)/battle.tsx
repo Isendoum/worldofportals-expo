@@ -58,11 +58,23 @@ const BattleScreen = () => {
         useNativeDriver: true,
       }),
     ]).start();
+    Animated.sequence([
+      Animated.timing(animatedCreatureYValue, {
+        toValue: -10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animatedCreatureYValue, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   const monsterAttack = () => {
     const battle = battleState.clone();
-
+    battle.monsterAttack();
     setBattleState(battle);
     Animated.sequence([
       Animated.delay(1000),
@@ -77,7 +89,18 @@ const BattleScreen = () => {
         useNativeDriver: true,
       }),
     ]).start();
-    setTimeout(() => battle.monsterAttack(), 200);
+    Animated.sequence([
+      Animated.timing(animatedPlayerYValue, {
+        toValue: -10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animatedPlayerYValue, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   // check currently playing property
