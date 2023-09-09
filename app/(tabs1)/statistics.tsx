@@ -3,18 +3,21 @@ import { getNextLevelExperience } from "@/game/utils/expUtils";
 
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useFocusEffect } from "expo-router";
 
 export default function Statistics() {
   const [playerCharacter] = usePlayerCharacter();
-  // React.useEffect(() => {}, [playerCharacter]);
+  React.useEffect(() => {}, [playerCharacter]);
 
   return (
     <ScrollView
       contentContainerStyle={{
-        flex: 1,
+        //flex: 1,
         justifyContent: "flex-start",
         // alignItems: "center",
         marginTop: 25,
+        paddingBottom: 50,
+        height: "auto",
       }}>
       <View>
         <View style={styles.nameView}>

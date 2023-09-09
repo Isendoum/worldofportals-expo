@@ -11,7 +11,7 @@ export function getNextLevelExperience(level: number): number {
 }
 
 export function getMonstersNeededForLevelUp(level: number): number {
-  const d = 30;
+  const d = 15;
   const e = 1;
 
   return d * level + e;

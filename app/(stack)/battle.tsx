@@ -77,7 +77,7 @@ const BattleScreen = () => {
         useNativeDriver: true,
       }),
     ]).start();
-    setTimeout(() => battle.monsterAttack(), 1000);
+    setTimeout(() => battle.monsterAttack(), 200);
   };
 
   // check currently playing property

@@ -8,17 +8,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import Tooltip from "react-native-walkthrough-tooltip";
 import { useState } from "react";
 import { usePlayerCharacter } from "@/context/PlayerContext";
+import { useFocusEffect } from "expo-router";
+import CharacterSkills from "@/components/other/CharacterSkills";
 const Skills = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   // const [skills, setSkills] = useState();
   const [toolTipVisible, setToolTipVisible] = useState<number | string | null>(
     null
   );
-
+  useFocusEffect(() => {
+    console.log(playerCharacter?.skill1);
+  });
   const assignSkill = (skill: any, slot: number) => {
     if (playerCharacter) {
       // Create a new instance of PlayerCharacter with the updated skill
@@ -43,7 +46,7 @@ const Skills = () => {
         Skill Points:{" " + playerCharacter?.skillPoints}
       </Text>
 
-      <View style={{ flex: 1 }}>
+      <View style={{}}>
         <View
           //  fadingEdgeLength={20}
           style={{
@@ -99,12 +102,16 @@ const Skills = () => {
                           flex: 1,
                           flexDirection: "row",
                           alignItems: "center",
+
                           margin: 4,
                         }}>
-                        <Image
-                          style={{ width: 50, height: 50 }}
-                          source={findSkillImage(item.characterSkillName)}
-                        />
+                        <View
+                          style={{ borderWidth: 3, borderBlockColor: "black" }}>
+                          <Image
+                            style={{ width: 50, height: 50 }}
+                            source={findSkillImage(item.characterSkillName)}
+                          />
+                        </View>
                         <View style={{ margin: 4 }}>
                           <Text style={styles.itemNameText}>
                             {item.characterSkillName}
@@ -121,83 +128,7 @@ const Skills = () => {
             }}
           />
         </View>
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "75%",
-              height: "35%",
-              alignSelf: "center",
-            }}>
-            {playerCharacter?.skill1 === null ? (
-              <View>
-                <Text style={styles.skillText}>Skill 1</Text>
-                <Text style={styles.skillText}>Empty</Text>
-              </View>
-            ) : (
-              <View>
-                <Text style={styles.skillText}>Skill 1</Text>
-                <Image
-                  style={styles.skillImage}
-                  source={findSkillImage(
-                    playerCharacter?.skill1?.characterSkillName
-                  )}
-                />
-              </View>
-            )}
-
-            {playerCharacter?.skill2 === null ? (
-              <View>
-                <Text style={styles.skillText}>Skill 2</Text>
-                <Text style={styles.skillText}>Empty</Text>
-              </View>
-            ) : (
-              <View>
-                <Text style={styles.skillText}>Skill 2</Text>
-                <Image
-                  style={styles.skillImage}
-                  source={findSkillImage(
-                    playerCharacter?.skill2?.characterSkillName
-                  )}
-                />
-              </View>
-            )}
-
-            {playerCharacter?.skill3 === null ? (
-              <View>
-                <Text style={styles.skillText}>Skill 3</Text>
-                <Text style={styles.skillText}>Empty</Text>
-              </View>
-            ) : (
-              <View>
-                <Text style={styles.skillText}>Skill 3</Text>
-                <Image
-                  style={styles.skillImage}
-                  source={findSkillImage(
-                    playerCharacter?.skill3?.characterSkillName
-                  )}
-                />
-              </View>
-            )}
-            {playerCharacter?.skill4 === null ? (
-              <View>
-                <Text style={styles.skillText}>Skill 4</Text>
-                <Text style={styles.skillText}>Empty</Text>
-              </View>
-            ) : (
-              <View>
-                <Text style={styles.skillText}>Skill 4</Text>
-                <Image
-                  style={styles.skillImage}
-                  source={findSkillImage(
-                    playerCharacter?.skill4?.characterSkillName
-                  )}
-                />
-              </View>
-            )}
-          </View>
-        </View>
+        <CharacterSkills playerCharacter={playerCharacter} />
       </View>
     </View>
   );

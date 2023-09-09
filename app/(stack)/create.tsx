@@ -6,11 +6,6 @@ import { Text, View, Button } from "react-native";
 import React from "react";
 import { CharacterRace, PlayerCharacter } from "@/game/classes/classes";
 import { races, startingSkills } from "@/game/data/races";
-import {
-  getMonsterExperienceAward,
-  getMonstersNeededForLevelUp,
-  getNextLevelExperience,
-} from "@/game/utils/expUtils";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 
 export default function Create() {
@@ -61,6 +56,7 @@ export default function Create() {
         <AppText>Character name</AppText>
         <AppTextInput
           value={text}
+          style={{ minWidth: "50%" }}
           onChangeText={setText}
           placeholder="Enter character name"
         />

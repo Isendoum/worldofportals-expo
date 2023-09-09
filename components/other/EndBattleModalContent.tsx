@@ -15,20 +15,24 @@ export const EndBattleModalContent = ({
   const { closeModal } = useModal();
   const [, setPlayerCharacter] = usePlayerCharacter();
   const closeModalAndGatherGoldAndExp = () => {
-    console.log(battleState.playerCharacter?.gold);
     if (battleState.playerCharacter) {
-      const upPlayer = battleState.playerCharacter?.clone();
-      upPlayer.addAndCheckExp(battleState.creature?.expRewards!);
-      upPlayer.gold =
-        (upPlayer?.gold || 0) + (battleState.creature?.goldRewards || 0);
-      upPlayer.inventory = [
-        ...upPlayer.inventory!,
-        generateRandomItem(battleState.creature?.level!),
-      ];
-      setPlayerCharacter(upPlayer);
+      try {
+        const upPlayer = battleState.playerCharacter?.clone();
+        upPlayer.addAndCheckExp(battleState.creature?.expRewards!);
+        console.log(upPlayer.exp);
+        upPlayer.gold =
+          (upPlayer?.gold || 0) + (battleState.creature?.goldRewards || 0);
+        upPlayer.inventory = [
+          ...upPlayer.inventory!,
+          generateRandomItem(battleState.creature?.level!),
+        ];
+        setPlayerCharacter(upPlayer);
+        closeModal();
+        router.back();
+      } catch (e) {
+        console.error(e);
+      }
     }
-    closeModal();
-    router.back();
   };
 
   return (

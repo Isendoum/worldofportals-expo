@@ -19,7 +19,7 @@ export class PlayerCharacter {
     public maxInnerPower?: number,
     public currentInnerPower?: number,
     public skillPoints?: number,
-    public gear?: Gear,
+    public gear: Gear = new Gear(),
     public resourceName?: string,
     public characterSkills?: CharacterSkill[],
     public skill1?: CharacterSkill,
@@ -50,6 +50,7 @@ export class PlayerCharacter {
     char.exp = 0;
     char.gold = 50;
     char.inventory = [];
+    char.skillPoints = 0;
     char.expRequired = getNextLevelExperience(char.level);
     char.currentHp = char.getMaxHp();
     char.maxInnerPower = char.getMaxInnerPower();
@@ -347,9 +348,9 @@ export class PlayerCharacter {
     const expWithAward = (this.exp || 0) + exp;
     if (expWithAward >= this.expRequired!) {
       this.level = this.level! + 1;
-      this.currentHp = this.maxHp;
       const remainingExp = expWithAward - this.expRequired!;
       this.exp = remainingExp;
+      this.currentHp = this.getMaxHp();
       if (remainingExp > 0) {
         this.addAndCheckExp(remainingExp);
       }
