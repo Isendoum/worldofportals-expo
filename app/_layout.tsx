@@ -1,7 +1,6 @@
 import { ThemeProvider } from "@react-navigation/native";
 import { Drawer } from "expo-router/drawer";
-import { View, useColorScheme } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StatusBar, View, useColorScheme } from "react-native";
 import AppDarkTheme from "../theme/AppDarkTheme";
 import AppDefaultTheme from "../theme/AppDefaultTheme";
 import AppIcon from "@/components/AppIcon";
@@ -53,18 +52,22 @@ export default function AppLayout() {
   return (
     <ThemeProvider
       value={colorScheme === "dark" ? AppDarkTheme : AppDefaultTheme}>
+      <StatusBar animated barStyle="light-content" />
       <PlayerCharacterProvider>
         <ModalProvider>
           <Drawer
             initialRouteName="(stack)"
             screenOptions={({ navigation }) => ({
-              headerLeft: (props) => (
-                <View {...props}>
-                  <TouchableOpacity onPress={navigation.toggleDrawer}>
-                    <AppIcon name="menu" size={36} />
-                  </TouchableOpacity>
-                </View>
-              ),
+              headerShown: false,
+              sceneContainerStyle: { paddingTop: 20, backgroundColor: "grey" },
+              // header: (props) => <View></View>,
+              // headerLeft: (props) => (
+              //   <View {...props}>
+              //     <TouchableOpacity onPress={navigation.toggleDrawer}>
+              //       <AppIcon name="menu" size={36} />
+              //     </TouchableOpacity>
+              //   </View>
+              // ),
             })}>
             <Drawer.Screen
               name="(stack)"

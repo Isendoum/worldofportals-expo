@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
@@ -16,7 +16,7 @@ const Screen1 = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   const [previousLocation, setPreviousLocation] = useState<any>(null);
   const [distanceTraveled, setDistanceTraveled] = useState<number>(0);
-  const ref = createRef<MapView>();
+  const mapRef = useRef<MapView>(null);
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -29,7 +29,7 @@ const Screen1 = () => {
         accuracy: Location.Accuracy.Balanced,
         timeInterval: 5,
       });
-      console.log("Loc:", location);
+      //  console.log("Loc:", location);
       setLocation(location);
     })();
   }, []);
@@ -41,7 +41,7 @@ const Screen1 = () => {
 
   const setCarreer = (d: number) => {
     if (playerCharacter) {
-      console.log(d);
+      //   console.log(d);
       const upPlayer = playerCharacter?.clone();
       upPlayer.career.distanceTraveled = d;
       setPlayerCharacter(upPlayer);
@@ -68,59 +68,55 @@ const Screen1 = () => {
         <Text>{message}</Text>
         <Button onPress={() => router.back()} title="Menu" />
       </View>
-      <MapView
-        ref={ref}
-        provider="google"
-        style={styles.map}
-        initialRegion={location?.coords}
-        region={location?.coords}
-        // mapType="terrain"
-        customMapStyle={mapStyle}
-        onRegionChange={(e) => {
-          ref?.current ? ref?.current?.animateToRegion(location.coords) : null;
-        }}
-        minZoomLevel={17}
-        maxZoomLevel={17}
-        onUserLocationChange={(a) => {
-          if (previousLocation && a.nativeEvent?.coordinate) {
-            const distance = getDistance(
-              previousLocation.coords.latitude,
-              previousLocation.coords.longitude,
-              a.nativeEvent?.coordinate.latitude,
-              a.nativeEvent?.coordinate.longitude
-            );
-            setDistanceTraveled((prevDistance) => prevDistance + distance);
-          }
-          setPreviousLocation({ coords: a.nativeEvent.coordinate });
-          setLocation({ coords: a.nativeEvent.coordinate });
-        }}
-        showsUserLocation>
-        {location?.coords && (
-          <Marker
-            coordinate={{
-              latitude: location?.coords?.latitude,
-              longitude: location?.coords?.longitude,
-            }}
-            style={{ width: 30, height: 50 }}
-            onPress={() => {
-              if (playerCharacter?.currentHp === 0) {
-                showHpMessage();
-              } else {
-                router.push("(stack)/battle");
-              }
-            }}
-            children={
-              <View>
-                <Image
-                  source={require("../../assets/creatures/skeletonWarrior.png")}
-                  style={{ width: "100%", height: "100%" }}
-                  resizeMode="contain"
-                />
-              </View>
+      {location && (
+        <MapView
+          ref={mapRef}
+          provider="google"
+          style={styles.map}
+          initialRegion={location?.coords}
+          region={location?.coords}
+          // mapType="terrain"
+          customMapStyle={mapStyle}
+          onRegionChange={(e) => {
+            mapRef?.current
+              ? mapRef?.current?.animateToRegion(location.coords)
+              : null;
+          }}
+          minZoomLevel={17}
+          maxZoomLevel={17}
+          onUserLocationChange={(a) => {
+            if (previousLocation && a.nativeEvent?.coordinate) {
+              const distance = getDistance(
+                previousLocation.coords.latitude,
+                previousLocation.coords.longitude,
+                a.nativeEvent?.coordinate.latitude,
+                a.nativeEvent?.coordinate.longitude
+              );
+              setDistanceTraveled((prevDistance) => prevDistance + distance);
             }
-          />
-        )}
-      </MapView>
+            setPreviousLocation({ coords: a.nativeEvent.coordinate });
+            setLocation({ coords: a.nativeEvent.coordinate });
+          }}
+          showsUserLocation>
+          {location?.coords && (
+            <Marker
+              coordinate={location.coords}
+              onPress={() => {
+                if (playerCharacter?.currentHp === 0) {
+                  showHpMessage();
+                } else {
+                  router.push("(stack)/battle");
+                }
+              }}>
+              <Image
+                source={require("../../assets/creatures/skeletonWarrior.png")}
+                style={{ width: 30, height: 50 }}
+                resizeMode="contain"
+              />
+            </Marker>
+          )}
+        </MapView>
+      )}
     </View>
   );
 };

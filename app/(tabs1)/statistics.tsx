@@ -13,7 +13,7 @@ export default function Statistics() {
       contentContainerStyle={{
         flex: 1,
         justifyContent: "flex-start",
-        alignItems: "center",
+        // alignItems: "center",
         marginTop: 25,
       }}>
       <View>
@@ -45,23 +45,6 @@ export default function Statistics() {
             {playerCharacter?.maxInnerPower}
           </Text>
           <Text style={styles.text}>Gold: {playerCharacter?.gold}</Text>
-        </View>
-        <View>
-          <Text style={styles.inBetweenText}>Stats</Text>
-        </View>
-        <View style={styles.columnView}>
-          <Text style={styles.text}>
-            Attack: {playerCharacter?.getAttack()}
-          </Text>
-          <Text style={styles.text}>
-            Defence: {playerCharacter?.getDefence()}
-          </Text>
-          <Text style={styles.text}>
-            M.Attack: {playerCharacter?.getMagicAttack()}
-          </Text>
-          <Text style={styles.text}>
-            M.Defence: {playerCharacter?.getMagicDefence()}
-          </Text>
         </View>
 
         <View>
@@ -123,6 +106,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 2,
     borderRadius: 7,
+    padding: 6,
     marginStart: "10%",
     marginEnd: "10%",
     flex: 0,
@@ -131,6 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     marginBottom: 10,
+    padding: 6,
     borderColor: "#F0F8FF",
     borderStyle: "solid",
     borderWidth: 2,
@@ -141,7 +126,7 @@ const styles = StyleSheet.create({
   text: {
     flexDirection: "column",
     fontFamily: "BruntsfieldCFBlackRegular",
-    fontSize: 18,
+    fontSize: 16,
     color: "#F0F8FF",
   },
 });

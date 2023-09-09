@@ -16,11 +16,12 @@ const Gear = () => {
   const [playerCharacter] = usePlayerCharacter();
 
   return (
-    <View
-      style={{
-        flex: 1,
+    <ScrollView
+      contentContainerStyle={{
+        // flex: 1,
+
         flexDirection: "column",
-        paddingTop: 20,
+        paddingTop: 40,
         justifyContent: "center",
       }}>
       <View
@@ -50,21 +51,43 @@ const Gear = () => {
             // height: "100%",
           }}>
           <View>
+            <Text
+              style={{ ...styles.text, textAlign: "center", paddingBottom: 4 }}>
+              Hp: {playerCharacter?.currentHp}/{playerCharacter?.getMaxHp()}
+            </Text>
             <Image
               style={{
                 // flex: 1,
-                resizeMode: "contain",
+                resizeMode: "stretch",
                 height: 200,
-                width: 150,
+                width: 130,
               }}
               source={require("assets/warrior.png")}
             />
           </View>
           <View
             style={{
+              flexDirection: "column",
+              justifyContent: "center",
+              flex: 1,
+            }}>
+            <Text style={styles.text}>
+              Attack: {playerCharacter?.getAttack()}
+            </Text>
+            <Text style={styles.text}>
+              Defence: {playerCharacter?.getDefence()}
+            </Text>
+            <Text style={styles.text}>
+              M.Attack: {playerCharacter?.getMagicAttack()}
+            </Text>
+            <Text style={styles.text}>
+              M.Defence: {playerCharacter?.getMagicDefence()}
+            </Text>
+          </View>
+          <View
+            style={{
               flex: 1,
               flexDirection: "column",
-
               justifyContent: "flex-end",
             }}>
             <View
@@ -91,7 +114,7 @@ const Gear = () => {
           <ItemSlot name="Earings" item={playerCharacter?.gear?.earings} />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -105,6 +128,12 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
     borderRadius: 5,
     marginBottom: "5%",
+  },
+  text: {
+    flexDirection: "column",
+    fontFamily: "BruntsfieldCFBlackRegular",
+    fontSize: 18,
+    color: "#F0F8FF",
   },
   itemImage: {
     flex: 1,

@@ -1,13 +1,16 @@
+import AppButton from "@/components/AppButton";
 import AppIcon from "@/components/AppIcon";
-import { Tabs } from "expo-router";
-import { ImageBackground, StyleSheet } from "react-native";
+import { Tabs, useRouter } from "expo-router";
+import { Button, ImageBackground, StyleSheet } from "react-native";
 
 const Tbs = () => {
+  const router = useRouter();
   return (
     <ImageBackground
       style={{ ...StyleSheet.absoluteFillObject }}
       imageStyle={{ resizeMode: "stretch" }}
       source={require("../../assets/backgrounds/characterStatsBg.png")}>
+      <AppButton title="<-" onPress={() => router.back()} />
       <Tabs>
         <Tabs.Screen
           name="statistics"
