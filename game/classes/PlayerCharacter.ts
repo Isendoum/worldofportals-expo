@@ -43,6 +43,7 @@ export class PlayerCharacter {
     // ... initialize other properties ...
   }
 
+  // initialize a new character
   static characterInit(
     name: string,
     race: CharacterRace,
@@ -66,6 +67,7 @@ export class PlayerCharacter {
     return char;
   }
 
+  // deep copy constructor
   clone() {
     const cloned = new PlayerCharacter();
     // Copy over all properties from this instance to the cloned instance
@@ -73,16 +75,39 @@ export class PlayerCharacter {
     return cloned;
   }
 
+  // add item to the inventory
   addItemToInventory(item: Item) {
-    if (this.inventory && this.inventory.length < 20) {
-      this.inventory?.push(item);
+    if (this.inventory) {
+      if (this.inventory.length < 20) {
+        if (item.itemType === ItemType.CONSUMABLE) {
+          let itemInInve = this.inventory.find(
+            (itemInv) => item.itemName === itemInv.itemName
+          );
+          if (itemInInve) {
+            const index = this.inventory?.indexOf(itemInInve);
+            this.inventory[index].quantity = this.inventory[index].quantity + 1;
+          } else {
+            this.inventory?.push(item);
+          }
+        } else {
+          this.inventory?.push(item);
+        }
+      } else {
+        if (item.itemType === ItemType.CONSUMABLE) {
+          let itemInInve = this.inventory.find(
+            (itemInv) => item.itemName === itemInv.itemName
+          );
+          if (itemInInve) {
+            const index = this.inventory?.indexOf(itemInInve);
+            this.inventory[index].quantity = this.inventory[index].quantity + 1;
+          }
+        }
+      }
     }
   }
+
+  //remove item from the inventory
   removeItemFromInventory(item: Item) {
-    // const inventoryWithRemovedItem = this.inventory?.filter(
-    //   (i) => i._id !== item._id
-    // );
-    // this.inventory = inventoryWithRemovedItem;
     if (this.inventory && this.inventory.length > 0) {
       const index = this.inventory?.indexOf(item);
 
@@ -238,7 +263,32 @@ export class PlayerCharacter {
         }
         break;
       case ItemType.CONSUMABLE:
+        this.useConsumable(item);
         break;
+    }
+  }
+
+  useConsumable(item: Item) {
+    //switch that decides what the consumable will do
+    switch (item.itemName) {
+      case "Hp potion":
+        if (this.currentHp && item.itemAbility) {
+          if (
+            this.currentHp + item.itemAbility?.abilityModifier >
+            this.getMaxHp()
+          ) {
+            this.currentHp = this.getMaxHp();
+          } else {
+            this.currentHp = this.currentHp + item.itemAbility?.abilityModifier;
+          }
+        }
+        break;
+    }
+    item.quantity = item.quantity - 1;
+    if (item.quantity === 0 && this.inventory) {
+      const index = this.inventory?.indexOf(item);
+
+      this.inventory?.splice(index, 1);
     }
   }
 

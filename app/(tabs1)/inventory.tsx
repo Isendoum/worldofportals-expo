@@ -17,7 +17,7 @@ import { Item, ItemAbility, ItemType } from "@/game/classes/classes";
 
 import { findGearItem } from "@/utils/gearUtils";
 import { ITEM_IMAGES } from "@/game/utils/assetMap";
-import { generateRandomItem } from "@/game/utils/itemUtils";
+import { generateConsumable, generateRandomItem } from "@/game/utils/itemUtils";
 
 const CharacterInventory = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
@@ -299,8 +299,9 @@ const CharacterInventory = () => {
       // Create a new instance of PlayerCharacter with the updated skill
       const updatedPlayerCharacter = playerCharacter.clone();
       const item = generateRandomItem(playerCharacter.level!);
-      console.log(item.assetFile);
+      const consumable = generateConsumable(playerCharacter.level!);
       updatedPlayerCharacter.addItemToInventory(item);
+      updatedPlayerCharacter.addItemToInventory(consumable);
 
       // Set the new instance as the state
       setPlayerCharacter(updatedPlayerCharacter);

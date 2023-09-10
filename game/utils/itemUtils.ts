@@ -1,4 +1,4 @@
-import { Item, ItemType } from "../classes/classes";
+import { Item, ItemAbility, ItemType } from "../classes/classes";
 
 export const ItemTypeDisplayNames = {
   [ItemType.WEAPON]: "Weapon",
@@ -12,7 +12,7 @@ export const ItemTypeDisplayNames = {
   [ItemType.EARINGS]: "Earings",
   [ItemType.GLOVES]: "Gloves",
   [ItemType.PANTS]: "Pants",
-  [ItemType.CONSUMABLE]: "Consumable",
+  [ItemType.CONSUMABLE]: "Hp potion",
 };
 
 const getAssetType = (itemType: ItemType) => {
@@ -41,7 +41,7 @@ const getAssetType = (itemType: ItemType) => {
     case ItemType.EARINGS:
       return "earrings";
     case ItemType.CONSUMABLE:
-      return "ippotion";
+      return "hppotion";
   }
 };
 
@@ -112,6 +112,35 @@ export function generateRandomItem(level: number) {
     assetFile
   );
 }
+
+export const generateConsumable = (level: number) => {
+  const type = ItemType.CONSUMABLE;
+  // Construct item name
+  const itemName = `${ItemTypeDisplayNames[type]}`;
+  // Generate a gold value (for demonstration purposes, you can adjust as needed)
+  const goldValue = Math.floor(level * 10 + 1 * 5);
+  const id = generateUniqueId();
+
+  const assetFile = getAssetType(type);
+  const itemAbility = new ItemAbility("Hp potion that heals the player", 10);
+  // Create and return the new item
+  return new Item(
+    id,
+    itemName,
+    type,
+    1,
+    level,
+    0, // defenceModifier,
+    0, // attackModifier,
+    0, // magicDefenceModifier,
+    0, // magicAttackModifier,
+    0, // hpModifier,
+    goldValue,
+    itemAbility,
+    assetFile
+  );
+};
+
 function generateUniqueId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 }

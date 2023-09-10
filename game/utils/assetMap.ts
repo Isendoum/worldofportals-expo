@@ -12,6 +12,6 @@ export const ITEM_IMAGES = {
   gloves: require("../../assets/Items/gloves.png"),
   pants: require("../../assets/Items/pants.png"),
   ring: require("../../assets/Items/ring.png"),
-  potion: require("../../assets/Items/potion.png"),
+  hppotion: require("../../assets/Items/potion.png"),
   ipPotion: require("../../assets/Items/ippotion.png"),
 };
