@@ -2,7 +2,6 @@ import React, { createContext, ReactNode, useState } from "react";
 import { Modal, View, Button } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { AppTheme } from "@/types/themeTypes";
-import AppButton from "@/components/AppButton";
 import AppIcon from "@/components/AppIcon";
 interface ModalContextProps {
   isModalOpen: boolean;

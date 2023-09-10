@@ -7,11 +7,7 @@ import { useRouter } from "expo-router";
 import { ScrollView, View } from "react-native";
 import AppCard from "@/components/AppCard";
 import { usePlayerCharacter } from "@/context/PlayerContext";
-import {
-  CharacterRace,
-  ItemType,
-  PlayerCharacter,
-} from "@/game/classes/classes";
+import { CharacterRace, ItemType } from "@/game/classes/classes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ShowModalContent = () => {

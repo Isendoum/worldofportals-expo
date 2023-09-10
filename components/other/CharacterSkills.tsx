@@ -1,7 +1,8 @@
-import { PlayerCharacter } from "@/game/classes/classes";
+
 import { findSkillImage } from "@/utils/imageUtils";
 import { Image, StyleSheet, Text, View } from "react-native";
 import MapSkills from "./MapSkills";
+import { PlayerCharacter } from "@/game/classes/PlayerCharacter";
 
 const CharacterSkills = ({
   playerCharacter,

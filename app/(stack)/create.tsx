@@ -4,9 +4,10 @@ import AppTextInput from "@/components/inputs/AppTextInput";
 import { useRouter } from "expo-router";
 import { Text, View, Button } from "react-native";
 import React from "react";
-import { CharacterRace, PlayerCharacter } from "@/game/classes/classes";
+import { CharacterRace } from "@/game/classes/classes";
 import { races, startingSkills } from "@/game/data/races";
 import { usePlayerCharacter } from "@/context/PlayerContext";
+import { PlayerCharacter } from "@/game/classes/PlayerCharacter";
 
 export default function Create() {
   const router = useRouter();

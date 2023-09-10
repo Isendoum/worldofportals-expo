@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { PlayerCharacter } from "@/game/classes/classes";
+import { PlayerCharacter } from "@/game/classes/PlayerCharacter";
 
 const PlayerCharacterContext = createContext<
   [PlayerCharacter | null, (player: PlayerCharacter) => void]

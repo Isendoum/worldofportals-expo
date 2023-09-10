@@ -1,4 +1,5 @@
-import { CharacterSkill, PlayerCharacter } from "@/game/classes/classes";
+import { PlayerCharacter } from "@/game/classes/PlayerCharacter";
+import { CharacterSkill } from "@/game/classes/classes";
 import { findSkillImage } from "@/utils/imageUtils";
 import { Image, StyleSheet, Text, View } from "react-native";
 

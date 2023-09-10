@@ -33,6 +33,7 @@ const CharacterInventory = () => {
       const updatedPlayerCharacter = playerCharacter.clone();
       updatedPlayerCharacter.removeItemFromInventory(item);
       setPlayerCharacter(updatedPlayerCharacter);
+      setItemInfo(null);
     }
   };
 
@@ -41,6 +42,7 @@ const CharacterInventory = () => {
       const updatedPlayerCharacter = playerCharacter.clone();
       updatedPlayerCharacter.equipGearItemAndRemoveItFromInventory(item);
       setPlayerCharacter(updatedPlayerCharacter);
+      setItemInfo(null);
     }
   };
 
