@@ -420,10 +420,12 @@ export class PlayerCharacter {
 
   addAndCheckExp(exp: number) {
     const expWithAward = (this.exp || 0) + exp;
+    console.log(this.expRequired);
     if (expWithAward >= this.expRequired!) {
       this.level = this.level! + 1;
       const remainingExp = expWithAward - this.expRequired!;
-      this.exp = remainingExp;
+      this.expRequired = getNextLevelExperience(this.level);
+      this.exp = 0;
       this.currentHp = this.getMaxHp();
       if (remainingExp > 0) {
         this.addAndCheckExp(remainingExp);

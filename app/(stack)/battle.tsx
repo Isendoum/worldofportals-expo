@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native";
 import { EndBattleModalContent } from "../../components/other/EndBattleModalContent";
+import Particle from "@/components/other/Particle";
 
 const BattleScreen = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
@@ -58,18 +59,18 @@ const BattleScreen = () => {
       }),
     ]).start();
 
-    Animated.sequence([
-      Animated.timing(animatedEffectOpacity, {
-        toValue: 1, // Make the effect fully visible
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(animatedEffectOpacity, {
-        toValue: 0, // Hide the effect
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]).start(() => setShowEffect(false));
+    // Animated.sequence([
+    //   Animated.timing(animatedEffectOpacity, {
+    //     toValue: 1, // Make the effect fully visible
+    //     duration: 100,
+    //     useNativeDriver: true,
+    //   }),
+    //   Animated.timing(animatedEffectOpacity, {
+    //     toValue: 0, // Hide the effect
+    //     duration: 500,
+    //     useNativeDriver: true,
+    //   }),
+    // ]).start(() => );
     Animated.sequence([
       Animated.timing(animatedCreatureYValue, {
         toValue: -10,
@@ -81,7 +82,7 @@ const BattleScreen = () => {
         duration: 100,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]).start(() => setShowEffect(false));
   };
 
   const monsterAttack = () => {
@@ -121,7 +122,6 @@ const BattleScreen = () => {
 
   // check currently playing property
   useEffect(() => {
-    console.log(battleState.battleState);
     if (battleState.battleState === "monster") {
       monsterAttack();
     }
@@ -175,21 +175,6 @@ const BattleScreen = () => {
         </TouchableOpacity>
       );
   };
-
-  // const hasEnoughInnerPower = (innerPower: number) => {
-  //   if (innerPower === null) {
-  //     return false;
-  //   } else if (innerPower <= battleState.playerCharacter.currentInnerPower) {
-  //     return true;
-  //   } else return false;
-  // };
-
-  //   useEffect(() => {
-  //     hasEnoughInnerPower();
-
-  //   }, []);
-
-  // ... (rest of the component)
 
   return (
     <ImageBackground
@@ -256,21 +241,25 @@ const BattleScreen = () => {
         {!battleEnded ? (
           <View style={styles.creatureView}>
             <View style={{ flex: 0, maxHeight: "100%", maxWidth: "100%" }}>
-              {showEffect && (
-                <Animated.Image
-                  style={{
-                    position: "absolute",
-                    resizeMode: "contain",
-                    zIndex: 2,
-                    width: 50, // Adjust as needed
-                    height: 50, // Adjust as needed
-                    opacity: animatedEffectOpacity,
-                    alignSelf: "center",
-                    bottom: "55%", // Adjust as needed
-                  }}
-                  source={require("assets/skills/wildSwing.png")}
-                />
-              )}
+              {showEffect &&
+                Array.from({ length: 20 }).map((_, index) => (
+                  <Particle
+                    key={index}
+                    style={{
+                      position: "absolute",
+                      width: 5,
+                      height: 5,
+                      zIndex: 2,
+                      // backgroundColor: "red",
+                      top: Math.random() * 100, // Random position
+                      left: Math.random() * 100, // Random position
+                    }}>
+                    <Image
+                      style={{ width: 12, height: 12, resizeMode: "contain" }}
+                      source={require("../../assets/effects/portal.png")}
+                    />
+                  </Particle>
+                ))}
               <Animated.Image
                 style={{
                   flex: -1,
@@ -278,12 +267,6 @@ const BattleScreen = () => {
                   resizeMode: "contain",
                   alignSelf: "flex-end",
                   transform: [
-                    // {
-                    //   rotate: animatedRotateValue.interpolate({
-                    //     inputRange: [-5, 5],
-                    //     outputRange: ["-0.1rad", "0.1rad"],
-                    //   }),
-                    // },
                     {
                       translateX: animatedCreatureXValue,
                     },
@@ -329,13 +312,6 @@ const BattleScreen = () => {
           {skillButton(battleState?.playerCharacter?.skill4)}
         </View>
       </View>
-
-      {/* <Overlay
-          onBackdropPress={() => null}
-          isVisible={endBattleOverlay}
-          overlayStyle={{ height: '50%' }}>
-          {endOverlay()}
-        </Overlay> */}
     </ImageBackground>
   );
 };
