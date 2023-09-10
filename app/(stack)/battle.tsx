@@ -74,8 +74,11 @@ const BattleScreen = () => {
 
   const monsterAttack = () => {
     const battle = battleState.clone();
-    battle.monsterAttack();
-    setBattleState(battle);
+    setTimeout(() => {
+      battle.monsterAttack();
+      setBattleState(battle);
+    }, 1000);
+
     Animated.sequence([
       Animated.delay(1000),
       Animated.timing(animatedCreatureXValue, {

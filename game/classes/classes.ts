@@ -4,8 +4,6 @@ import {
 } from "../utils/expUtils";
 import { PlayerCharacter } from "./PlayerCharacter";
 
-
-
 export class Gear {
   constructor(
     public weapon?: Item,
@@ -105,9 +103,12 @@ export class Battle {
       if (projectedCreatureHp <= 0) {
         this.creature.currentHp = 0;
         this.battleState = "end";
+        this.battleMessage = `${this.playerCharacter?.name} wins!`;
       } else {
         this.creature.currentHp = projectedCreatureHp;
         this.battleState = "monster";
+        this.battleMessage = `${this.creature.name} turn!`;
+        this.turn = this.turn + 1;
       }
     }
   }
@@ -118,9 +119,12 @@ export class Battle {
       if (projectedPlayerHp <= 0) {
         this.playerCharacter.currentHp = 0;
         this.battleState = "end";
+        this.battleMessage = `${this.playerCharacter?.name} loses!`;
       } else {
         this.playerCharacter.currentHp = projectedPlayerHp;
         this.battleState = "player";
+        this.battleMessage = `${this.playerCharacter.name} turn!`;
+        this.turn = this.turn + 1;
       }
     }
   }
@@ -148,8 +152,8 @@ export class Creature {
   static generateMonster(level: number) {
     const monster = new Creature();
     monster.name = "Skeleton";
-    monster.maxHp = 20 * level;
-    monster.currentHp = 20 * level;
+    monster.maxHp = 100 * level;
+    monster.currentHp = 100 * level;
     monster.attack = 1 + level;
     monster.defence = 1 + level;
     monster.level = level;

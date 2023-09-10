@@ -22,10 +22,10 @@ export const EndBattleModalContent = ({
         console.log(upPlayer.exp);
         upPlayer.gold =
           (upPlayer?.gold || 0) + (battleState.creature?.goldRewards || 0);
-        upPlayer.inventory = [
-          ...upPlayer.inventory!,
-          generateRandomItem(battleState.creature?.level!),
-        ];
+        upPlayer.addItemToInventory(
+          generateRandomItem(battleState.creature?.level!)
+        );
+
         setPlayerCharacter(upPlayer);
         closeModal();
         router.back();
