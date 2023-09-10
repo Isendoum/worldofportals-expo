@@ -21,30 +21,28 @@ const BattleScreen = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   const { openModal } = useModal();
   const [arePlayerButtonDisabled, setArePlayerButtonDisabled] = useState(false);
-  const [endBattleOverlay, setEndBattleOverlay] = useState(false);
+
   const [battleState, setBattleState] = useState(
     new Battle(
       playerCharacter!,
       Creature.generateMonster(playerCharacter?.level!)
     )
   );
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [isSkillDisabled, setIsSkillDisabled] = useState(false);
   const [battleEnded, setBattleEnded] = useState(false);
-  const [loot, setLoot] = useState([]);
-  const [creatureMaxHp, setCreatureMaxHp] = useState(100);
   const router = useRouter();
   const animatedRotateValue = useRef(new Animated.Value(0)).current;
   const animatedPlayerXValue = useRef(new Animated.Value(0)).current;
   const animatedPlayerYValue = useRef(new Animated.Value(0)).current;
   const animatedCreatureXValue = useRef(new Animated.Value(0)).current;
   const animatedCreatureYValue = useRef(new Animated.Value(0)).current;
-  const creatureTimeout = useRef(null);
+  const [showEffect, setShowEffect] = useState(false);
+  const animatedEffectOpacity = useRef(new Animated.Value(0)).current;
 
   const attackRequest = (skill: CharacterSkill | undefined) => {
     const battle = battleState.clone();
     battle.playerAttack(skill);
     setBattleState(battle);
+    setShowEffect(true);
     // Animation
     Animated.sequence([
       Animated.timing(animatedPlayerXValue, {
@@ -52,12 +50,26 @@ const BattleScreen = () => {
         duration: 200,
         useNativeDriver: true,
       }),
+
       Animated.timing(animatedPlayerXValue, {
         toValue: 0, // Return to the original position
         duration: 150,
         useNativeDriver: true,
       }),
     ]).start();
+
+    Animated.sequence([
+      Animated.timing(animatedEffectOpacity, {
+        toValue: 1, // Make the effect fully visible
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animatedEffectOpacity, {
+        toValue: 0, // Hide the effect
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start(() => setShowEffect(false));
     Animated.sequence([
       Animated.timing(animatedCreatureYValue, {
         toValue: -10,
@@ -93,6 +105,7 @@ const BattleScreen = () => {
       }),
     ]).start();
     Animated.sequence([
+      Animated.delay(1000),
       Animated.timing(animatedPlayerYValue, {
         toValue: -10,
         duration: 100,
@@ -134,7 +147,9 @@ const BattleScreen = () => {
             }
             // ref={(skillBtn) => (this.skillBtn = skillBtn)}
             style={{ alignItems: "center" }}
-            onPressIn={() => attackRequest(skill)}
+            onPressIn={() => {
+              attackRequest(skill);
+            }}
 
             //disabled={this.isAttackDisabled(skill.innerPowerConsume)}
           >
@@ -232,14 +247,30 @@ const BattleScreen = () => {
                     },
                   ],
                 }}
-                source={require("assets/warrior.png")}
+                source={require("assets/player/warriorBattle.png")}
               />
             </View>
           </View>
         ) : null}
+
         {!battleEnded ? (
           <View style={styles.creatureView}>
             <View style={{ flex: 0, maxHeight: "100%", maxWidth: "100%" }}>
+              {showEffect && (
+                <Animated.Image
+                  style={{
+                    position: "absolute",
+                    resizeMode: "contain",
+                    zIndex: 2,
+                    width: 50, // Adjust as needed
+                    height: 50, // Adjust as needed
+                    opacity: animatedEffectOpacity,
+                    alignSelf: "center",
+                    bottom: "55%", // Adjust as needed
+                  }}
+                  source={require("assets/skills/wildSwing.png")}
+                />
+              )}
               <Animated.Image
                 style={{
                   flex: -1,

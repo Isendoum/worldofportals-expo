@@ -282,12 +282,23 @@ export class PlayerCharacter {
             this.currentHp = this.currentHp + item.itemAbility?.abilityModifier;
           }
         }
+
+        if (this.currentHp === 0 && item.itemAbility) {
+          if (
+            this.currentHp + item.itemAbility?.abilityModifier >
+            this.getMaxHp()
+          ) {
+            this.currentHp = this.getMaxHp();
+          } else {
+            this.currentHp = this.currentHp + item.itemAbility?.abilityModifier;
+          }
+        }
+
         break;
     }
     item.quantity = item.quantity - 1;
     if (item.quantity === 0 && this.inventory) {
       const index = this.inventory?.indexOf(item);
-
       this.inventory?.splice(index, 1);
     }
   }
