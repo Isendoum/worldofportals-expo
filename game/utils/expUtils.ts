@@ -18,17 +18,10 @@ export function getMonstersNeededForLevelUp(level: number): number {
 }
 
 export function getMonsterExperienceAward(monsterLevel: number): number {
-  return Math.floor(
-    getNextLevelExperience(monsterLevel) /
-      getMonstersNeededForLevelUp(monsterLevel)
-  );
+  const award =
+    Math.floor(
+      getNextLevelExperience(monsterLevel) /
+        getMonstersNeededForLevelUp(monsterLevel)
+    ) + 150;
+  return award;
 }
-
-// for (let index = 1; index < 100; index++) {
-//   const expNeeded = getNextLevelExperience(index);
-//   const monsterNeeded = getMonstersNeededForLevelUp(index);
-//   const monsterExperience = getMonsterExperienceAward(index);
-//   console.log(`Level ${index}`, expNeeded);
-//   console.log(`Monsters needed in level: ${index} is ${monsterNeeded}`);
-//   console.log(`Monsters level ${index} exp awards: ${monsterExperience}`);
-// }

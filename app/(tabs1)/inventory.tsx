@@ -65,22 +65,23 @@ const CharacterInventory = () => {
               flex: 1,
               flexDirection: "column",
             }}>
-            <Text>Use {item.itemName}?</Text>
+            <Text style={styles.overlayQuestion}>Use {item.itemName}?</Text>
             <View
               style={{
+                marginTop: 15,
                 flex: 0,
                 flexDirection: "row",
                 justifyContent: "space-between",
               }}>
               <TouchableOpacity onPress={closeOverlay}>
-                <Text>cancel</Text>
+                <Text style={styles.equipDiscardText}>cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   useItemAndUpdatePlayerState(item);
                   closeOverlay();
                 }}>
-                <Text>use</Text>
+                <Text style={styles.equipDiscardText}>use</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -126,6 +127,7 @@ const CharacterInventory = () => {
                 flex: 0,
                 flexDirection: "row",
                 justifyContent: "space-between",
+                marginTop: 15,
               }}>
               <TouchableOpacity onPress={closeOverlay}>
                 <Text style={styles.equipDiscardText}>cancel</Text>

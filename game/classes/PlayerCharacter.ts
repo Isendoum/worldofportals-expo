@@ -109,6 +109,14 @@ export class PlayerCharacter {
   //remove item from the inventory
   removeItemFromInventory(item: Item) {
     if (this.inventory && this.inventory.length > 0) {
+      if (item.itemType === ItemType.CONSUMABLE) {
+        item.quantity = item.quantity - 1;
+        if (item.quantity === 0 && this.inventory) {
+          const index = this.inventory?.indexOf(item);
+          this.inventory?.splice(index, 1);
+        }
+        return;
+      }
       const index = this.inventory?.indexOf(item);
 
       this.inventory?.splice(index, 1);
@@ -295,11 +303,6 @@ export class PlayerCharacter {
         }
 
         break;
-    }
-    item.quantity = item.quantity - 1;
-    if (item.quantity === 0 && this.inventory) {
-      const index = this.inventory?.indexOf(item);
-      this.inventory?.splice(index, 1);
     }
   }
 

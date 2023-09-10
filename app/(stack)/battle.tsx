@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { EndBattleModalContent } from "../../components/other/EndBattleModalContent";
+import { EndBattleModalContent } from "@/components/other/EndBattleModalContent";
 import Particle from "@/components/other/Particle";
 
 const BattleScreen = () => {
@@ -250,7 +250,7 @@ const BattleScreen = () => {
                       width: 5,
                       height: 5,
                       zIndex: 2,
-                      // backgroundColor: "red",
+
                       top: Math.random() * 100, // Random position
                       left: Math.random() * 100, // Random position
                     }}>

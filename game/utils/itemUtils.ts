@@ -122,7 +122,11 @@ export const generateConsumable = (level: number) => {
   const id = generateUniqueId();
 
   const assetFile = getAssetType(type);
-  const itemAbility = new ItemAbility("Hp potion that heals the player", 10);
+  const itemAbilityModifier = level * 10;
+  const itemAbility = new ItemAbility(
+    `Hp potion that heals for ${itemAbilityModifier} the player`,
+    itemAbilityModifier
+  );
   // Create and return the new item
   return new Item(
     id,
