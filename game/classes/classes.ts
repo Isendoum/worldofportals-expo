@@ -1,4 +1,8 @@
 import {
+  calculateAttackOnMonster,
+  calculateAttackOnPlayer,
+} from "../utils/battleUtils";
+import {
   getMonsterExperienceAward,
   getNextLevelExperience,
 } from "../utils/expUtils";
@@ -97,8 +101,7 @@ export class Battle {
 
   playerAttack(skill: CharacterSkill | undefined) {
     if (skill && this.creature?.currentHp) {
-      const attackDamage =
-        (this.playerCharacter?.getAttack() || 0) * skill.characterSkillModifier;
+      const attackDamage = calculateAttackOnMonster(this, skill);
       const projectedCreatureHp = this.creature?.currentHp - attackDamage;
       if (projectedCreatureHp <= 0) {
         this.creature.currentHp = 0;
@@ -114,8 +117,8 @@ export class Battle {
   }
   monsterAttack() {
     if (this.playerCharacter?.currentHp) {
-      const projectedPlayerHp =
-        this.playerCharacter?.currentHp - this.creature?.attack!;
+      const attackDamage = calculateAttackOnPlayer(this);
+      const projectedPlayerHp = this.playerCharacter?.currentHp - attackDamage;
       if (projectedPlayerHp <= 0) {
         this.playerCharacter.currentHp = 0;
         this.battleState = "end";

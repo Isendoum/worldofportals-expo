@@ -18,7 +18,7 @@ export const startingSkills = [
   {
     id: "1",
     characterSkillName: "Attack",
-    characterSkillType: "ATTACK",
+    characterSkillType: "PHYSICAL",
     skillDescription:
       "Basic melee attack. Does 100.0% magic damage to the target. Consumes 0% of inner power.",
     characterSkillModifier: 1,
@@ -32,7 +32,7 @@ export const startingSkills = [
   {
     id: "2",
     characterSkillName: "Wild Swing",
-    characterSkillType: "ATTACKSKILL",
+    characterSkillType: "PHYSICAL",
     skillDescription:
       "Swing you weapon wildly, causing 150.0% melee damage to the target. Consumes 10% of inner power.",
     characterSkillModifier: 1.5,
@@ -46,7 +46,7 @@ export const startingSkills = [
   {
     id: "3",
     characterSkillName: "Arcane Bolt",
-    characterSkillType: "MAGICATTACK",
+    characterSkillType: "MAGICAL",
     skillDescription:
       "Throw an arcane bolt causing 150.0% magic damage to the target. Consumes 10% of inner power.",
     characterSkillModifier: 1.5,
@@ -60,7 +60,7 @@ export const startingSkills = [
   {
     id: "4",
     characterSkillName: "Magic Attack",
-    characterSkillType: "MAGICATTACK",
+    characterSkillType: "MAGICAL",
     skillDescription:
       "Basic magic attack. Does 100.0% magic damage to the target. Consumes 0% of inner power.",
     characterSkillModifier: 1,

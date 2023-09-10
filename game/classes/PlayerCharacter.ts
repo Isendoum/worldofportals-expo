@@ -280,6 +280,9 @@ export class PlayerCharacter {
     //switch that decides what the consumable will do
     switch (item.itemName) {
       case "Hp potion":
+        if (this.currentHp === this.getMaxHp()) {
+          break;
+        }
         if (this.currentHp && item.itemAbility) {
           if (
             this.currentHp + item.itemAbility?.abilityModifier >
@@ -301,7 +304,11 @@ export class PlayerCharacter {
             this.currentHp = this.currentHp + item.itemAbility?.abilityModifier;
           }
         }
-
+        item.quantity = item.quantity - 1;
+        if (item.quantity === 0 && this.inventory) {
+          const index = this.inventory?.indexOf(item);
+          this.inventory?.splice(index, 1);
+        }
         break;
     }
   }
