@@ -8,6 +8,7 @@ import { Marker } from "react-native-maps";
 import mapStyle from "../../assets/mapStyle.json";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { getDistance } from "@/game/utils/maoUtils";
+import { generateRandomCoordinates } from "@/utils/mapUtils";
 const Screen1 = () => {
   const router = useRouter();
   const [location, setLocation] = useState<any>({});
@@ -16,6 +17,7 @@ const Screen1 = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   const [previousLocation, setPreviousLocation] = useState<any>(null);
   const [distanceTraveled, setDistanceTraveled] = useState<number>(0);
+  const [randomMarkers, setRandomMarkers] = useState<any[]>([]);
   const mapRef = useRef<MapView>(null);
   useEffect(() => {
     (async () => {
@@ -29,13 +31,30 @@ const Screen1 = () => {
         accuracy: Location.Accuracy.Balanced,
         timeInterval: 5,
       });
-      //  console.log("Loc:", location);
       setLocation(location);
+
+      // Generate 5 random markers (you can change this number)
+      const markers = [];
+      for (let i = 0; i < 5; i++) {
+        markers.push(
+          generateRandomCoordinates(
+            location.coords.latitude,
+            location.coords.longitude,
+            1000
+          )
+        );
+      }
+      setRandomMarkers(markers);
     })();
   }, []);
 
   const showHpMessage = () => {
     Alert.alert("You are weak. Heal to resume battles.");
+    // setTimeout(() => setMessage(""), 2000);
+  };
+
+  const showFarAwayMessage = () => {
+    Alert.alert("You are too far away. Walk closer to start a fight!");
     // setTimeout(() => setMessage(""), 2000);
   };
 
@@ -75,7 +94,6 @@ const Screen1 = () => {
           style={styles.map}
           initialRegion={location?.coords}
           region={location?.coords}
-          // mapType="terrain"
           customMapStyle={mapStyle}
           onRegionChange={(e) => {
             mapRef?.current
@@ -84,21 +102,21 @@ const Screen1 = () => {
           }}
           minZoomLevel={17}
           maxZoomLevel={17}
-          onUserLocationChange={(a) => {
-            if (previousLocation && a.nativeEvent?.coordinate) {
-              const distance = getDistance(
-                previousLocation.coords.latitude,
-                previousLocation.coords.longitude,
-                a.nativeEvent?.coordinate.latitude,
-                a.nativeEvent?.coordinate.longitude
-              );
-              setDistanceTraveled((prevDistance) => prevDistance + distance);
-            }
-            setPreviousLocation({ coords: a.nativeEvent.coordinate });
-            setLocation({ coords: a.nativeEvent.coordinate });
-          }}
+          // onUserLocationChange={(a) => {
+          //   if (previousLocation && a.nativeEvent?.coordinate) {
+          //     const distance = getDistance(
+          //       previousLocation.coords.latitude,
+          //       previousLocation.coords.longitude,
+          //       a.nativeEvent?.coordinate.latitude,
+          //       a.nativeEvent?.coordinate.longitude
+          //     );
+          //     setDistanceTraveled((prevDistance) => prevDistance + distance);
+          //   }
+          //   setPreviousLocation({ coords: a.nativeEvent.coordinate });
+          //   setLocation({ coords: a.nativeEvent.coordinate });
+          // }}
           showsUserLocation>
-          {location?.coords && (
+          {/* {location?.coords && (
             <Marker
               coordinate={location.coords}
               onPress={() => {
@@ -114,7 +132,37 @@ const Screen1 = () => {
                 resizeMode="contain"
               />
             </Marker>
-          )}
+          )} */}
+          {randomMarkers.map((marker, index) => (
+            <Marker
+              key={index}
+              coordinate={marker}
+              onPress={() => {
+                if (playerCharacter?.currentHp === 0) {
+                  showHpMessage();
+                  return;
+                }
+                if (
+                  getDistance(
+                    location.coords.latitude,
+                    location.coords.longitude,
+                    marker.latitude,
+                    marker.longitude
+                  ) > 60
+                ) {
+                  showFarAwayMessage();
+                  return;
+                }
+
+                router.push("(stack)/battle");
+              }}>
+              <Image
+                source={require("../../assets/creatures/skeletonWarrior.png")}
+                style={{ width: 30, height: 50 }}
+                resizeMode="contain"
+              />
+            </Marker>
+          ))}
         </MapView>
       )}
     </View>
