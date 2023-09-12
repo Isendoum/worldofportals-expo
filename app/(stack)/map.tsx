@@ -28,7 +28,7 @@ const Screen1 = () => {
 
   useEffect(() => {
     (async () => {
-      let location = await Location.getCurrentPositionAsync({
+      const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Balanced,
         timeInterval: 5,
       });
@@ -116,71 +116,70 @@ const Screen1 = () => {
         <Text>{message}</Text>
         <Button onPress={() => router.replace("/")} title="Menu" />
       </View>
-      <View style={{ position: "absolute", zIndex: 2, top: 25, right: 20 }}>
+      <View style={{ position: "absolute", zIndex: 2, bottom: 25, right: 20 }}>
         <Text>Time left: {formatTime(timeLeft)}</Text>
         <Button onPress={() => setTrigger(!trigger)} title="Reset" />
       </View>
-      {location && (
-        <MapView
-          ref={mapRef}
-          provider="google"
-          style={styles.map}
-          initialRegion={location?.coords}
-          region={location?.coords}
-          customMapStyle={mapStyle}
-          onRegionChange={(e) => {
-            mapRef?.current?.state
-              ? mapRef?.current?.animateToRegion(location?.coords)
-              : null;
-          }}
-          minZoomLevel={17}
-          maxZoomLevel={17}
-          onUserLocationChange={(a) => {
-            // if (previousLocation && a.nativeEvent?.coordinate) {
-            //   const distance = getDistance(
-            //     previousLocation.coords.latitude,
-            //     previousLocation.coords.longitude,
-            //     a.nativeEvent?.coordinate.latitude,
-            //     a.nativeEvent?.coordinate.longitude
-            //   );
-            //   setDistanceTraveled((prevDistance) => prevDistance + distance);
-            // }
-            // setPreviousLocation({ coords: a.nativeEvent.coordinate });
-            setLocation({ coords: a.nativeEvent.coordinate });
-          }}
-          showsUserLocation>
-          {randomMarkers?.map((marker, index) => (
-            <Marker
-              key={index}
-              coordinate={marker}
-              onPress={() => {
-                if (playerCharacter?.currentHp === 0) {
-                  showHpMessage();
-                  return;
-                }
-                if (
-                  getDistance(
-                    location.coords.latitude,
-                    location.coords.longitude,
-                    marker.latitude,
-                    marker.longitude
-                  ) > 60
-                ) {
-                  showFarAwayMessage();
-                  return;
-                }
 
-                router.push("(stack)/battle");
-              }}>
-              <Image
-                source={require("../../assets/creatures/skeletonWarrior.png")}
-                style={{ width: 30, height: 50 }}
-                resizeMode="contain"
-              />
-            </Marker>
-          ))}
-        </MapView>
-      )}
+      <MapView
+        ref={mapRef}
+        provider="google"
+        style={styles.map}
+        initialRegion={location?.coords}
+        region={location?.coords}
+        customMapStyle={mapStyle}
+        onRegionChange={(e) => {
+          mapRef?.current?.state
+            ? mapRef?.current?.animateToRegion(location?.coords)
+            : null;
+        }}
+        minZoomLevel={17}
+        maxZoomLevel={17}
+        onUserLocationChange={(a) => {
+          // if (previousLocation && a.nativeEvent?.coordinate) {
+          //   const distance = getDistance(
+          //     previousLocation.coords.latitude,
+          //     previousLocation.coords.longitude,
+          //     a.nativeEvent?.coordinate.latitude,
+          //     a.nativeEvent?.coordinate.longitude
+          //   );
+          //   setDistanceTraveled((prevDistance) => prevDistance + distance);
+          // }
+          // setPreviousLocation({ coords: a.nativeEvent.coordinate });
+          setLocation({ coords: a.nativeEvent.coordinate });
+        }}
+        showsUserLocation>
+        {randomMarkers?.map((marker, index) => (
+          <Marker
+            key={index}
+            coordinate={marker}
+            onPress={() => {
+              if (playerCharacter?.currentHp === 0) {
+                showHpMessage();
+                return;
+              }
+              if (
+                getDistance(
+                  location?.coords?.latitude,
+                  location?.coords?.longitude,
+                  marker.latitude,
+                  marker.longitude
+                ) > 60
+              ) {
+                showFarAwayMessage();
+                return;
+              }
+
+              router.push("(stack)/battle");
+            }}>
+            <Image
+              source={require("../../assets/creatures/skeletonWarrior.png")}
+              style={{ width: 30, height: 50 }}
+              resizeMode="contain"
+            />
+          </Marker>
+        ))}
+      </MapView>
     </View>
   );
 };

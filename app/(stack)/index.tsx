@@ -29,6 +29,7 @@ const IntroPage = () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setLocationStatus(status);
+        alert("Permission to access location was denied");
         return;
       }
       setLocationStatus(status);
