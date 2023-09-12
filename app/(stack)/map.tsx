@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 
 import { useEffect, useState, useRef } from "react";
@@ -9,58 +9,87 @@ import mapStyle from "../../assets/mapStyle.json";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { getDistance } from "@/game/utils/maoUtils";
 import { generateRandomCoordinates } from "@/utils/mapUtils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTimer } from "@/context/TimerContext";
+import { formatTime } from "@/utils/generalUtils";
+
 const Screen1 = () => {
+  const { startTimer, timeLeft } = useTimer();
   const router = useRouter();
-  const [location, setLocation] = useState<any>({});
+  const [location, setLocation] = useState<any>(null);
   const [message, setMessage] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState("");
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   const [previousLocation, setPreviousLocation] = useState<any>(null);
   const [distanceTraveled, setDistanceTraveled] = useState<number>(0);
-  const [randomMarkers, setRandomMarkers] = useState<any[]>([]);
+  const [randomMarkers, setRandomMarkers] = useState<any[] | null>([]);
+  const [trigger, setTrigger] = useState(false);
   const mapRef = useRef<MapView>(null);
+
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-
       let location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Balanced,
         timeInterval: 5,
       });
       setLocation(location);
-
-      // Generate 5 random markers (you can change this number)
-      const markers = [];
-      for (let i = 0; i < 5; i++) {
-        markers.push(
-          generateRandomCoordinates(
-            location.coords.latitude,
-            location.coords.longitude,
-            1000
-          )
-        );
+      // Check if markers are already stored
+      const storedMarkers = await AsyncStorage.getItem("randomMarkers");
+      if (storedMarkers) {
+        setRandomMarkers(JSON.parse(storedMarkers));
+      } else {
+        // Generate random markers
+        const markers = [];
+        for (let i = 0; i < 5; i++) {
+          markers.push(
+            generateRandomCoordinates(
+              location.coords.latitude,
+              location.coords.longitude
+            )
+          );
+        }
+        setRandomMarkers(markers);
+        // Store the generated markers
+        await AsyncStorage.setItem("randomMarkers", JSON.stringify(markers));
       }
-      setRandomMarkers(markers);
     })();
+    return () => {
+      setLocation(null);
+      setRandomMarkers(null);
+      mapRef.current?.setState(null);
+    };
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (timeLeft === 0) {
+        startTimer();
+        const markers = [];
+        for (let i = 0; i < 5; i++) {
+          markers.push(
+            generateRandomCoordinates(
+              location.coords.latitude,
+              location.coords.longitude
+            )
+          );
+        }
+        setRandomMarkers(markers);
+        // Store the generated markers
+        await AsyncStorage.setItem("randomMarkers", JSON.stringify(markers));
+      }
+    })();
+  }, [trigger]);
 
   const showHpMessage = () => {
     Alert.alert("You are weak. Heal to resume battles.");
-    // setTimeout(() => setMessage(""), 2000);
   };
 
   const showFarAwayMessage = () => {
     Alert.alert("You are too far away. Walk closer to start a fight!");
-    // setTimeout(() => setMessage(""), 2000);
   };
 
   const setCarreer = (d: number) => {
     if (playerCharacter) {
-      //   console.log(d);
       const upPlayer = playerCharacter?.clone();
       upPlayer.career.distanceTraveled = d;
       setPlayerCharacter(upPlayer);
@@ -85,7 +114,11 @@ const Screen1 = () => {
       }}>
       <View style={{ position: "absolute", zIndex: 2, top: 0, left: 0 }}>
         <Text>{message}</Text>
-        <Button onPress={() => router.back()} title="Menu" />
+        <Button onPress={() => router.replace("/")} title="Menu" />
+      </View>
+      <View style={{ position: "absolute", zIndex: 2, top: 25, right: 20 }}>
+        <Text>Time left: {formatTime(timeLeft)}</Text>
+        <Button onPress={() => setTrigger(!trigger)} title="Reset" />
       </View>
       {location && (
         <MapView
@@ -96,44 +129,27 @@ const Screen1 = () => {
           region={location?.coords}
           customMapStyle={mapStyle}
           onRegionChange={(e) => {
-            mapRef?.current
-              ? mapRef?.current?.animateToRegion(location.coords)
+            mapRef?.current?.state
+              ? mapRef?.current?.animateToRegion(location?.coords)
               : null;
           }}
           minZoomLevel={17}
           maxZoomLevel={17}
-          // onUserLocationChange={(a) => {
-          //   if (previousLocation && a.nativeEvent?.coordinate) {
-          //     const distance = getDistance(
-          //       previousLocation.coords.latitude,
-          //       previousLocation.coords.longitude,
-          //       a.nativeEvent?.coordinate.latitude,
-          //       a.nativeEvent?.coordinate.longitude
-          //     );
-          //     setDistanceTraveled((prevDistance) => prevDistance + distance);
-          //   }
-          //   setPreviousLocation({ coords: a.nativeEvent.coordinate });
-          //   setLocation({ coords: a.nativeEvent.coordinate });
-          // }}
+          onUserLocationChange={(a) => {
+            // if (previousLocation && a.nativeEvent?.coordinate) {
+            //   const distance = getDistance(
+            //     previousLocation.coords.latitude,
+            //     previousLocation.coords.longitude,
+            //     a.nativeEvent?.coordinate.latitude,
+            //     a.nativeEvent?.coordinate.longitude
+            //   );
+            //   setDistanceTraveled((prevDistance) => prevDistance + distance);
+            // }
+            // setPreviousLocation({ coords: a.nativeEvent.coordinate });
+            setLocation({ coords: a.nativeEvent.coordinate });
+          }}
           showsUserLocation>
-          {/* {location?.coords && (
-            <Marker
-              coordinate={location.coords}
-              onPress={() => {
-                if (playerCharacter?.currentHp === 0) {
-                  showHpMessage();
-                } else {
-                  router.push("(stack)/battle");
-                }
-              }}>
-              <Image
-                source={require("../../assets/creatures/skeletonWarrior.png")}
-                style={{ width: 30, height: 50 }}
-                resizeMode="contain"
-              />
-            </Marker>
-          )} */}
-          {randomMarkers.map((marker, index) => (
+          {randomMarkers?.map((marker, index) => (
             <Marker
               key={index}
               coordinate={marker}

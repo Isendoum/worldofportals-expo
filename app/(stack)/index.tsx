@@ -1,32 +1,19 @@
 import AppButton from "@/components/AppButton";
-import AppText from "@/components/AppText";
-import AppTextInput from "@/components/inputs/AppTextInput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useRouter } from "expo-router";
 import { ScrollView, View } from "react-native";
 import AppCard from "@/components/AppCard";
 import { usePlayerCharacter } from "@/context/PlayerContext";
-import { CharacterRace, ItemType } from "@/game/classes/classes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const ShowModalContent = () => {
-  const [text, setText] = useState<string>("");
-  return (
-    <View style={{ width: "80%" }}>
-      <AppText>Input</AppText>
-      <AppTextInput
-        value={text}
-        onChangeText={setText}
-        placeholder="Enter your name"
-      />
-    </View>
-  );
-};
+import { useTimer } from "@/context/TimerContext";
+import * as Location from "expo-location";
 
 const IntroPage = () => {
   const router = useRouter();
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
+  const [locationStatus, setLocationStatus] = useState("");
+  const { startTimer, timeLeft } = useTimer();
+
   const clearStorage = async () => {
     try {
       // await AsyncStorage.clear();
@@ -36,6 +23,21 @@ const IntroPage = () => {
       alert("Failed to clear the async storage.");
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setLocationStatus(status);
+        return;
+      }
+      setLocationStatus(status);
+      if (timeLeft === 600) {
+        // startTimer();
+      }
+    })();
+  }, []);
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -50,7 +52,7 @@ const IntroPage = () => {
           flexDirection: "column",
         }}>
         <AppButton
-          disabled={!playerCharacter}
+          disabled={!playerCharacter || locationStatus !== "granted"}
           title="Explore"
           onPress={() => router.push("/(stack)/map")}
         />

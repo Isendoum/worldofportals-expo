@@ -17,6 +17,7 @@ import AsyncStorage, {
   useAsyncStorage,
 } from "@react-native-async-storage/async-storage";
 import { useEvent } from "react-native-reanimated";
+import { TimerProvider } from "@/context/TimerContext";
 
 export default function AppLayout() {
   const [isReady, setReady] = React.useState(false);
@@ -54,49 +55,54 @@ export default function AppLayout() {
       value={colorScheme === "dark" ? AppDarkTheme : AppDefaultTheme}>
       <StatusBar animated barStyle="light-content" />
       <PlayerCharacterProvider>
-        <ModalProvider>
-          <Drawer
-            initialRouteName="(stack)"
-            screenOptions={({ navigation }) => ({
-              headerShown: false,
-              sceneContainerStyle: { paddingTop: 20, backgroundColor: "grey" },
-              // header: (props) => <View></View>,
-              // headerLeft: (props) => (
-              //   <View {...props}>
-              //     <TouchableOpacity onPress={navigation.toggleDrawer}>
-              //       <AppIcon name="menu" size={36} />
-              //     </TouchableOpacity>
-              //   </View>
-              // ),
-            })}>
-            <Drawer.Screen
-              name="(stack)"
-              options={{
-                title: "Home",
-                //   headerShown: false,
-                // icon for menu item of drawer
-                // drawerIcon: (props) => {
-                //   return (
-                //     <View {...props}>
-                //       <Text>O</Text>
-                //     </View>
-                //   );
-                // },
-                headerTitle: (props) => (
-                  <View>
-                    <AppText>Header for all stacks</AppText>
-                  </View>
-                ),
-              }}
-            />
-            <Drawer.Screen
-              name="(tabs1)"
-              options={{
-                title: "Character",
-              }}
-            />
-          </Drawer>
-        </ModalProvider>
+        <TimerProvider>
+          <ModalProvider>
+            <Drawer
+              initialRouteName="(stack)"
+              screenOptions={({ navigation }) => ({
+                headerShown: false,
+                sceneContainerStyle: {
+                  paddingTop: 20,
+                  backgroundColor: "grey",
+                },
+                // header: (props) => <View></View>,
+                // headerLeft: (props) => (
+                //   <View {...props}>
+                //     <TouchableOpacity onPress={navigation.toggleDrawer}>
+                //       <AppIcon name="menu" size={36} />
+                //     </TouchableOpacity>
+                //   </View>
+                // ),
+              })}>
+              <Drawer.Screen
+                name="(stack)"
+                options={{
+                  title: "Home",
+                  //   headerShown: false,
+                  // icon for menu item of drawer
+                  // drawerIcon: (props) => {
+                  //   return (
+                  //     <View {...props}>
+                  //       <Text>O</Text>
+                  //     </View>
+                  //   );
+                  // },
+                  headerTitle: (props) => (
+                    <View>
+                      <AppText>Header for all stacks</AppText>
+                    </View>
+                  ),
+                }}
+              />
+              <Drawer.Screen
+                name="(tabs1)"
+                options={{
+                  title: "Character",
+                }}
+              />
+            </Drawer>
+          </ModalProvider>
+        </TimerProvider>
       </PlayerCharacterProvider>
     </ThemeProvider>
   );
