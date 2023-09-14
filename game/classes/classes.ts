@@ -1,3 +1,5 @@
+import { generateUniqueId } from "@/utils/generalUtils";
+import { MONSTER_IMAGES } from "../utils/assetMap";
 import {
   calculateAttackOnMonster,
   calculateAttackOnPlayer,
@@ -140,8 +142,14 @@ export class Battle {
   }
 }
 
+export interface MLocation {
+  latitude: number;
+  longitude: number;
+}
+
 export class Creature {
   constructor(
+    public id?: string,
     public name?: string,
     public level?: number,
     public currentHp?: number,
@@ -149,11 +157,14 @@ export class Creature {
     public attack?: number,
     public defence?: number,
     public expRewards?: number,
-    public goldRewards?: number
+    public goldRewards?: number,
+    public asset?: any,
+    public location?: MLocation
   ) {}
 
   static generateMonster(level: number) {
     const monster = new Creature();
+    monster.id = generateUniqueId();
     monster.name = "Skeleton";
     monster.maxHp = 100 * level;
     monster.currentHp = 100 * level;
@@ -162,6 +173,22 @@ export class Creature {
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
+    monster.asset = MONSTER_IMAGES["skeleton"];
+    return monster;
+  }
+
+  static generateMonsterWithLocation(level: number) {
+    const monster = new Creature();
+    monster.id = generateUniqueId();
+    monster.name = "Skeleton";
+    monster.maxHp = 100 * level;
+    monster.currentHp = 100 * level;
+    monster.attack = 1 + level;
+    monster.defence = 1 + level;
+    monster.level = level;
+    monster.expRewards = getMonsterExperienceAward(level);
+    monster.goldRewards = 100;
+    monster.asset = MONSTER_IMAGES["skeleton"];
     return monster;
   }
 }

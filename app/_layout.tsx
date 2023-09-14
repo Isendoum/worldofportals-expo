@@ -3,7 +3,6 @@ import { Drawer } from "expo-router/drawer";
 import { StatusBar, View, useColorScheme } from "react-native";
 import AppDarkTheme from "../theme/AppDarkTheme";
 import AppDefaultTheme from "../theme/AppDefaultTheme";
-import AppIcon from "@/components/AppIcon";
 import AppText from "@/components/AppText";
 import { ModalProvider } from "@/context/ModalContext";
 import { SplashScreen, Stack } from "expo-router";
@@ -16,7 +15,7 @@ import {
 import AsyncStorage, {
   useAsyncStorage,
 } from "@react-native-async-storage/async-storage";
-import { useEvent } from "react-native-reanimated";
+
 import { TimerProvider } from "@/context/TimerContext";
 
 export default function AppLayout() {

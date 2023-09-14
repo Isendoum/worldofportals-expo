@@ -1,3 +1,4 @@
+import { generateUniqueId } from "@/utils/generalUtils";
 import { Item, ItemAbility, ItemType } from "../classes/classes";
 
 export const ItemTypeDisplayNames = {
@@ -145,6 +146,4 @@ export const generateConsumable = (level: number) => {
   );
 };
 
-function generateUniqueId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-}
+

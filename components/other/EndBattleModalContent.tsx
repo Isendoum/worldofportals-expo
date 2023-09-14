@@ -1,10 +1,12 @@
-import { Battle } from "@/game/classes/classes";
+import { Battle, Creature } from "@/game/classes/classes";
 import { useModal } from "@/hooks/useModal";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { generateRandomItem } from "@/game/utils/itemUtils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { usePickedMonster } from "@/context/MapBattleContext";
 
 export const EndBattleModalContent = ({
   battleState,
@@ -14,7 +16,8 @@ export const EndBattleModalContent = ({
   const router = useRouter();
   const { closeModal } = useModal();
   const [, setPlayerCharacter] = usePlayerCharacter();
-  const closeModalAndGatherGoldAndExp = () => {
+  const [, setMonster] = usePickedMonster();
+  const closeModalAndGatherGoldAndExp = async () => {
     if (battleState.playerCharacter) {
       try {
         const upPlayer = battleState.playerCharacter?.clone();
@@ -28,6 +31,19 @@ export const EndBattleModalContent = ({
 
         setPlayerCharacter(upPlayer);
         closeModal();
+
+        const storedMonsters = await AsyncStorage.getItem("randomMonsters");
+        if (storedMonsters) {
+          const parsedMonsters: Creature[] = JSON.parse(storedMonsters);
+          const updatedMonsters = parsedMonsters.filter(
+            (mon) => mon.id !== battleState.creature?.id
+          );
+          await AsyncStorage.setItem(
+            "randomMonsters",
+            JSON.stringify(updatedMonsters)
+          );
+          setMonster(null);
+        }
         router.back();
       } catch (e) {
         console.error(e);
