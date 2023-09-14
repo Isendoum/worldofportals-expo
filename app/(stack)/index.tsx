@@ -24,19 +24,21 @@ const IntroPage = () => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setLocationStatus(status);
-        alert("Permission to access location was denied");
-        return;
-      }
+  const getLocPerm = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
       setLocationStatus(status);
-      if (timeLeft === 600) {
-        // startTimer();
-      }
-    })();
+      alert("Permission to access location was denied");
+      return;
+    }
+    setLocationStatus(status);
+    if (timeLeft === 600) {
+      // startTimer();
+    }
+  };
+
+  useEffect(() => {
+    getLocPerm();
   }, []);
 
   return (

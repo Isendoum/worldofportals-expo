@@ -15,3 +15,7 @@ export const ITEM_IMAGES = {
   hppotion: require("../../assets/Items/potion.png"),
   ipPotion: require("../../assets/Items/ippotion.png"),
 };
+
+export const MONSTER_IMAGES = {
+  skeleton: require("../../assets/creatures/skeletonWarrior.png"),
+};

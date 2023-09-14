@@ -17,17 +17,16 @@ import {
 } from "react-native";
 import { EndBattleModalContent } from "@/components/other/EndBattleModalContent";
 import Particle from "@/components/other/Particle";
+import { usePickedMonster } from "@/context/MapBattleContext";
 
 const BattleScreen = () => {
+  const [monster, setMonster] = usePickedMonster();
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   const { openModal } = useModal();
   const [arePlayerButtonDisabled, setArePlayerButtonDisabled] = useState(false);
 
   const [battleState, setBattleState] = useState(
-    new Battle(
-      playerCharacter!,
-      Creature.generateMonster(playerCharacter?.level!)
-    )
+    new Battle(playerCharacter!, monster!)
   );
   const [battleEnded, setBattleEnded] = useState(false);
   const router = useRouter();
@@ -275,7 +274,7 @@ const BattleScreen = () => {
                     },
                   ],
                 }}
-                source={require("assets/creatures/skeletonWarrior.png")}
+                source={battleState.creature?.asset}
               />
             </View>
           </View>
