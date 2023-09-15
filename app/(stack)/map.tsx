@@ -93,7 +93,7 @@ const MapScreen = () => {
   useEffect(() => {
     (async () => {
       if (
-        timeLeft === 0 &&
+        //timeLeft === 0 &&
         location?.coords?.latitude &&
         location?.coords?.longitude
       ) {

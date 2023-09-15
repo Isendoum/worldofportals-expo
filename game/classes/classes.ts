@@ -9,6 +9,7 @@ import {
   getNextLevelExperience,
 } from "../utils/expUtils";
 import { PlayerCharacter } from "./PlayerCharacter";
+import { monsterNames } from "../data/monsters";
 
 export class Gear {
   constructor(
@@ -165,7 +166,8 @@ export class Creature {
   static generateMonster(level: number) {
     const monster = new Creature();
     monster.id = generateUniqueId();
-    monster.name = "Skeleton";
+    const name = monsterNames[Math.floor(Math.random() * monsterNames.length)];
+    monster.name = name;
     monster.maxHp = 100 * level;
     monster.currentHp = 100 * level;
     monster.attack = 1 + level;
@@ -173,14 +175,18 @@ export class Creature {
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
-    monster.asset = MONSTER_IMAGES["skeleton"];
+    const assetProp: string = name.replace(" ", "").toLocaleLowerCase();
+    monster.asset = MONSTER_IMAGES[assetProp];
     return monster;
   }
 
   static generateMonsterWithLocation(level: number) {
     const monster = new Creature();
     monster.id = generateUniqueId();
-    monster.name = "Skeleton";
+    const name =
+      monsterNames[Math.floor(Math.random() * monsterNames.length + 1)];
+    console.log(name);
+    monster.name = name;
     monster.maxHp = 100 * level;
     monster.currentHp = 100 * level;
     monster.attack = 1 + level;
@@ -188,7 +194,8 @@ export class Creature {
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
-    monster.asset = MONSTER_IMAGES["skeleton"];
+    const assetProp: string = monster.name.replace(" ", "").toLocaleLowerCase();
+    monster.asset = MONSTER_IMAGES[assetProp];
     return monster;
   }
 }

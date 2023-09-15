@@ -145,5 +145,3 @@ export const generateConsumable = (level: number) => {
     assetFile
   );
 };
-
-

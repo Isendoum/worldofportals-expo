@@ -16,6 +16,11 @@ export const ITEM_IMAGES = {
   ipPotion: require("../../assets/Items/ippotion.png"),
 };
 
-export const MONSTER_IMAGES = {
-  skeleton: require("../../assets/creatures/skeletonWarrior.png"),
+type MonsterImagesType = {
+  [key: string]: any;
+};
+
+export const MONSTER_IMAGES: MonsterImagesType = {
+  skeletonwarrior: require("../../assets/creatures/skeletonWarrior.png"),
+  redsoldier: require("../../assets/creatures/redSoldier.png"),
 };

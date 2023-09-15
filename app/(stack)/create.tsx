@@ -5,9 +5,10 @@ import { useRouter } from "expo-router";
 import { Text, View, Button } from "react-native";
 import React from "react";
 import { CharacterRace } from "@/game/classes/classes";
-import { races, startingSkills } from "@/game/data/races";
+import { races } from "@/game/data/races";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { PlayerCharacter } from "@/game/classes/PlayerCharacter";
+import { startingSkills } from "@/game/data/skills";
 
 export default function Create() {
   const router = useRouter();
