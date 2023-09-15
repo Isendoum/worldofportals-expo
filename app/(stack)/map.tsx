@@ -21,45 +21,17 @@ const MapScreen = () => {
   const nav = useNavigation();
   const [location, setLocation] = useState<any>(null);
   const [message, setMessage] = useState<string>("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   const [previousLocation, setPreviousLocation] = useState<any>(null);
   const [distanceTraveled, setDistanceTraveled] = useState<number>(0);
-  const [randomMarkers, setRandomMarkers] = useState<any[] | null>([]);
   const [randomMonsters, setRandomMonsters] = useState<Creature[]>([]);
   const [trigger, setTrigger] = useState(false);
-  const [isFirstVisit, setIsFirstVisit] = useState(true);
   // const mapRef = useRef<MapView>(null);
 
   const [, setMonster] = usePickedMonster();
 
   const loadMonsters = useCallback(async () => {
-    const storedMonsters = await AsyncStorage.getItem("randomMonsters");
-    if (storedMonsters) {
-      setRandomMonsters(JSON.parse(storedMonsters));
-    }
-  }, []);
-
-  useEffect(() => {
-    const a = nav.addListener("focus", (e) => {
-      if (!isFirstVisit) {
-        loadMonsters();
-        return;
-      }
-      setIsFirstVisit(false);
-    });
-    return () => nav.removeListener("focus", a);
-  }, []);
-
-  const getAndSetLocation = async () => {
-    const location = await Location.getLastKnownPositionAsync();
-    setLocation(location);
-  };
-
-  useEffect(() => {
-    (async () => {
-      await getAndSetLocation();
-      // Check if markers are already stored
+    try {
       const storedMonsters = await AsyncStorage.getItem("randomMonsters");
       if (storedMonsters) {
         setRandomMonsters(JSON.parse(storedMonsters));
@@ -74,7 +46,42 @@ const MapScreen = () => {
           monsters.push(mon);
         }
         setRandomMonsters(monsters);
+
         await AsyncStorage.setItem("randomMonsters", JSON.stringify(monsters));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [playerCharacter, location]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadMonsters();
+      // You can also add any other logic you want to run when the screen comes into focus here
+
+      // Return a cleanup function if needed
+      return () => {
+        // Cleanup logic here, if any
+      };
+    }, [loadMonsters]) // Add loadMonsters to the dependency array to ensure the latest version of the function is used
+  );
+
+  // useEffect(() => {
+  //   console.log("in  effect");
+  //   (async () => await loadMonsters())();
+  // }, []);
+
+  const getAndSetLocation = async () => {
+    const location = await Location.getLastKnownPositionAsync();
+    setLocation(location);
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await getAndSetLocation();
+      } catch (e) {
+        console.error(e);
       }
     })();
     return () => {
@@ -90,7 +97,6 @@ const MapScreen = () => {
         location?.coords?.latitude &&
         location?.coords?.longitude
       ) {
-        console.log("asdasd");
         startTimer();
         const monsters = [];
         for (let i = 0; i < 5; i++) {
@@ -214,10 +220,19 @@ const MapScreen = () => {
                     monster?.location?.longitude!
                   ) > 60
                 ) {
+                  console.log(
+                    getDistance(
+                      location?.coords?.latitude,
+                      location?.coords?.longitude,
+                      monster?.location?.latitude!,
+                      monster?.location?.longitude!
+                    )
+                  );
                   showFarAwayMessage();
                   return;
                 }
                 setMonster(monster);
+                setRandomMonsters([]);
                 router.push("(stack)/battle");
               }}>
               <Image
