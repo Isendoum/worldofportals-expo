@@ -7,7 +7,7 @@ import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import mapStyle from "../../assets/mapStyle.json";
 import { usePlayerCharacter } from "@/context/PlayerContext";
-import { getDistance } from "@/game/utils/maoUtils";
+import { getDistance } from "@/game/utils/mapUtils";
 import { generateRandomCoordinates } from "@/utils/mapUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTimer } from "@/context/TimerContext";
@@ -210,7 +210,7 @@ const MapScreen = () => {
                     location?.coords?.longitude,
                     monster?.location?.latitude!,
                     monster?.location?.longitude!
-                  ) > 60
+                  ) > 100
                 ) {
                   console.log(
                     getDistance(

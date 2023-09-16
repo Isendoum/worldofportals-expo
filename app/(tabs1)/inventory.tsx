@@ -25,7 +25,7 @@ const CharacterInventory = () => {
   const [inventory, setInventory] = useState(playerCharacter?.inventory || []);
   const [itemInfo, setItemInfo] = useState<Item | null>(null);
   const [action, setAction] = useState<string | null>(null);
-  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(true);
   const [trigger, setTrigger] = useState(false);
 
   const removeItemAndUpdatePlayerState = async (item: Item) => {
@@ -149,17 +149,21 @@ const CharacterInventory = () => {
           <View
             style={{
               backgroundColor: "#606060",
-              paddingStart: "10%",
-              paddingEnd: "10%",
+              paddingStart: "5%",
+              paddingEnd: "5%",
               paddingBottom: "10%",
               justifyContent: "center",
               flex: 1,
               flexDirection: "column",
             }}>
-            <Text style={styles.itemNameText}>Discard {item.itemName}?</Text>
+            <Text style={styles.itemNameDiscardText}>
+              Discard {item.itemName}?
+            </Text>
+
             <View
               style={{
-                flex: 0,
+                //  flex: 1,
+                marginTop: 12,
                 flexDirection: "row",
                 justifyContent: "space-between",
               }}>
@@ -399,6 +403,12 @@ const styles = StyleSheet.create({
   },
   itemNameText: {
     flex: 1,
+    flexDirection: "column",
+    fontFamily: "BruntsfieldCFBlackRegular",
+    fontSize: 18,
+  },
+  itemNameDiscardText: {
+    // flex: 1,
     flexDirection: "column",
     fontFamily: "BruntsfieldCFBlackRegular",
     fontSize: 18,
