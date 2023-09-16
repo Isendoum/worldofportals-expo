@@ -388,8 +388,6 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "black",
     marginRight: 12,
-    // width: 64,
-    // height: 64,
   },
   listItemContent: {},
   titleText: {
