@@ -37,9 +37,13 @@ const BattleScreen = () => {
   const animatedCreatureXValue = useRef(new Animated.Value(0)).current;
   const animatedCreatureYValue = useRef(new Animated.Value(0)).current;
   const [showEffect, setShowEffect] = useState(false);
+  const [currentSkill, setCurrentSkill] = useState<
+    CharacterSkill | undefined
+  >();
   const animatedEffectOpacity = useRef(new Animated.Value(0)).current;
 
   const attackRequest = (skill: CharacterSkill | undefined) => {
+    setCurrentSkill(skill);
     const battle = battleState.clone();
     const prevCreatureHp = battleState?.creature?.currentHp;
     battle.playerAttack(skill);
@@ -48,19 +52,21 @@ const BattleScreen = () => {
     setBattleState(battle);
     setShowEffect(true);
     // Animation
-    Animated.sequence([
-      Animated.timing(animatedPlayerXValue, {
-        toValue: 200, // Dash towards the monster by 50 units
-        duration: 200,
-        useNativeDriver: true,
-      }),
+    if (skill?.characterSkillType !== "MAGICAL") {
+      Animated.sequence([
+        Animated.timing(animatedPlayerXValue, {
+          toValue: 200, // Dash towards the monster by 200 units
+          duration: 200,
+          useNativeDriver: true,
+        }),
 
-      Animated.timing(animatedPlayerXValue, {
-        toValue: 0, // Return to the original position
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
+        Animated.timing(animatedPlayerXValue, {
+          toValue: 0, // Return to the original position
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
 
     Animated.sequence([
       Animated.timing(animatedCreatureYValue, {
@@ -165,6 +171,7 @@ const BattleScreen = () => {
         animatedCreatureXValue={animatedCreatureXValue}
         animatedCreatureYValue={animatedCreatureYValue}
         showEffect={showEffect}
+        skill={currentSkill}
       />
       <View style={styles.infoView}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>

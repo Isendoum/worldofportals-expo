@@ -21,3 +21,25 @@ export function findSkillImage(name: string | undefined) {
       return require("../assets/Items/generic.png");
   }
 }
+
+export function findSkillEffect(name: string | undefined) {
+  switch (name) {
+    case undefined:
+      "../assets/effects/portal.png";
+      return;
+    case "Attack":
+      return require("../assets/effects/portal.png");
+    case "Wild Swing":
+      return require("../assets/effects/townSkillShop.png");
+    case "Arcane Bolt":
+      return require("../assets/effects/portal.png");
+    case "Magic Attack":
+      return require("../assets/effects/portal.png");
+    case "Healing Touch":
+      return require("../assets/effects/portal.png");
+    case "Burst of Power":
+      return require("../assets/effects/portal.png");
+    default:
+      return require("../assets/effects/portal.png");
+  }
+}

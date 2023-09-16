@@ -8,7 +8,7 @@ const ButtonWithText = ({
   callback: () => void;
 }) => {
   return (
-    <TouchableOpacity onPress={callback}>
+    <TouchableOpacity onPress={() => callback()}>
       <Text style={styles.equipDiscardText}>{buttonText}</Text>
     </TouchableOpacity>
   );

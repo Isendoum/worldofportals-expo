@@ -1,6 +1,8 @@
 import { Animated, Image, StyleSheet, View } from "react-native";
 import Particle from "./Particle";
 import { Battle } from "@/game/classes/Battle";
+import { CharacterSkill } from "@/game/classes/classes";
+import { findSkillEffect } from "@/utils/imageUtils";
 
 const BattleMainScene = ({
   battleState,
@@ -10,6 +12,7 @@ const BattleMainScene = ({
   animatedCreatureXValue,
   animatedCreatureYValue,
   showEffect,
+  skill,
 }: {
   battleState: Battle;
   battleEnded: boolean;
@@ -18,6 +21,7 @@ const BattleMainScene = ({
   animatedCreatureXValue: Animated.Value;
   animatedCreatureYValue: Animated.Value;
   showEffect: boolean;
+  skill?: CharacterSkill;
 }) => {
   return (
     <View
@@ -67,7 +71,7 @@ const BattleMainScene = ({
                   }}>
                   <Image
                     style={{ width: 12, height: 12, resizeMode: "contain" }}
-                    source={require("../../assets/effects/portal.png")}
+                    source={findSkillEffect(skill?.characterSkillName)}
                   />
                 </Particle>
               ))}
