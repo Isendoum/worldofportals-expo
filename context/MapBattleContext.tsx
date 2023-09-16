@@ -1,5 +1,5 @@
+import { Creature } from "@/game/classes/Creature";
 import React, { createContext, useContext, useState } from "react";
-import { Creature } from "@/game/classes/classes";
 
 const MapBattleContext = createContext<
   [Creature | null, (monster: Creature | null) => void]

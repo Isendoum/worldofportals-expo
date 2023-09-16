@@ -1,4 +1,3 @@
-import { Battle, Creature } from "@/game/classes/classes";
 import { useModal } from "@/hooks/useModal";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -7,6 +6,8 @@ import { usePlayerCharacter } from "@/context/PlayerContext";
 import { generateRandomItem } from "@/game/utils/itemUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { usePickedMonster } from "@/context/MapBattleContext";
+import { Battle } from "@/game/classes/Battle";
+import { Creature } from "@/game/classes/Creature";
 
 export const EndBattleModalContent = ({
   battleState,

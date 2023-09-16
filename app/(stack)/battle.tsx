@@ -1,6 +1,6 @@
 import ProgressBar from "@/components/other/ProgressBar";
 import { usePlayerCharacter } from "@/context/PlayerContext";
-import { Creature, Battle, CharacterSkill } from "@/game/classes/classes";
+import { CharacterSkill } from "@/game/classes/classes";
 import { useModal } from "@/hooks/useModal";
 import { findSkillImage } from "@/utils/imageUtils";
 import { useRouter } from "expo-router";
@@ -18,6 +18,7 @@ import {
 import { EndBattleModalContent } from "@/components/other/EndBattleModalContent";
 import Particle from "@/components/other/Particle";
 import { usePickedMonster } from "@/context/MapBattleContext";
+import { Battle } from "@/game/classes/Battle";
 
 const BattleScreen = () => {
   const [monster, setMonster] = usePickedMonster();

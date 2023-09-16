@@ -1,7 +1,7 @@
-import { useFocusEffect, useNavigation, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
@@ -12,13 +12,13 @@ import { generateRandomCoordinates } from "@/utils/mapUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTimer } from "@/context/TimerContext";
 import { formatTime } from "@/utils/generalUtils";
-import { Creature } from "@/game/classes/classes";
+
 import { usePickedMonster } from "@/context/MapBattleContext";
+import { Creature } from "@/game/classes/Creature";
 
 const MapScreen = () => {
   const { startTimer, timeLeft } = useTimer();
   const router = useRouter();
-  const nav = useNavigation();
   const [location, setLocation] = useState<any>(null);
   const [message, setMessage] = useState<string>("");
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
@@ -30,6 +30,7 @@ const MapScreen = () => {
 
   const [, setMonster] = usePickedMonster();
 
+  // loads monsters or creates a new batch of them
   const loadMonsters = useCallback(async () => {
     try {
       const storedMonsters = await AsyncStorage.getItem("randomMonsters");
@@ -57,19 +58,10 @@ const MapScreen = () => {
   useFocusEffect(
     useCallback(() => {
       loadMonsters();
-      // You can also add any other logic you want to run when the screen comes into focus here
 
-      // Return a cleanup function if needed
-      return () => {
-        // Cleanup logic here, if any
-      };
+      return () => {};
     }, [loadMonsters]) // Add loadMonsters to the dependency array to ensure the latest version of the function is used
   );
-
-  // useEffect(() => {
-  //   console.log("in  effect");
-  //   (async () => await loadMonsters())();
-  // }, []);
 
   const getAndSetLocation = async () => {
     const location = await Location.getLastKnownPositionAsync();
@@ -187,20 +179,20 @@ const MapScreen = () => {
           // }}
           minZoomLevel={17}
           maxZoomLevel={17}
-          // onUserLocationChange={(a) => {
-          //   console.log("changed");
-          //   // if (previousLocation && a.nativeEvent?.coordinate) {
-          //   //   const distance = getDistance(
-          //   //     previousLocation.coords.latitude,
-          //   //     previousLocation.coords.longitude,
-          //   //     a.nativeEvent?.coordinate.latitude,
-          //   //     a.nativeEvent?.coordinate.longitude
-          //   //   );
-          //   //   setDistanceTraveled((prevDistance) => prevDistance + distance);
-          //   // }
-          //   // setPreviousLocation({ coords: a.nativeEvent.coordinate });
-          //   setLocation({ coords: a.nativeEvent.coordinate });
-          // }}
+          onUserLocationChange={(a) => {
+            console.log("changed");
+            // if (previousLocation && a.nativeEvent?.coordinate) {
+            //   const distance = getDistance(
+            //     previousLocation.coords.latitude,
+            //     previousLocation.coords.longitude,
+            //     a.nativeEvent?.coordinate.latitude,
+            //     a.nativeEvent?.coordinate.longitude
+            //   );
+            //   setDistanceTraveled((prevDistance) => prevDistance + distance);
+            // }
+            // setPreviousLocation({ coords: a.nativeEvent.coordinate });
+            setLocation({ coords: a.nativeEvent.coordinate });
+          }}
           userLocationUpdateInterval={20000}
           showsUserLocation>
           {randomMonsters?.map((monster, index) => (
