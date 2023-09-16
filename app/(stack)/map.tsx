@@ -26,6 +26,8 @@ const MapScreen = () => {
   const [distanceTraveled, setDistanceTraveled] = useState<number>(0);
   const [randomMonsters, setRandomMonsters] = useState<Creature[]>([]);
   const [trigger, setTrigger] = useState(false);
+  const [currentlyShowingUserLocation, setCurrentlyShowingUserLocation] =
+    useState(true);
   // const mapRef = useRef<MapView>(null);
 
   const [, setMonster] = usePickedMonster();
@@ -57,6 +59,7 @@ const MapScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setCurrentlyShowingUserLocation(true);
       loadMonsters();
 
       return () => {};
@@ -194,7 +197,7 @@ const MapScreen = () => {
             setLocation({ coords: a.nativeEvent.coordinate });
           }}
           userLocationUpdateInterval={20000}
-          showsUserLocation>
+          showsUserLocation={currentlyShowingUserLocation}>
           {randomMonsters?.map((monster, index) => (
             <Marker
               key={index}
@@ -224,6 +227,7 @@ const MapScreen = () => {
                   return;
                 }
                 setMonster(monster);
+                setCurrentlyShowingUserLocation(false);
                 setRandomMonsters([]);
                 router.push("(stack)/battle");
               }}>

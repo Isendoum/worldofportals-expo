@@ -32,16 +32,20 @@ export class Creature {
     monster.monsterType = monTemplate.type;
     monster.maxHp = monTemplate.baseHp * level;
     monster.currentHp = monTemplate.baseHp * level;
-    monster.attack = 1 + level;
-    monster.defence = 1 + level;
-    monster.MagicAttack = 1 + level;
-    monster.MagicDefence = 1 + level;
+    monster.attack = monTemplate.baseAttack + level;
+    monster.defence = monTemplate.baseDefence + level;
+    monster.MagicAttack = monTemplate.baseMAttack + level;
+    monster.MagicDefence = monTemplate.baseMDefence + level;
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
     const assetProp: string = name.replace(" ", "").toLocaleLowerCase();
     monster.asset = MONSTER_IMAGES[assetProp];
     return monster;
+  }
+
+  public getCurrentHp(): number {
+    return this.currentHp || 0;
   }
 }
 

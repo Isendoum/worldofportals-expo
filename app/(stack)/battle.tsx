@@ -2,7 +2,6 @@ import ProgressBar from "@/components/other/ProgressBar";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { CharacterSkill } from "@/game/classes/classes";
 import { useModal } from "@/hooks/useModal";
-import { findSkillImage } from "@/utils/imageUtils";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -16,10 +15,10 @@ import {
   View,
 } from "react-native";
 import { EndBattleModalContent } from "@/components/other/EndBattleModalContent";
-import Particle from "@/components/other/Particle";
 import { usePickedMonster } from "@/context/MapBattleContext";
 import { Battle } from "@/game/classes/Battle";
 import SkillButton from "@/components/other/SkillButton";
+import BattleMainScene from "@/components/other/BattleMainScene";
 
 const BattleScreen = () => {
   const [monster, setMonster] = usePickedMonster();
@@ -42,7 +41,10 @@ const BattleScreen = () => {
 
   const attackRequest = (skill: CharacterSkill | undefined) => {
     const battle = battleState.clone();
+    const prevCreatureHp = battleState?.creature?.currentHp;
     battle.playerAttack(skill);
+    const playerDamage = prevCreatureHp! - battle?.creature?.currentHp! || 0;
+    console.log(playerDamage);
     setBattleState(battle);
     setShowEffect(true);
     // Animation
@@ -60,18 +62,6 @@ const BattleScreen = () => {
       }),
     ]).start();
 
-    // Animated.sequence([
-    //   Animated.timing(animatedEffectOpacity, {
-    //     toValue: 1, // Make the effect fully visible
-    //     duration: 100,
-    //     useNativeDriver: true,
-    //   }),
-    //   Animated.timing(animatedEffectOpacity, {
-    //     toValue: 0, // Hide the effect
-    //     duration: 500,
-    //     useNativeDriver: true,
-    //   }),
-    // ]).start(() => );
     Animated.sequence([
       Animated.timing(animatedCreatureYValue, {
         toValue: -10,
@@ -167,79 +157,15 @@ const BattleScreen = () => {
           {battleState?.battleMessage}
         </Text>
       </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          flex: 1,
-          justifyContent: "space-between",
-        }}>
-        {!battleEnded ? (
-          <View style={styles.playerView}>
-            <View style={{ flex: 0, maxHeight: "100%", maxWidth: "100%" }}>
-              <Animated.Image
-                style={{
-                  flex: -1,
-                  resizeMode: "contain",
-                  aspectRatio: 0.7,
-                  transform: [
-                    {
-                      translateX: animatedPlayerXValue,
-                    },
-                    {
-                      translateY: animatedPlayerYValue,
-                    },
-                  ],
-                }}
-                source={require("assets/player/warriorBattle.png")}
-              />
-            </View>
-          </View>
-        ) : null}
-
-        {!battleEnded ? (
-          <View style={styles.creatureView}>
-            <View style={{ flex: 0, maxHeight: "100%", maxWidth: "100%" }}>
-              {showEffect &&
-                Array.from({ length: 20 }).map((_, index) => (
-                  <Particle
-                    key={index}
-                    style={{
-                      position: "absolute",
-                      width: 5,
-                      height: 5,
-                      zIndex: 2,
-
-                      top: Math.random() * 100, // Random position
-                      left: Math.random() * 100, // Random position
-                    }}>
-                    <Image
-                      style={{ width: 12, height: 12, resizeMode: "contain" }}
-                      source={require("../../assets/effects/portal.png")}
-                    />
-                  </Particle>
-                ))}
-              <Animated.Image
-                style={{
-                  flex: -1,
-                  aspectRatio: 0.7,
-                  resizeMode: "contain",
-                  alignSelf: "flex-end",
-                  transform: [
-                    {
-                      translateX: animatedCreatureXValue,
-                    },
-                    {
-                      translateY: animatedCreatureYValue,
-                    },
-                  ],
-                }}
-                source={battleState.creature?.asset}
-              />
-            </View>
-          </View>
-        ) : null}
-      </View>
+      <BattleMainScene
+        battleState={battleState}
+        battleEnded={battleEnded}
+        animatedPlayerXValue={animatedPlayerXValue}
+        animatedPlayerYValue={animatedPlayerYValue}
+        animatedCreatureXValue={animatedCreatureXValue}
+        animatedCreatureYValue={animatedCreatureYValue}
+        showEffect={showEffect}
+      />
       <View style={styles.infoView}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View>

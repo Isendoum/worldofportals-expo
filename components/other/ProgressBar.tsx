@@ -9,7 +9,7 @@ const ProgressBar = ({ current, max }: { current: number; max: number }) => {
     Animated.timing(progress, {
       toValue: percentage,
       duration: 500,
-      useNativeDriver: false,
+      useNativeDriver: false, // We're animating the width, so we can't use the native driver
     }).start();
   }, [current]);
 
@@ -21,7 +21,12 @@ const ProgressBar = ({ current, max }: { current: number; max: number }) => {
   return (
     <View style={styles.container}>
       <Animated.View
-        style={[styles.bar, { width: widthInterpolated, left: 0 }]}
+        style={[
+          styles.bar,
+          {
+            width: widthInterpolated,
+          },
+        ]}
       />
       <Text style={styles.text}>
         {current}/{max}
@@ -44,9 +49,10 @@ const styles = StyleSheet.create({
   },
   bar: {
     position: "absolute",
+    left: 0,
     bottom: 0,
-    height: 20,
-    backgroundColor: "#333",
+    height: 14,
+    backgroundColor: "#B22222",
     borderRadius: 8,
   },
   text: {

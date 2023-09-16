@@ -54,6 +54,8 @@ export class Battle {
 
   clone() {
     const cloned = new Battle();
+    let playerClone = this.playerCharacter?.clone();
+    this.playerCharacter = playerClone;
     // Copy over all properties from this instance to the cloned instance
     Object.assign(cloned, this);
     return cloned;

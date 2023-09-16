@@ -18,6 +18,7 @@ import { Item, ItemAbility, ItemType } from "@/game/classes/classes";
 import { findGearItem } from "@/utils/gearUtils";
 import { ITEM_IMAGES } from "@/game/utils/assetMap";
 import { generateConsumable, generateRandomItem } from "@/game/utils/itemUtils";
+import ButtonWithText from "@/components/other/ButtonWithText";
 
 const CharacterInventory = () => {
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
@@ -252,20 +253,20 @@ const CharacterInventory = () => {
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <TouchableOpacity
-              onPress={() => {
+            <ButtonWithText
+              buttonText="Discard"
+              callback={() => {
                 setIsOverlayVisible(true);
                 setAction("discard");
-              }}>
-              <Text style={styles.equipDiscardText}>Discard</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
+              }}
+            />
+            <ButtonWithText
+              buttonText="Equip"
+              callback={() => {
                 setIsOverlayVisible(true);
                 setAction("equip");
-              }}>
-              <Text style={styles.equipDiscardText}>Equip</Text>
-            </TouchableOpacity>
+              }}
+            />
           </View>
         </View>
       );
@@ -280,20 +281,20 @@ const CharacterInventory = () => {
           </Text>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <TouchableOpacity
-              onPress={() => {
+            <ButtonWithText
+              buttonText="Discard"
+              callback={() => {
                 setIsOverlayVisible(true);
                 setAction("discard");
-              }}>
-              <Text style={styles.equipDiscardText}>Discard</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
+              }}
+            />
+            <ButtonWithText
+              buttonText="Use"
+              callback={() => {
                 setIsOverlayVisible(true);
                 setAction("use");
-              }}>
-              <Text style={styles.equipDiscardText}>Use</Text>
-            </TouchableOpacity>
+              }}
+            />
           </View>
         </View>
       );
