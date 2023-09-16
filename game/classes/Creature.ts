@@ -12,6 +12,8 @@ export class Creature {
     public maxHp?: number,
     public attack?: number,
     public defence?: number,
+    public MagicAttack?: number,
+    public MagicDefence?: number,
     public expRewards?: number,
     public goldRewards?: number,
     public asset?: any,
@@ -27,6 +29,8 @@ export class Creature {
     monster.currentHp = 100 * level;
     monster.attack = 1 + level;
     monster.defence = 1 + level;
+    monster.MagicAttack = 1 + level;
+    monster.MagicDefence = 1 + level;
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
@@ -45,6 +49,8 @@ export class Creature {
     monster.currentHp = 100 * level;
     monster.attack = 1 + level;
     monster.defence = 1 + level;
+    monster.MagicAttack = 1 + level;
+    monster.MagicDefence = 1 + level;
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
