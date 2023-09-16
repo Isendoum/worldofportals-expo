@@ -311,7 +311,7 @@ const CharacterInventory = () => {
   }, [trigger]);
 
   return (
-    <View style={{ flex: 1, marginTop: "2%" }}>
+    <View style={{ marginTop: "2%" }}>
       <Button onPress={() => setTrigger(!trigger)} title="Gen" />
       <Text style={styles.titleText}>Inventory ({inventory.length}/20)</Text>
 
@@ -321,22 +321,26 @@ const CharacterInventory = () => {
           marginStart: "10%",
           marginEnd: "10%",
           marginBottom: "10%",
-          height: "55%",
+          height: "50%",
         }}>
         <FlatList
           data={playerCharacter?.inventory}
           renderItem={({ item }) => (
             <Pressable onPress={() => setItemInfo(item)}>
               <View style={styles.listItem}>
-                <Image
-                  source={
-                    item?.assetFile
-                      ? ITEM_IMAGES[
-                          `${item.assetFile}` as keyof typeof ITEM_IMAGES
-                        ]
-                      : ""
-                  }
-                />
+                <View style={styles.itemView}>
+                  <Image
+                    width={64}
+                    height={64}
+                    source={
+                      item?.assetFile
+                        ? ITEM_IMAGES[
+                            `${item.assetFile}` as keyof typeof ITEM_IMAGES
+                          ]
+                        : ""
+                    }
+                  />
+                </View>
                 <Text style={styles.itemNameText}>
                   {item.itemName}
                   {item.itemType === ItemType.CONSUMABLE ? (
@@ -375,6 +379,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#999999",
     marginBottom: "3%",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  itemView: {
+    alignItems: "center",
+    borderRadius: 2,
+    borderWidth: 3,
+    borderColor: "black",
+    marginRight: 12,
+    // width: 64,
+    // height: 64,
   },
   listItemContent: {},
   titleText: {
@@ -385,9 +400,10 @@ const styles = StyleSheet.create({
     color: "#F0F8FF",
   },
   itemNameText: {
+    flex: 1,
     flexDirection: "column",
     fontFamily: "BruntsfieldCFBlackRegular",
-    fontSize: 20,
+    fontSize: 18,
   },
   itemSubtitleText: {
     flexDirection: "column",

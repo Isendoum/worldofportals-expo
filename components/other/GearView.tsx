@@ -63,7 +63,7 @@ const GearView = ({ item }: { item: Item | undefined }) => {
 const styles = StyleSheet.create({
   itemGearView: {
     alignItems: "center",
-    // borderRadius: 2,
+    borderRadius: 2,
     borderWidth: 3,
     borderColor: "black",
     width: 64,

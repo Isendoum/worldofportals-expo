@@ -1,5 +1,6 @@
 import { Battle } from "../classes/Battle";
 import { CharacterSkill } from "../classes/classes";
+import { MonsterType } from "../data/monsters";
 
 export const calculateAttackOnMonster = (
   battle: Battle,
@@ -37,9 +38,18 @@ export const calculateAttackOnMonster = (
 export const calculateAttackOnPlayer = (battle: Battle): number => {
   const monsterAttack = battle.creature?.attack || 0;
   const playerDefence = battle.playerCharacter?.getDefence() || 0;
+  const monsterMAttack = battle.creature?.MagicAttack || 0;
+  const playerMDefence = battle.playerCharacter?.getMagicDefence() || 0;
 
-  // Assuming that higher defence reduces the damage.
-  const damageReduction = monsterAttack * (playerDefence / 100);
-  console.log(damageReduction);
-  return Math.floor(monsterAttack - damageReduction);
+  if (battle.creature?.monsterType === MonsterType.PHYSICAL) {
+    // Assuming that higher defence reduces the damage.
+    const damageReduction = monsterAttack * (playerDefence / 100);
+    console.log("Physical " + damageReduction);
+    return Math.floor(monsterAttack - damageReduction);
+  } else {
+    // Assuming that higher defence reduces the damage.
+    const damageReduction = monsterMAttack * (playerMDefence / 100);
+    console.log("Magical " + damageReduction);
+    return Math.floor(monsterMAttack - damageReduction);
+  }
 };

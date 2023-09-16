@@ -19,11 +19,6 @@ import AsyncStorage, {
 import { TimerProvider } from "@/context/TimerContext";
 
 export default function AppLayout() {
-  const [isReady, setReady] = React.useState(false);
-  const [playerExists, setPlayerExists] = React.useState(false);
-  const [playerCharacter] = usePlayerCharacter();
-  const a = useAsyncStorage("playerCharacter");
-
   const [fontsLoaded] = useFonts({
     BruntsfieldCFBlackRegular: require("../assets/BruntsfieldCFBlackRegular.otf"),
   });
@@ -45,7 +40,7 @@ export default function AppLayout() {
         // When all loading is setup, unmount the splash screen component.
         SplashScreen.hideAsync();
         // setReady(true);
-      }, 3000);
+      }, 2000);
     }
   }, [fontsLoaded, fontsLoaded2, fontsLoaded3, fontsLoaded4]);
 

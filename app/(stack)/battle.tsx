@@ -19,6 +19,7 @@ import { EndBattleModalContent } from "@/components/other/EndBattleModalContent"
 import Particle from "@/components/other/Particle";
 import { usePickedMonster } from "@/context/MapBattleContext";
 import { Battle } from "@/game/classes/Battle";
+import SkillButton from "@/components/other/SkillButton";
 
 const BattleScreen = () => {
   const [monster, setMonster] = usePickedMonster();
@@ -133,49 +134,6 @@ const BattleScreen = () => {
     }
   }, [battleState.battleState]);
 
-  const skillButton = (skill: CharacterSkill | undefined) => {
-    if (skill !== null) {
-      return (
-        <View
-          style={{
-            flexDirection: "column",
-          }}>
-          <TouchableOpacity
-            disabled={
-              battleState.battleState === "monster" ||
-              battleState.battleState === "end"
-            }
-            // ref={(skillBtn) => (this.skillBtn = skillBtn)}
-            style={{ alignItems: "center" }}
-            onPressIn={() => {
-              attackRequest(skill);
-            }}
-
-            //disabled={this.isAttackDisabled(skill.innerPowerConsume)}
-          >
-            <Image
-              style={{
-                resizeMode: "contain",
-                width: 50,
-                height: 50,
-              }}
-              source={findSkillImage(skill?.characterSkillName)}
-            />
-          </TouchableOpacity>
-        </View>
-      );
-    } else
-      return (
-        <TouchableOpacity
-          style={{ flex: 1, alignItems: "center" }}
-          disabled={true}>
-          <Text style={{ fontSize: 20, fontFamily: "RomanAntique" }}>
-            No skill
-          </Text>
-        </TouchableOpacity>
-      );
-  };
-
   return (
     <ImageBackground
       style={styles.background}
@@ -190,6 +148,7 @@ const BattleScreen = () => {
             fontSize: 20,
             fontFamily: "RomanAntique",
             color: "#ffffff",
+            margin: 5,
           }}>
           Run
         </Text>
@@ -306,10 +265,26 @@ const BattleScreen = () => {
           </View>
         </View>
         <View style={styles.playerCommandsView}>
-          {skillButton(battleState?.playerCharacter?.skill1)}
-          {skillButton(battleState?.playerCharacter?.skill2)}
-          {skillButton(battleState?.playerCharacter?.skill3)}
-          {skillButton(battleState?.playerCharacter?.skill4)}
+          <SkillButton
+            skill={battleState?.playerCharacter?.skill1}
+            battleState={battleState}
+            attackRequest={attackRequest}
+          />
+          <SkillButton
+            skill={battleState?.playerCharacter?.skill2}
+            battleState={battleState}
+            attackRequest={attackRequest}
+          />
+          <SkillButton
+            skill={battleState?.playerCharacter?.skill3}
+            battleState={battleState}
+            attackRequest={attackRequest}
+          />
+          <SkillButton
+            skill={battleState?.playerCharacter?.skill4}
+            battleState={battleState}
+            attackRequest={attackRequest}
+          />
         </View>
       </View>
     </ImageBackground>
@@ -337,7 +312,7 @@ const styles = StyleSheet.create({
   playerCommandsView: {
     flexDirection: "row",
     // flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
   infoView: {
     flexDirection: "column",

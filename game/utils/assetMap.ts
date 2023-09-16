@@ -22,5 +22,6 @@ type MonsterImagesType = {
 
 export const MONSTER_IMAGES: MonsterImagesType = {
   skeletonwarrior: require("../../assets/creatures/skeletonWarrior.png"),
+  magewarrior: require("../../assets/creatures/mageWarrior.png"),
   redsoldier: require("../../assets/creatures/redSoldier.png"),
 };

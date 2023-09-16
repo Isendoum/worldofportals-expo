@@ -106,7 +106,11 @@ const Skills = () => {
                           margin: 4,
                         }}>
                         <View
-                          style={{ borderWidth: 3, borderBlockColor: "black" }}>
+                          style={{
+                            borderWidth: 3,
+                            borderBlockColor: "black",
+                            borderRadius: 2,
+                          }}>
                           <Image
                             style={{ width: 50, height: 50 }}
                             source={findSkillImage(item.characterSkillName)}

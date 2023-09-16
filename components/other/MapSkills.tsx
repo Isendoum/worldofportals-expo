@@ -24,6 +24,7 @@ const MapSkills = ({ player }: { player: PlayerCharacter | null }) => {
               flexDirection: "column",
               alignSelf: "center",
               borderWidth: 3,
+              borderRadius: 2,
               borderBlockColor: "black",
               justifyContent: "center",
             }}>
@@ -33,7 +34,12 @@ const MapSkills = ({ player }: { player: PlayerCharacter | null }) => {
       ) : (
         <View key={index}>
           <Text style={styles.skillText}>Skill {index + 1}</Text>
-          <View style={{ borderWidth: 3, borderBlockColor: "black" }}>
+          <View
+            style={{
+              borderWidth: 3,
+              borderRadius: 2,
+              borderBlockColor: "black",
+            }}>
             <Image
               style={styles.skillImage}
               source={findSkillImage(skill?.characterSkillName)}

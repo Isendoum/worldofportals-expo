@@ -1,6 +1,6 @@
 import { useModal } from "@/hooks/useModal";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { generateRandomItem } from "@/game/utils/itemUtils";
@@ -17,6 +17,7 @@ export const EndBattleModalContent = ({
   const router = useRouter();
   const { closeModal } = useModal();
   const [, setPlayerCharacter] = usePlayerCharacter();
+  const [isWin] = useState(battleState.playerCharacter?.currentHp! > 0);
   const [, setMonster] = usePickedMonster();
   const closeModalAndGatherGoldAndExp = async () => {
     if (battleState.playerCharacter) {
@@ -52,6 +53,20 @@ export const EndBattleModalContent = ({
     }
   };
 
+  const closeModalAndLeave = async () => {
+    if (battleState.playerCharacter) {
+      try {
+        const upPlayer = battleState.playerCharacter?.clone();
+
+        setPlayerCharacter(upPlayer);
+        closeModal();
+
+        router.back();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
   return (
     <View style={{ width: "80%" }}>
       <Text
@@ -60,25 +75,30 @@ export const EndBattleModalContent = ({
           fontFamily: "RomanAntique",
           // color: "#ffffff",
         }}>
-        Fight won
+        {!isWin ? "Fight lost!" : "Fight won!"}
       </Text>
-      <Text
-        style={{
-          fontSize: 26,
-          fontFamily: "RomanAntique",
-          // color: "#ffffff",
-        }}>
-        Exp: {battleState.creature?.expRewards}
-      </Text>
-      <Text
-        style={{
-          fontSize: 26,
-          fontFamily: "RomanAntique",
-          // color: "#ffffff",
-        }}>
-        Gold: {battleState.creature?.goldRewards}
-      </Text>
-      <TouchableOpacity onPress={closeModalAndGatherGoldAndExp}>
+      {isWin && (
+        <View>
+          <Text
+            style={{
+              fontSize: 26,
+              fontFamily: "RomanAntique",
+              // color: "#ffffff",
+            }}>
+            Exp: {battleState.creature?.expRewards}
+          </Text>
+          <Text
+            style={{
+              fontSize: 26,
+              fontFamily: "RomanAntique",
+              // color: "#ffffff",
+            }}>
+            Gold: {battleState.creature?.goldRewards}
+          </Text>
+        </View>
+      )}
+      <TouchableOpacity
+        onPress={isWin ? closeModalAndGatherGoldAndExp : closeModalAndLeave}>
         <Text
           style={{
             fontSize: 26,

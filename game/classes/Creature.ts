@@ -1,7 +1,7 @@
 import { generateUniqueId } from "@/utils/generalUtils";
 import { MONSTER_IMAGES } from "../utils/assetMap";
 import { getMonsterExperienceAward } from "../utils/expUtils";
-import { monsterNames } from "../data/monsters";
+import { MonsterType, monsterTemplate } from "../data/monsters";
 
 export class Creature {
   constructor(
@@ -17,16 +17,21 @@ export class Creature {
     public expRewards?: number,
     public goldRewards?: number,
     public asset?: any,
-    public location?: MLocation
+    public location?: MLocation,
+    public monsterType?: MonsterType
   ) {}
 
   static generateMonster(level: number) {
     const monster = new Creature();
     monster.id = generateUniqueId();
-    const name = monsterNames[Math.floor(Math.random() * monsterNames.length)];
+    // get a monster template
+    const monTemplate =
+      monsterTemplate[Math.floor(Math.random() * monsterTemplate.length)];
+    const name = monTemplate.name;
     monster.name = name;
-    monster.maxHp = 100 * level;
-    monster.currentHp = 100 * level;
+    monster.monsterType = monTemplate.type;
+    monster.maxHp = monTemplate.baseHp * level;
+    monster.currentHp = monTemplate.baseHp * level;
     monster.attack = 1 + level;
     monster.defence = 1 + level;
     monster.MagicAttack = 1 + level;
@@ -35,26 +40,6 @@ export class Creature {
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
     const assetProp: string = name.replace(" ", "").toLocaleLowerCase();
-    monster.asset = MONSTER_IMAGES[assetProp];
-    return monster;
-  }
-
-  static generateMonsterWithLocation(level: number) {
-    const monster = new Creature();
-    monster.id = generateUniqueId();
-    const name =
-      monsterNames[Math.floor(Math.random() * monsterNames.length + 1)];
-    monster.name = name;
-    monster.maxHp = 100 * level;
-    monster.currentHp = 100 * level;
-    monster.attack = 1 + level;
-    monster.defence = 1 + level;
-    monster.MagicAttack = 1 + level;
-    monster.MagicDefence = 1 + level;
-    monster.level = level;
-    monster.expRewards = getMonsterExperienceAward(level);
-    monster.goldRewards = 100;
-    const assetProp: string = monster.name.replace(" ", "").toLocaleLowerCase();
     monster.asset = MONSTER_IMAGES[assetProp];
     return monster;
   }
