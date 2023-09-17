@@ -11,6 +11,7 @@ const BattleMainScene = ({
   animatedPlayerYValue,
   animatedCreatureXValue,
   animatedCreatureYValue,
+  animatedEffectOpacity,
   showEffect,
   skill,
   damage,
@@ -21,6 +22,7 @@ const BattleMainScene = ({
   animatedPlayerYValue: Animated.Value;
   animatedCreatureXValue: Animated.Value;
   animatedCreatureYValue: Animated.Value;
+  animatedEffectOpacity: Animated.Value;
   showEffect: boolean;
   skill?: CharacterSkill;
   damage?: number;
@@ -58,7 +60,7 @@ const BattleMainScene = ({
       {!battleEnded ? (
         <View style={styles.creatureView}>
           <View style={{ flex: 0, maxHeight: "100%", maxWidth: "100%" }}>
-            <Text
+            <Animated.Text
               style={{
                 position: "absolute",
                 top: -20,
@@ -68,28 +70,30 @@ const BattleMainScene = ({
                 width: 100,
                 height: 20,
                 zIndex: 2,
+                opacity: animatedEffectOpacity,
               }}>
               {damage}
-            </Text>
-            {showEffect &&
-              Array.from({ length: 20 }).map((_, index) => (
-                <Particle
-                  key={index}
-                  style={{
-                    position: "absolute",
-                    width: 5,
-                    height: 5,
-                    zIndex: 2,
+            </Animated.Text>
 
-                    top: Math.random() * 100, // Random position
-                    left: Math.random() * 100, // Random position
-                  }}>
-                  <Image
-                    style={{ width: 12, height: 12, resizeMode: "contain" }}
-                    source={findSkillEffect(skill?.characterSkillName)}
-                  />
-                </Particle>
-              ))}
+            {Array.from({ length: 20 }).map((_, index) => (
+              <Particle
+                //   opacity={ animatedEffectOpacity}
+                key={index}
+                style={{
+                  position: "absolute",
+                  width: 5,
+                  height: 5,
+                  zIndex: 2,
+                  opacity: animatedEffectOpacity,
+                  top: Math.random() * 100, // Random position
+                  left: Math.random() * 100, // Random position
+                }}>
+                <Image
+                  style={{ width: 12, height: 12, resizeMode: "contain" }}
+                  source={findSkillEffect(skill?.characterSkillName)}
+                />
+              </Particle>
+            ))}
             <Animated.Image
               style={{
                 flex: -1,
