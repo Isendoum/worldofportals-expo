@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Animated, View, Text, StyleSheet } from "react-native";
 
-const ProgressBar = ({ current, max }: { current: number; max: number }) => {
+const ProgressBar = ({
+  current,
+  max,
+  color,
+}: {
+  current: number;
+  max: number;
+  color: string;
+}) => {
   const percentage = (current / max) * 100;
   const [progress, setProgress] = useState(new Animated.Value(percentage));
 
@@ -25,6 +33,7 @@ const ProgressBar = ({ current, max }: { current: number; max: number }) => {
           styles.bar,
           {
             width: widthInterpolated,
+            backgroundColor: color,
           },
         ]}
       />
@@ -38,26 +47,27 @@ const ProgressBar = ({ current, max }: { current: number; max: number }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#ccc",
-    borderRadius: 10,
-    margin: 10,
+    //borderRadius: 8,
+    margin: 4,
     width: 100,
-    height: 40,
-    flexDirection: "column",
-    alignItems: "center",
+    //height: 14,
+    //flexDirection: "column",
+    //alignItems: "center",
     justifyContent: "center",
-    position: "relative",
+    // position: "relative",
   },
   bar: {
     position: "absolute",
     left: 0,
-    bottom: 0,
-    height: 14,
-    backgroundColor: "#B22222",
-    borderRadius: 8,
+    //bottom: 0,
+    height: "100%",
+
+    // borderRadius: 8,
   },
   text: {
-    position: "absolute",
-    top: 0,
+    //position: "absolute",
+    //bottom: 0,
+    fontSize: 12,
     alignSelf: "center",
   },
 });

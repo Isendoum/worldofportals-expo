@@ -99,6 +99,7 @@ export class PlayerCharacter {
           );
           if (itemInInve) {
             const index = this.inventory?.indexOf(itemInInve);
+            this.inventory[index].itemAbility = item.itemAbility;
             this.inventory[index].quantity = this.inventory[index].quantity + 1;
           }
         }
@@ -302,6 +303,40 @@ export class PlayerCharacter {
             this.currentHp = this.getMaxHp();
           } else {
             this.currentHp = this.currentHp + item.itemAbility?.abilityModifier;
+          }
+        }
+        item.quantity = item.quantity - 1;
+        if (item.quantity === 0 && this.inventory) {
+          const index = this.inventory?.indexOf(item);
+          this.inventory?.splice(index, 1);
+        }
+        break;
+
+      case "Mana potion":
+        if (this.currentInnerPower === this.getMaxInnerPower()) {
+          break;
+        }
+        if (this.currentInnerPower && item.itemAbility) {
+          if (
+            this.currentInnerPower + item.itemAbility?.abilityModifier >
+            this.getMaxInnerPower()
+          ) {
+            this.currentInnerPower = this.getMaxInnerPower();
+          } else {
+            this.currentInnerPower =
+              this.currentInnerPower + item.itemAbility?.abilityModifier;
+          }
+        }
+
+        if (this.currentInnerPower === 0 && item.itemAbility) {
+          if (
+            this.currentInnerPower + item.itemAbility?.abilityModifier >
+            this.getMaxInnerPower()
+          ) {
+            this.currentInnerPower = this.getMaxInnerPower();
+          } else {
+            this.currentInnerPower =
+              this.currentInnerPower + item.itemAbility?.abilityModifier;
           }
         }
         item.quantity = item.quantity - 1;

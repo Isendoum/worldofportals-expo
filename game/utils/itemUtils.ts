@@ -16,6 +16,17 @@ export const ItemTypeDisplayNames = {
   [ItemType.CONSUMABLE]: "Hp potion",
 };
 
+export const ConsumablesDisplayNames = ["Hp potion", "Mana potion"];
+
+const getConsumableAsset = (name: string) => {
+  switch (name) {
+    case "Hp potion":
+      return "hppotion";
+    case "Mana potion":
+      return "ippotion";
+  }
+};
+
 const getAssetType = (itemType: ItemType) => {
   switch (itemType) {
     case ItemType.WEAPON:
@@ -117,15 +128,19 @@ export function generateRandomItem(level: number) {
 export const generateConsumable = (level: number) => {
   const type = ItemType.CONSUMABLE;
   // Construct item name
-  const itemName = `${ItemTypeDisplayNames[type]}`;
+  const itemName = `${
+    ConsumablesDisplayNames[
+      Math.floor(Math.random() * Object.keys(ConsumablesDisplayNames).length)
+    ]
+  }`;
   // Generate a gold value (for demonstration purposes, you can adjust as needed)
   const goldValue = Math.floor(level * 10 + 1 * 5);
   const id = generateUniqueId();
 
-  const assetFile = getAssetType(type);
+  const assetFile = getConsumableAsset(itemName);
   const itemAbilityModifier = level * 10;
   const itemAbility = new ItemAbility(
-    `Hp potion that heals for ${itemAbilityModifier} the player`,
+    `${itemName} that does something for ${itemAbilityModifier} the player`,
     itemAbilityModifier
   );
   // Create and return the new item

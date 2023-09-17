@@ -13,7 +13,7 @@ export const ITEM_IMAGES = {
   pants: require("../../assets/Items/pants.png"),
   ring: require("../../assets/Items/ring.png"),
   hppotion: require("../../assets/Items/potion.png"),
-  ipPotion: require("../../assets/Items/ippotion.png"),
+  ippotion: require("../../assets/Items/ippotion.png"),
 };
 
 type MonsterImagesType = {

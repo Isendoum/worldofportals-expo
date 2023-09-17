@@ -41,14 +41,17 @@ const BattleScreen = () => {
     CharacterSkill | undefined
   >();
   const animatedEffectOpacity = useRef(new Animated.Value(0)).current;
+  const [damageDone, setDamageDone] = useState<number | undefined>();
 
   const attackRequest = (skill: CharacterSkill | undefined) => {
     setCurrentSkill(skill);
     const battle = battleState.clone();
+
     const prevCreatureHp = battleState?.creature?.currentHp;
     battle.playerAttack(skill);
     const playerDamage = prevCreatureHp! - battle?.creature?.currentHp! || 0;
     console.log(playerDamage);
+    setDamageDone(playerDamage);
     setBattleState(battle);
     setShowEffect(true);
     // Animation
@@ -79,7 +82,10 @@ const BattleScreen = () => {
         duration: 100,
         useNativeDriver: true,
       }),
-    ]).start(() => setShowEffect(false));
+    ]).start(() => {
+      setShowEffect(false);
+      setDamageDone(undefined);
+    });
   };
 
   const monsterAttack = () => {
@@ -172,6 +178,7 @@ const BattleScreen = () => {
         animatedCreatureYValue={animatedCreatureYValue}
         showEffect={showEffect}
         skill={currentSkill}
+        damage={damageDone}
       />
       <View style={styles.infoView}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -180,8 +187,14 @@ const BattleScreen = () => {
               {battleState.playerCharacter?.name}
             </Text>
             <ProgressBar
+              color="#B22222"
               current={battleState.playerCharacter?.getCurrentHp()!}
               max={battleState.playerCharacter?.getMaxHp()!}
+            />
+            <ProgressBar
+              color="blue"
+              current={battleState.playerCharacter?.currentInnerPower!}
+              max={battleState.playerCharacter?.getMaxInnerPower()!}
             />
             {/* <ProgressBar style={{ marginTop: 2, alignSelf: "center" }} borderColor={"#000000"} color={"#00008B"} height={8} width={100} animated={true}
               progress={battleState.player.playerCharacter.currentInnerPower / this.state.battleState.player.playerCharacter.maxInnerPower} />
@@ -190,6 +203,7 @@ const BattleScreen = () => {
           <View>
             <Text style={styles.infoText}>{battleState?.creature?.name}</Text>
             <ProgressBar
+              color="#B22222"
               current={battleState?.creature?.currentHp!}
               max={battleState?.creature?.maxHp!}
             />

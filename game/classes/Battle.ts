@@ -22,6 +22,14 @@ export class Battle {
   playerAttack(skill: CharacterSkill | undefined) {
     if (skill && this.creature?.currentHp) {
       const attackDamage = calculateAttackOnMonster(this, skill);
+      const innerPowerConsumed =
+        (skill.innerPowerConsume / 100) *
+        this.playerCharacter?.getMaxInnerPower()!;
+      if (this.playerCharacter?.currentInnerPower) {
+        this.playerCharacter.currentInnerPower =
+          (this.playerCharacter?.currentInnerPower || 0) - innerPowerConsumed;
+      }
+
       const projectedCreatureHp = this.creature?.currentHp - attackDamage;
       if (projectedCreatureHp <= 0) {
         this.creature.currentHp = 0;

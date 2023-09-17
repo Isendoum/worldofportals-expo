@@ -21,7 +21,10 @@ const SkillButton = ({
         <TouchableOpacity
           disabled={
             battleState.battleState === "monster" ||
-            battleState.battleState === "end"
+            battleState.battleState === "end" ||
+            (skill.innerPowerConsume / 100) *
+              battleState.playerCharacter?.getMaxInnerPower()! >
+              battleState.playerCharacter?.currentInnerPower!
           }
           // ref={(skillBtn) => (this.skillBtn = skillBtn)}
           style={{ alignItems: "center" }}

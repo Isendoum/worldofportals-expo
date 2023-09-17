@@ -1,4 +1,4 @@
-import { Animated, Image, StyleSheet, View } from "react-native";
+import { Animated, Image, StyleSheet, Text, View } from "react-native";
 import Particle from "./Particle";
 import { Battle } from "@/game/classes/Battle";
 import { CharacterSkill } from "@/game/classes/classes";
@@ -13,6 +13,7 @@ const BattleMainScene = ({
   animatedCreatureYValue,
   showEffect,
   skill,
+  damage,
 }: {
   battleState: Battle;
   battleEnded: boolean;
@@ -22,6 +23,7 @@ const BattleMainScene = ({
   animatedCreatureYValue: Animated.Value;
   showEffect: boolean;
   skill?: CharacterSkill;
+  damage?: number;
 }) => {
   return (
     <View
@@ -56,6 +58,19 @@ const BattleMainScene = ({
       {!battleEnded ? (
         <View style={styles.creatureView}>
           <View style={{ flex: 0, maxHeight: "100%", maxWidth: "100%" }}>
+            <Text
+              style={{
+                position: "absolute",
+                top: -20,
+                left: 55,
+                fontSize: 18,
+                color: "white",
+                width: 100,
+                height: 20,
+                zIndex: 2,
+              }}>
+              {damage}
+            </Text>
             {showEffect &&
               Array.from({ length: 20 }).map((_, index) => (
                 <Particle
