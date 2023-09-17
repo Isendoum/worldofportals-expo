@@ -53,7 +53,7 @@ const BattleScreen = () => {
     console.log(playerDamage);
     setDamageDone(playerDamage);
     setBattleState(battle);
-    setShowEffect(true);
+
     // Animation
     if (skill?.characterSkillType !== "MAGICAL") {
       Animated.sequence([
@@ -62,7 +62,6 @@ const BattleScreen = () => {
           duration: 200,
           useNativeDriver: true,
         }),
-
         Animated.timing(animatedPlayerXValue, {
           toValue: 0, // Return to the original position
           duration: 150,
@@ -70,7 +69,18 @@ const BattleScreen = () => {
         }),
       ]).start();
     }
-
+    Animated.sequence([
+      Animated.timing(animatedEffectOpacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animatedEffectOpacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start();
     Animated.sequence([
       Animated.timing(animatedCreatureYValue, {
         toValue: -10,
@@ -82,10 +92,7 @@ const BattleScreen = () => {
         duration: 100,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      setShowEffect(false);
-      setDamageDone(undefined);
-    });
+    ]).start();
   };
 
   const monsterAttack = () => {
@@ -139,7 +146,7 @@ const BattleScreen = () => {
   return (
     <ImageBackground
       style={styles.background}
-      source={require("assets/backgrounds/postApocalypticTown.gif")}>
+      source={require("assets/backgrounds/postApocalypticTown.png")}>
       <StatusBar animated hidden />
 
       <TouchableOpacity
@@ -176,6 +183,7 @@ const BattleScreen = () => {
         animatedPlayerYValue={animatedPlayerYValue}
         animatedCreatureXValue={animatedCreatureXValue}
         animatedCreatureYValue={animatedCreatureYValue}
+        animatedEffectOpacity={animatedEffectOpacity}
         showEffect={showEffect}
         skill={currentSkill}
         damage={damageDone}
