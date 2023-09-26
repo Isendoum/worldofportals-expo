@@ -1,7 +1,7 @@
 import { useModal } from "@/hooks/useModal";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { BackHandler, Text, TouchableOpacity, View } from "react-native";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { generateRandomItem } from "@/game/utils/itemUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,6 +19,20 @@ export const EndBattleModalContent = ({
   const [, setPlayerCharacter] = usePlayerCharacter();
   const [isWin] = useState(battleState.playerCharacter?.currentHp! > 0);
   const [, setMonster] = usePickedMonster();
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      handleBackButton
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackButton = () => {
+    closeModalAndGatherGoldAndExp();
+    console.log("yo");
+    return true; // prevent default behavior
+  };
   const closeModalAndGatherGoldAndExp = async () => {
     if (battleState.playerCharacter) {
       try {
@@ -73,6 +87,8 @@ export const EndBattleModalContent = ({
         style={{
           fontSize: 26,
           fontFamily: "RomanAntique",
+          textAlign: "center",
+          marginBottom: 10,
           // color: "#ffffff",
         }}>
         {!isWin ? "Fight lost!" : "Fight won!"}
@@ -103,6 +119,8 @@ export const EndBattleModalContent = ({
           style={{
             fontSize: 26,
             fontFamily: "RomanAntique",
+            marginTop: 20,
+            textAlign: "center",
             // color: "#ffffff",
           }}>
           Back to map

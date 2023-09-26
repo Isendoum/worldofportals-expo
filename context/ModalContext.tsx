@@ -21,6 +21,7 @@ interface ModalProviderProps {
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<ReactNode>(null);
+
   const theme = useTheme() as AppTheme;
 
   const openModal = (content: ReactNode) => {
@@ -42,7 +43,10 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
           animationType="slide"
           transparent={true}
           visible={isModalOpen}
-          onRequestClose={closeModal}>
+          // onRequestClose={(event) => {
+          //   closeModal();
+          // }}
+        >
           <View
             style={{
               flex: 1,
@@ -51,14 +55,14 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
               alignItems: "center",
               backgroundColor: theme.colors.modalBackground,
             }}>
-            <View
+            {/* <View
               style={{
                 width: "auto",
                 alignSelf: "flex-end",
                 paddingEnd: 10,
               }}>
               <AppIcon size={36} name="close" onPress={closeModal} />
-            </View>
+            </View> */}
             <View
               style={{
                 flex: 1,
