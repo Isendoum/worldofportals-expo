@@ -43,12 +43,12 @@ export const calculateAttackOnPlayer = (battle: Battle): number => {
 
   if (battle.creature?.monsterType === MonsterType.PHYSICAL) {
     // Assuming that higher defence reduces the damage.
-    const damageReduction = monsterAttack * (playerDefence / 100);
+    const damageReduction = monsterAttack * (playerDefence / 200);
     console.log("Physical " + damageReduction);
     return Math.floor(monsterAttack - damageReduction);
   } else {
     // Assuming that higher defence reduces the damage.
-    const damageReduction = monsterMAttack * (playerMDefence / 100);
+    const damageReduction = monsterMAttack * (playerMDefence / 200);
     console.log("Magical " + damageReduction);
     return Math.floor(monsterMAttack - damageReduction);
   }

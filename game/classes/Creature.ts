@@ -32,10 +32,10 @@ export class Creature {
     monster.monsterType = monTemplate.type;
     monster.maxHp = monTemplate.baseHp * level;
     monster.currentHp = monTemplate.baseHp * level;
-    monster.attack = monTemplate.baseAttack + level;
-    monster.defence = monTemplate.baseDefence + level;
-    monster.MagicAttack = monTemplate.baseMAttack + level;
-    monster.MagicDefence = monTemplate.baseMDefence + level;
+    monster.attack = monTemplate.baseAttack * level;
+    monster.defence = monTemplate.baseDefence * level;
+    monster.MagicAttack = monTemplate.baseMAttack * level;
+    monster.MagicDefence = monTemplate.baseMDefence * level;
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
