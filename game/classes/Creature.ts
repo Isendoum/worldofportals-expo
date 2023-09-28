@@ -18,7 +18,9 @@ export class Creature {
     public goldRewards?: number,
     public asset?: any,
     public location?: MLocation,
-    public monsterType?: MonsterType
+    public monsterType?: MonsterType,
+    public itemDropChance?: number,
+    public potionDropChance?: number
   ) {}
 
   static generateMonster(level: number) {
@@ -39,6 +41,8 @@ export class Creature {
     monster.level = level;
     monster.expRewards = getMonsterExperienceAward(level);
     monster.goldRewards = 100;
+    monster.itemDropChance = monTemplate.itemDropChance;
+    monster.potionDropChance = monTemplate.potionDropChance;
     const assetProp: string = name.replace(" ", "").toLocaleLowerCase();
     monster.asset = MONSTER_IMAGES[assetProp];
     return monster;

@@ -58,6 +58,7 @@ const ItemInfoBasedOnItemType = ({
             flexDirection: "row",
             justifyContent: "space-between",
             width: "100%",
+            marginBottom: 8,
           }}>
           <Text style={styles.itemSubtitleText}>
             Lvl required: {item.levelRequired}
@@ -66,7 +67,11 @@ const ItemInfoBasedOnItemType = ({
             Sell value: {item.goldValue} g.
           </Text>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}>
           <ButtonWithText buttonText="Discard" callback={discardItemCallback} />
           <ButtonWithText buttonText="Equip" callback={equipItemCallback} />
         </View>
@@ -94,10 +99,12 @@ const styles = StyleSheet.create({
   listItemContent: {},
 
   itemNameText: {
-    flex: 1,
+    textAlign: "center",
     flexDirection: "column",
     fontFamily: "BruntsfieldCFBlackRegular",
-    fontSize: 18,
+    fontSize: 22,
+    marginBottom: 6,
+    color: "#ffffff",
   },
   itemSubtitleText: {
     flexDirection: "column",

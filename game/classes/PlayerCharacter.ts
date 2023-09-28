@@ -75,6 +75,22 @@ export class PlayerCharacter {
     return cloned;
   }
 
+  swapItemsPositionInInventory(pos1: number, pos2: number) {
+    if (
+      this.inventory &&
+      pos1 >= 0 &&
+      pos1 < this.inventory.length &&
+      pos2 >= 0 &&
+      pos2 < this.inventory.length
+    ) {
+      console.log("asdasda");
+      [this.inventory[pos1], this.inventory[pos2]] = [
+        this.inventory[pos2],
+        this.inventory[pos1],
+      ];
+    }
+  }
+
   // add item to the inventory
   addItemToInventory(item: Item) {
     if (this.inventory) {

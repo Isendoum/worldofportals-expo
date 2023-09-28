@@ -16,7 +16,7 @@ export const calculateAttackOnMonster = (
       playerAttack * skill.characterSkillModifier;
     // Assuming that higher defence reduces the damage.
     const damageReduction =
-      playerDamageBasedOnPlayerStats * (monsterDefence / 100);
+      playerDamageBasedOnPlayerStats * (monsterDefence / 10);
     console.log(damageReduction);
     return Math.floor(playerDamageBasedOnPlayerStats - damageReduction);
   }
@@ -27,7 +27,7 @@ export const calculateAttackOnMonster = (
       playerMAttack * skill.characterSkillModifier;
     // Assuming that higher defence reduces the damage.
     const damageReduction =
-      playerDamageBasedOnPlayerStats * (monsterMDefence / 100);
+      playerDamageBasedOnPlayerStats * (monsterMDefence / 10);
     console.log(damageReduction);
     return Math.floor(playerDamageBasedOnPlayerStats - damageReduction);
   }

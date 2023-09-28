@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { BackHandler, Text, TouchableOpacity, View } from "react-native";
 import { usePlayerCharacter } from "@/context/PlayerContext";
-import { generateRandomItem } from "@/game/utils/itemUtils";
+import { generateConsumable, generateRandomItem } from "@/game/utils/itemUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { usePickedMonster } from "@/context/MapBattleContext";
 import { Battle } from "@/game/classes/Battle";
@@ -19,6 +19,11 @@ export const EndBattleModalContent = ({
   const [, setPlayerCharacter] = usePlayerCharacter();
   const [isWin] = useState(battleState.playerCharacter?.currentHp! > 0);
   const [, setMonster] = usePickedMonster();
+
+  const handleBackButton = () => {
+    // closeModalAndGatherGoldAndExp();
+    return true; // prevent default behavior
+  };
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
@@ -27,12 +32,6 @@ export const EndBattleModalContent = ({
 
     return () => backHandler.remove();
   }, []);
-
-  const handleBackButton = () => {
-    closeModalAndGatherGoldAndExp();
-    console.log("yo");
-    return true; // prevent default behavior
-  };
   const closeModalAndGatherGoldAndExp = async () => {
     if (battleState.playerCharacter) {
       try {
@@ -41,13 +40,22 @@ export const EndBattleModalContent = ({
         console.log(upPlayer.exp);
         upPlayer.gold =
           (upPlayer?.gold || 0) + (battleState.creature?.goldRewards || 0);
-        upPlayer.addItemToInventory(
-          generateRandomItem(battleState.creature?.level!)
-        );
+
+        // Check if the monster drops an item
+        if (Math.random() * 100 < battleState.creature?.itemDropChance!) {
+          upPlayer.addItemToInventory(
+            generateRandomItem(battleState.creature?.level!)
+          );
+        }
+
+        // Check if the monster drops a potion
+        if (Math.random() * 100 < battleState.creature?.potionDropChance!) {
+          upPlayer.addItemToInventory(
+            generateConsumable(battleState.creature?.level!)
+          );
+        }
 
         setPlayerCharacter(upPlayer);
-        closeModal();
-
         const storedMonsters = await AsyncStorage.getItem("randomMonsters");
         if (storedMonsters) {
           const parsedMonsters: Creature[] = JSON.parse(storedMonsters);
@@ -60,6 +68,7 @@ export const EndBattleModalContent = ({
           );
           setMonster(null);
         }
+        closeModal();
         router.back();
       } catch (e) {
         console.error(e);
