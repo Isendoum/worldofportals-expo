@@ -28,7 +28,6 @@ const CharacterInventory = () => {
   const [itemInfo, setItemInfo] = useState<Item | null>(null);
   const [action, setAction] = useState<string | null>(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const removeItemAndUpdatePlayerState = useCallback(
     async (item: Item) => {
       if (playerCharacter) {
@@ -84,7 +83,6 @@ const CharacterInventory = () => {
 
   return (
     <View style={{ alignItems: "center" }}>
-      {/* <Button onPress={() => setTrigger(!trigger)} title="Gen" /> */}
       <Text style={styles.titleText}>Inventory ({inventory.length}/20)</Text>
 
       <View

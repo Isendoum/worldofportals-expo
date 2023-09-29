@@ -30,6 +30,7 @@ const Skills = () => {
 
       // Set the new instance as the state
       setPlayerCharacter(updatedPlayerCharacter);
+      setToolTipVisible(null);
     }
   };
 
@@ -53,6 +54,7 @@ const Skills = () => {
             marginStart: "10%",
             marginEnd: "10%",
             marginBottom: "10%",
+            alignItems: "center",
             flex: 1,
             flexDirection: "column",
           }}>
@@ -62,14 +64,51 @@ const Skills = () => {
             renderItem={({ item }) => {
               return (
                 <View style={styles.listItem}>
+                  <Pressable
+                    onPress={() => {
+                      setToolTipVisible((prev) =>
+                        prev === item.id ? null : item.id
+                      );
+                      console.log(item.characterSkillName);
+                    }}>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        margin: 4,
+                      }}>
+                      <View
+                        style={{
+                          borderWidth: 3,
+                          borderBlockColor: "black",
+                          borderRadius: 2,
+                        }}>
+                        <Image
+                          style={{ width: 50, height: 50 }}
+                          source={findSkillImage(item.characterSkillName)}
+                        />
+                      </View>
+                      <View style={{ margin: 4 }}>
+                        <Text style={styles.itemNameText}>
+                          {item.characterSkillName}
+                        </Text>
+                        <Text style={styles.itemSubtitleText}>
+                          {item.skillDescription}
+                        </Text>
+                      </View>
+                    </View>
+                  </Pressable>
+
                   <Tooltip
                     disableShadow
                     isVisible={toolTipVisible === item.id}
-                    backgroundColor="#606060"
+                    backgroundColor="transparent"
                     placement="bottom"
                     onClose={() => setToolTipVisible(null)}
                     content={
                       <View>
+                        {/* Your slot assignment options */}
                         <TouchableOpacity
                           onPress={() => assignSkill(item, 1)}
                           disabled={false}>
@@ -92,40 +131,8 @@ const Skills = () => {
                         </TouchableOpacity>
                       </View>
                     }>
-                    <Pressable
-                      onPress={() => {
-                        setToolTipVisible(item.id);
-                        console.log(item.characterSkillName);
-                      }}>
-                      <View
-                        style={{
-                          flex: 1,
-                          flexDirection: "row",
-                          alignItems: "center",
-
-                          margin: 4,
-                        }}>
-                        <View
-                          style={{
-                            borderWidth: 3,
-                            borderBlockColor: "black",
-                            borderRadius: 2,
-                          }}>
-                          <Image
-                            style={{ width: 50, height: 50 }}
-                            source={findSkillImage(item.characterSkillName)}
-                          />
-                        </View>
-                        <View style={{ margin: 4 }}>
-                          <Text style={styles.itemNameText}>
-                            {item.characterSkillName}
-                          </Text>
-                          <Text style={styles.itemSubtitleText}>
-                            {item.skillDescription}
-                          </Text>
-                        </View>
-                      </View>
-                    </Pressable>
+                    {/* Invisible trigger for tooltip positioning */}
+                    <View style={{ height: 0, opacity: 0 }} />
                   </Tooltip>
                 </View>
               );
