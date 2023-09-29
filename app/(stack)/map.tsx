@@ -1,7 +1,7 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
@@ -28,8 +28,8 @@ const MapScreen = () => {
   const [trigger, setTrigger] = useState(false);
   const [currentlyShowingUserLocation, setCurrentlyShowingUserLocation] =
     useState(true);
-  // const mapRef = useRef<MapView>(null);
-
+  const mapRef = useRef<MapView>(null);
+  const [loading, setLoading] = useState(true);
   const [, setMonster] = usePickedMonster();
 
   // loads monsters or creates a new batch of them
@@ -61,7 +61,7 @@ const MapScreen = () => {
     useCallback(() => {
       setCurrentlyShowingUserLocation(true);
       loadMonsters();
-
+      setLoading(false);
       return () => {};
     }, [loadMonsters]) // Add loadMonsters to the dependency array to ensure the latest version of the function is used
   );
@@ -147,99 +147,126 @@ const MapScreen = () => {
         alignItems: "center",
         position: "relative",
       }}>
-      <View style={{ position: "absolute", zIndex: 2, top: 0, left: 0 }}>
-        <Text>{message}</Text>
-        <Button onPress={() => router.back()} title="Menu" />
-      </View>
-      <View style={{ position: "absolute", zIndex: 2, bottom: 25, right: 20 }}>
-        <Text>Time left: {formatTime(timeLeft)}</Text>
-        <Button onPress={() => setTrigger(!trigger)} title="Reset" />
-      </View>
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text>Loading...</Text>
+          {/* <ProgressBar progress={0.5} width={200} />{" "} */}
+          {/* Change progress value based on your loading progress */}
+        </View>
+      ) : (
+        <>
+          <View style={{ position: "absolute", zIndex: 2, top: 0, left: 0 }}>
+            <Text>{message}</Text>
+            <Button onPress={() => router.back()} title="Menu" />
+          </View>
+          <View
+            style={{ position: "absolute", zIndex: 2, bottom: 25, right: 20 }}>
+            <Text>Time left: {formatTime(timeLeft)}</Text>
+            <Button onPress={() => setTrigger(!trigger)} title="Reset" />
+          </View>
 
-      {
-        <MapView
-          // ref={mapRef}
-          provider="google"
-          style={styles.map}
-          initialRegion={{
-            latitude: location?.coords.latitude || 0,
-            longitude: location?.coords.longitude || 0,
-            latitudeDelta: 0.000034,
-            longitudeDelta: 0.000043,
-          }}
-          showsMyLocationButton={false}
-          region={{
-            latitude: location?.coords.latitude || 0,
-            longitude: location?.coords.longitude || 0,
-            latitudeDelta: 0.000034,
-            longitudeDelta: 0.000043,
-          }}
-          customMapStyle={mapStyle}
-          // onRegionChange={(e) => {
-          //   mapRef?.current?.state
-          //     ? mapRef?.current?.animateToRegion(location?.coords)
-          //     : null;
-          // }}
-          minZoomLevel={17}
-          maxZoomLevel={17}
-          onUserLocationChange={(a) => {
-            console.log("changed");
-            // if (previousLocation && a.nativeEvent?.coordinate) {
-            //   const distance = getDistance(
-            //     previousLocation.coords.latitude,
-            //     previousLocation.coords.longitude,
-            //     a.nativeEvent?.coordinate.latitude,
-            //     a.nativeEvent?.coordinate.longitude
-            //   );
-            //   setDistanceTraveled((prevDistance) => prevDistance + distance);
-            // }
-            // setPreviousLocation({ coords: a.nativeEvent.coordinate });
-            setLocation({ coords: a.nativeEvent.coordinate });
-          }}
-          userLocationUpdateInterval={20000}
-          showsUserLocation={currentlyShowingUserLocation}>
-          {randomMonsters?.map((monster, index) => (
-            <Marker
-              key={index}
-              coordinate={monster.location!}
-              onPress={() => {
-                if (playerCharacter?.currentHp === 0) {
-                  showHpMessage();
-                  return;
-                }
-                if (
-                  getDistance(
-                    location?.coords?.latitude,
-                    location?.coords?.longitude,
-                    monster?.location?.latitude!,
-                    monster?.location?.longitude!
-                  ) > 100
-                ) {
-                  console.log(
+          <MapView
+            ref={mapRef}
+            provider="google"
+            style={styles.map}
+            // initialRegion={{
+            //   latitude: location?.coords.latitude || 0,
+            //   longitude: location?.coords.longitude || 0,
+            //   latitudeDelta: 0.000034,
+            //   longitudeDelta: 0.000043,
+
+            // }}
+            camera={{
+              center: {
+                latitude: location?.coords.latitude || 0,
+                longitude: location?.coords.longitude || 0,
+              },
+              pitch: 45, // Adjust this value for desired 3D effect
+              heading: 0,
+              altitude: 300, // Adjust altitude as needed
+              zoom: 20,
+            }}
+            showsMyLocationButton={false}
+            customMapStyle={mapStyle}
+            // onRegionChange={(e) => {
+            //   mapRef?.current?.state
+            //     ? mapRef?.current?.animateToRegion(location?.coords)
+            //     : null;
+            // }}
+            minZoomLevel={20}
+            maxZoomLevel={20}
+            onUserLocationChange={(a) => {
+              console.log("changed");
+              // if (previousLocation && a.nativeEvent?.coordinate) {
+              //   const distance = getDistance(
+              //     previousLocation.coords.latitude,
+              //     previousLocation.coords.longitude,
+              //     a.nativeEvent?.coordinate.latitude,
+              //     a.nativeEvent?.coordinate.longitude
+              //   );
+              //   setDistanceTraveled((prevDistance) => prevDistance + distance);
+              // }
+              // setPreviousLocation({ coords: a.nativeEvent.coordinate });
+              if (mapRef.current && a.nativeEvent.coordinate) {
+                mapRef.current?.animateCamera({
+                  center: {
+                    latitude: a.nativeEvent.coordinate.latitude,
+                    longitude: a.nativeEvent.coordinate.longitude,
+                  },
+                  pitch: 45, // Adjust this value for desired 3D effect
+                  heading: 0,
+                  altitude: 300, // Adjust altitude as needed
+                  zoom: 20,
+                });
+              }
+
+              setLocation({ coords: a.nativeEvent.coordinate });
+            }}
+            userLocationUpdateInterval={20000}
+            showsUserLocation={currentlyShowingUserLocation}>
+            {randomMonsters?.map((monster, index) => (
+              <Marker
+                key={index}
+                coordinate={monster.location!}
+                onPress={() => {
+                  if (playerCharacter?.currentHp === 0) {
+                    showHpMessage();
+                    return;
+                  }
+                  if (
                     getDistance(
                       location?.coords?.latitude,
                       location?.coords?.longitude,
                       monster?.location?.latitude!,
                       monster?.location?.longitude!
-                    )
-                  );
-                  showFarAwayMessage();
-                  return;
-                }
-                setMonster(monster);
-                setCurrentlyShowingUserLocation(false);
-                setRandomMonsters([]);
-                router.push("(stack)/battle");
-              }}>
-              <Image
-                source={monster?.asset!}
-                style={{ width: 30, height: 50 }}
-                resizeMode="contain"
-              />
-            </Marker>
-          ))}
-        </MapView>
-      }
+                    ) > 50
+                  ) {
+                    console.log(
+                      getDistance(
+                        location?.coords?.latitude,
+                        location?.coords?.longitude,
+                        monster?.location?.latitude!,
+                        monster?.location?.longitude!
+                      )
+                    );
+                    showFarAwayMessage();
+                    return;
+                  }
+                  setMonster(monster);
+                  setCurrentlyShowingUserLocation(false);
+                  setRandomMonsters([]);
+                  router.push("(stack)/battle");
+                }}>
+                <Image
+                  source={monster?.asset!}
+                  style={{ width: 30, height: 50 }}
+                  resizeMode="contain"
+                />
+              </Marker>
+            ))}
+          </MapView>
+        </>
+      )}
     </View>
   );
 };

@@ -33,8 +33,8 @@ export const generateRandomCoordinates = (
   const x0 = longitude;
 
   // Convert meters to degrees
-  const latChange = 200 / 111300; // roughly 111.3km per degree for latitude
-  const lonChange = 100 / (111300 * Math.cos((Math.PI * y0) / 180)); // Adjust for latitude in longitude calculation
+  const latChange = 100 / 111300; // roughly 111.3km per degree for latitude
+  const lonChange = 50 / (111300 * Math.cos((Math.PI * y0) / 180)); // Adjust for latitude in longitude calculation
 
   // Generate random changes within the constraints
   const randomLatChange = (Math.random() - 0.5) * 2 * latChange; // -200m to +200m
