@@ -3,7 +3,7 @@ import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import * as Location from "expo-location";
-import MapView from "react-native-maps";
+import MapView, { UserLocationChangeEvent } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import mapStyle from "../../assets/mapStyle.json";
 import { usePlayerCharacter } from "@/context/PlayerContext";
@@ -131,6 +131,67 @@ const MapScreen = () => {
     }
   };
 
+  const checkForBattle = (monster: Creature) => {
+    return () => {
+      if (playerCharacter?.currentHp === 0) {
+        showHpMessage();
+        return;
+      }
+      if (
+        getDistance(
+          location?.coords?.latitude,
+          location?.coords?.longitude,
+          monster?.location?.latitude!,
+          monster?.location?.longitude!
+        ) > 50
+      ) {
+        console.log(
+          getDistance(
+            location?.coords?.latitude,
+            location?.coords?.longitude,
+            monster?.location?.latitude!,
+            monster?.location?.longitude!
+          )
+        );
+        showFarAwayMessage();
+        return;
+      }
+      setMonster(monster);
+      setCurrentlyShowingUserLocation(false);
+      setRandomMonsters([]);
+      router.push("(stack)/battle");
+    };
+  };
+
+  const onLocationChange = (a: UserLocationChangeEvent) => {
+    console.log("changed");
+    // this is to calculate total distance traveled
+    // if (previousLocation && a.nativeEvent?.coordinate) {
+    //   const distance = getDistance(
+    //     previousLocation.coords.latitude,
+    //     previousLocation.coords.longitude,
+    //     a.nativeEvent?.coordinate.latitude,
+    //     a.nativeEvent?.coordinate.longitude
+    //   );
+    //   setDistanceTraveled((prevDistance) => prevDistance + distance);
+    // }
+    // setPreviousLocation({ coords: a.nativeEvent.coordinate });
+    if (mapRef.current && a.nativeEvent.coordinate) {
+      mapRef.current?.animateCamera({
+        center: {
+          latitude: a.nativeEvent.coordinate.latitude,
+          longitude: a.nativeEvent.coordinate.longitude,
+        },
+        pitch: 45, // Adjust this value for desired 3D effect
+        heading: 0,
+        altitude: 300, // Adjust altitude as needed
+        zoom: 20,
+      });
+    }
+
+    setLocation({ coords: a.nativeEvent.coordinate });
+  };
+
   // useEffect(() => {
   //   const intervalId = setInterval(() => setCarreer(distanceTraveled), 5000);
 
@@ -169,13 +230,6 @@ const MapScreen = () => {
             ref={mapRef}
             provider="google"
             style={styles.map}
-            // initialRegion={{
-            //   latitude: location?.coords.latitude || 0,
-            //   longitude: location?.coords.longitude || 0,
-            //   latitudeDelta: 0.000034,
-            //   longitudeDelta: 0.000043,
-
-            // }}
             camera={{
               center: {
                 latitude: location?.coords.latitude || 0,
@@ -188,75 +242,16 @@ const MapScreen = () => {
             }}
             showsMyLocationButton={false}
             customMapStyle={mapStyle}
-            // onRegionChange={(e) => {
-            //   mapRef?.current?.state
-            //     ? mapRef?.current?.animateToRegion(location?.coords)
-            //     : null;
-            // }}
             minZoomLevel={20}
             maxZoomLevel={20}
-            onUserLocationChange={(a) => {
-              console.log("changed");
-              // if (previousLocation && a.nativeEvent?.coordinate) {
-              //   const distance = getDistance(
-              //     previousLocation.coords.latitude,
-              //     previousLocation.coords.longitude,
-              //     a.nativeEvent?.coordinate.latitude,
-              //     a.nativeEvent?.coordinate.longitude
-              //   );
-              //   setDistanceTraveled((prevDistance) => prevDistance + distance);
-              // }
-              // setPreviousLocation({ coords: a.nativeEvent.coordinate });
-              if (mapRef.current && a.nativeEvent.coordinate) {
-                mapRef.current?.animateCamera({
-                  center: {
-                    latitude: a.nativeEvent.coordinate.latitude,
-                    longitude: a.nativeEvent.coordinate.longitude,
-                  },
-                  pitch: 45, // Adjust this value for desired 3D effect
-                  heading: 0,
-                  altitude: 300, // Adjust altitude as needed
-                  zoom: 20,
-                });
-              }
-
-              setLocation({ coords: a.nativeEvent.coordinate });
-            }}
+            onUserLocationChange={onLocationChange}
             userLocationUpdateInterval={20000}
             showsUserLocation={currentlyShowingUserLocation}>
             {randomMonsters?.map((monster, index) => (
               <Marker
                 key={index}
                 coordinate={monster.location!}
-                onPress={() => {
-                  if (playerCharacter?.currentHp === 0) {
-                    showHpMessage();
-                    return;
-                  }
-                  if (
-                    getDistance(
-                      location?.coords?.latitude,
-                      location?.coords?.longitude,
-                      monster?.location?.latitude!,
-                      monster?.location?.longitude!
-                    ) > 50
-                  ) {
-                    console.log(
-                      getDistance(
-                        location?.coords?.latitude,
-                        location?.coords?.longitude,
-                        monster?.location?.latitude!,
-                        monster?.location?.longitude!
-                      )
-                    );
-                    showFarAwayMessage();
-                    return;
-                  }
-                  setMonster(monster);
-                  setCurrentlyShowingUserLocation(false);
-                  setRandomMonsters([]);
-                  router.push("(stack)/battle");
-                }}>
+                onPress={checkForBattle(monster)}>
                 <Image
                   source={monster?.asset!}
                   style={{ width: 30, height: 50 }}

@@ -51,14 +51,14 @@ export default function AppLayout() {
       <PlayerCharacterProvider>
         <TimerProvider>
           <ModalProvider>
-            <Drawer
+            <Stack
               initialRouteName="(stack)"
               screenOptions={({ navigation }) => ({
                 headerShown: false,
-                sceneContainerStyle: {
-                  paddingTop: 20,
-                  backgroundColor: "grey",
-                },
+                // sceneContainerStyle: {
+                //   paddingTop: 20,
+                //   backgroundColor: "grey",
+                // },
                 // header: (props) => <View></View>,
                 // headerLeft: (props) => (
                 //   <View {...props}>
@@ -68,7 +68,7 @@ export default function AppLayout() {
                 //   </View>
                 // ),
               })}>
-              <Drawer.Screen
+              <Stack.Screen
                 name="(stack)"
                 options={{
                   title: "Home",
@@ -88,13 +88,13 @@ export default function AppLayout() {
                   ),
                 }}
               />
-              <Drawer.Screen
+              <Stack.Screen
                 name="(tabs1)"
                 options={{
                   title: "Character",
                 }}
               />
-            </Drawer>
+            </Stack>
           </ModalProvider>
         </TimerProvider>
       </PlayerCharacterProvider>

@@ -2,7 +2,7 @@ import AppButton from "@/components/AppButton";
 import React, { useEffect, useState } from "react";
 
 import { useRouter } from "expo-router";
-import { ScrollView, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import AppCard from "@/components/AppCard";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { useTimer } from "@/context/TimerContext";
@@ -49,6 +49,7 @@ const IntroPage = () => {
         paddingBottom: 26,
         paddingTop: 26,
       }}>
+      <Text style={styles.title}>Side World</Text>
       <AppCard
         style={{
           justifyContent: "space-around",
@@ -86,5 +87,16 @@ const IntroPage = () => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    flexDirection: "column",
+    fontFamily: "FFFTusj",
+    fontSize: 36,
+    marginTop: 32,
+    marginBottom: 32,
+    color: "#000000",
+  },
+});
 
 export default IntroPage;
