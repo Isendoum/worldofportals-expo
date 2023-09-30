@@ -39,7 +39,7 @@ export class Creature {
     monster.MagicAttack = monTemplate.baseMAttack * level;
     monster.MagicDefence = monTemplate.baseMDefence * level;
     monster.level = level;
-    monster.expRewards = getMonsterExperienceAward(level);
+    monster.expRewards = getMonsterExperienceAward(level) + monTemplate.baseExp;
     monster.goldRewards = 100;
     monster.itemDropChance = monTemplate.itemDropChance;
     monster.potionDropChance = monTemplate.potionDropChance;
