@@ -37,11 +37,6 @@ export default function AppLayout() {
   React.useEffect(() => {
     if (fontsLoaded && fontsLoaded2 && fontsLoaded3 && fontsLoaded4) {
       SplashScreen.hideAsync();
-      // setTimeout(() => {
-      //   // When all loading is setup, unmount the splash screen component.
-      //   SplashScreen.hideAsync();
-      //   // setReady(true);
-      // }, 2000);
     }
   }, [fontsLoaded, fontsLoaded2, fontsLoaded3, fontsLoaded4]);
 
