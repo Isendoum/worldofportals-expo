@@ -10,6 +10,9 @@ import {
 } from "./classes";
 
 export class PlayerCharacter {
+  addSkill(skill: any) {
+    this.characterSkills = [...this.characterSkills!, skill];
+  }
   constructor(
     public name?: string,
     public maxHp?: number,
@@ -116,7 +119,8 @@ export class PlayerCharacter {
           if (itemInInve) {
             const index = this.inventory?.indexOf(itemInInve);
             this.inventory[index].itemAbility = item.itemAbility;
-            this.inventory[index].quantity = this.inventory[index].quantity + 1;
+            this.inventory[index].quantity =
+              this.inventory[index].quantity + item.quantity;
           }
         }
       }

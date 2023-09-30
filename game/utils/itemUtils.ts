@@ -160,3 +160,42 @@ export const generateConsumable = (level: number) => {
     assetFile
   );
 };
+
+export const generateConsumableNyName = (
+  level: number,
+  name: string,
+  quantity: number
+) => {
+  if (!ConsumablesDisplayNames.some((el) => el === name)) {
+    throw new Error("Consumable not exits");
+  }
+  const type = ItemType.CONSUMABLE;
+  // Construct item name
+
+  // Generate a gold value (for demonstration purposes, you can adjust as needed)
+  const goldValue = Math.floor(level * 10 + 1 * 5);
+  const id = generateUniqueId();
+
+  const assetFile = getConsumableAsset(name);
+  const itemAbilityModifier = level * 10;
+  const itemAbility = new ItemAbility(
+    `${name} that does something for ${itemAbilityModifier} the player`,
+    itemAbilityModifier
+  );
+  // Create and return the new item
+  return new Item(
+    id,
+    name,
+    type,
+    quantity,
+    level,
+    0, // defenceModifier,
+    0, // attackModifier,
+    0, // magicDefenceModifier,
+    0, // magicAttackModifier,
+    0, // hpModifier,
+    goldValue,
+    itemAbility,
+    assetFile
+  );
+};

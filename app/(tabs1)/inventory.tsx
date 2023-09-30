@@ -82,7 +82,7 @@ const CharacterInventory = () => {
   }, [action, isOverlayVisible]);
 
   return (
-    <View style={{ alignItems: "center" }}>
+    <View style={{}}>
       <Text style={styles.titleText}>Inventory ({inventory.length}/20)</Text>
 
       <View

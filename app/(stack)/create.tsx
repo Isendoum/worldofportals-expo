@@ -9,6 +9,7 @@ import { races } from "@/game/data/races";
 import { usePlayerCharacter } from "@/context/PlayerContext";
 import { PlayerCharacter } from "@/game/classes/PlayerCharacter";
 import { startingSkills } from "@/game/data/skills";
+import { generateConsumableNyName } from "@/game/utils/itemUtils";
 
 export default function Create() {
   const router = useRouter();
@@ -33,9 +34,18 @@ export default function Create() {
         race,
         startingSkills
       );
-
-      setPlayerCharacter(character);
-      router.back();
+      try {
+        character.addItemToInventory(
+          generateConsumableNyName(1, "Hp potion", 5)
+        );
+        character.addItemToInventory(
+          generateConsumableNyName(1, "Mana potion", 5)
+        );
+        setPlayerCharacter(character);
+        router.back();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

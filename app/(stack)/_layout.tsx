@@ -30,7 +30,7 @@ const Tbs = () => {
             }}
           />
           <Stack.Screen
-            name="screen2"
+            name="skillShop"
             options={{
               title: "Portal",
               headerShown: false,

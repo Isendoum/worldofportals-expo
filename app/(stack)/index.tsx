@@ -65,6 +65,11 @@ const IntroPage = () => {
           title="Character"
           onPress={() => router.push("/(tabs1)/statistics")}
         />
+        <AppButton
+          disabled={!playerCharacter}
+          title="Skill shop"
+          onPress={() => router.push("/(stack)/skillShop")}
+        />
       </AppCard>
 
       <AppCard

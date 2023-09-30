@@ -56,3 +56,19 @@ export const startingSkills = [
     crystalCost: 0,
   },
 ];
+
+export const availableSkills = [
+  {
+    id: "5",
+    characterSkillName: "Heal",
+    characterSkillType: "SUPPORT",
+    skillDescription: "Heals for 20.0% of max hp. Consumes 20% of inner power.",
+    characterSkillModifier: 0.2,
+    skillLevel: 1,
+    skillMaxLevel: 1,
+    innerPowerConsume: 20,
+    skillRank: "C",
+    buffedTurnsRemaining: 0,
+    crystalCost: 1,
+  },
+];

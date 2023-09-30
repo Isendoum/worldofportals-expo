@@ -1,5 +1,6 @@
 import { findSkillImage } from "@/utils/imageUtils";
 import {
+  Alert,
   FlatList,
   Image,
   Pressable,
@@ -11,33 +12,56 @@ import {
 import Tooltip from "react-native-walkthrough-tooltip";
 import { useState } from "react";
 import { usePlayerCharacter } from "@/context/PlayerContext";
+import { useFocusEffect, useRouter } from "expo-router";
 import CharacterSkills from "@/components/other/CharacterSkills";
-const Skills = () => {
+import AppButton from "@/components/AppButton";
+import { availableSkills } from "@/game/data/skills";
+import { CharacterSkill } from "@/game/classes/classes";
+
+const SkillShop = () => {
+  const router = useRouter();
   const [playerCharacter, setPlayerCharacter] = usePlayerCharacter();
   // const [skills, setSkills] = useState();
   const [toolTipVisible, setToolTipVisible] = useState<number | string | null>(
     null
   );
-
-  const assignSkill = (skill: any, slot: number) => {
+  const showNotEnoughPointsMessage = () => {
+    Alert.alert("Not enough points to buy this skill!");
+  };
+  const buySkill = (skill: CharacterSkill) => {
     if (playerCharacter) {
-      // Create a new instance of PlayerCharacter with the updated skill
-      const updatedPlayerCharacter = playerCharacter.clone();
-      updatedPlayerCharacter.assignSkillToSlot(skill, slot);
+      if (
+        playerCharacter.skillPoints! >= skill.crystalCost &&
+        playerCharacter.skillPoints !== 0
+      ) {
+        // Create a new instance of PlayerCharacter with the updated skill
+        const updatedPlayerCharacter = playerCharacter.clone();
+        updatedPlayerCharacter.addSkill(skill);
 
-      // Set the new instance as the state
-      setPlayerCharacter(updatedPlayerCharacter);
+        // Set the new instance as the state
+        setPlayerCharacter(updatedPlayerCharacter);
+      } else {
+        showNotEnoughPointsMessage();
+      }
       setToolTipVisible(null);
     }
   };
 
   return (
-    <View style={styles.content}>
-      <Text style={styles.titleText}>Skills</Text>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        marginTop: 25,
+      }}>
+      <AppButton title="<--" onPress={() => router.back()} />
+      <Text style={styles.titleText}>Skill shop</Text>
       <Text style={styles.skillPointsText}>
         Skill Points:{" " + playerCharacter?.skillPoints}
       </Text>
-      <View>
+
+      <View style={{}}>
         <View
           //  fadingEdgeLength={20}
           style={{
@@ -50,7 +74,7 @@ const Skills = () => {
           }}>
           <FlatList
             keyExtractor={(item) => item.id.toString()}
-            data={playerCharacter?.characterSkills}
+            data={availableSkills}
             renderItem={({ item }) => {
               return (
                 <View style={styles.listItem}>
@@ -100,24 +124,9 @@ const Skills = () => {
                       <View>
                         {/* Your slot assignment options */}
                         <TouchableOpacity
-                          onPress={() => assignSkill(item, 1)}
+                          onPress={() => buySkill(item)}
                           disabled={false}>
-                          <Text style={styles.toolTipText}>Set at slot 1</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => assignSkill(item, 2)}
-                          disabled={false}>
-                          <Text style={styles.toolTipText}>Set at slot 2</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => assignSkill(item, 3)}
-                          disabled={false}>
-                          <Text style={styles.toolTipText}>Set at slot 3</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => assignSkill(item, 4)}
-                          disabled={false}>
-                          <Text style={styles.toolTipText}>Set at slot 4</Text>
+                          <Text style={styles.toolTipText}>Buy</Text>
                         </TouchableOpacity>
                       </View>
                     }>
@@ -129,19 +138,12 @@ const Skills = () => {
             }}
           />
         </View>
-        <CharacterSkills playerCharacter={playerCharacter} />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginTop: 25,
-  },
   overlay: {
     borderRadius: 5,
     backgroundColor: "#FFF8DC",
@@ -197,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Skills;
+export default SkillShop;
